@@ -12,12 +12,12 @@ const links = [
 export function Navbar() {
   return (
     <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
-      <div className="max-w-6xl mx-auto px-8 h-16 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
         <a href="#" className="flex items-center gap-3 no-underline">
           <LogoIcon size={34} />
-          <span className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
+          <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
-        <div className="flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
             <a
               key={l.label}
@@ -34,6 +34,12 @@ export function Navbar() {
             Book a session
           </a>
         </div>
+        <a
+          href="mailto:caio@opsflow-advisory.ch"
+          className="md:hidden bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline"
+        >
+          Book session
+        </a>
       </div>
     </nav>
   )

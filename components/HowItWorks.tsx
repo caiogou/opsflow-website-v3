@@ -21,16 +21,16 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how" className="py-24 px-8 bg-teal-pale/30">
+    <section id="how" className="py-16 px-6 md:py-24 md:px-8 bg-teal-pale/30">
       <div className="max-w-6xl mx-auto">
         <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">How it works</p>
-        <h2 className="font-serif text-4xl font-normal text-navy mb-4 leading-tight">
+        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
           From first conversation<br />to measurable results.
         </h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-14">
+        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">
           Three steps. Fixed timelines. No open-ended engagements.
         </p>
-        <div className="grid grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {steps.map((s, i) => (
             <div key={s.num} className="relative">
               {i < steps.length - 1 && (

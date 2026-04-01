@@ -21,16 +21,16 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <section id="cases" className="py-24 px-8 bg-gray-50">
+    <section id="cases" className="py-16 px-6 md:py-24 md:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
         <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Cases</p>
-        <h2 className="font-serif text-4xl font-normal text-navy mb-4 leading-tight">
+        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
           Results that speak<br />for themselves.
         </h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-14">
+        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">
           First client cases will be published after initial engagements.
         </p>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t) => (
             <div
               key={t.name}

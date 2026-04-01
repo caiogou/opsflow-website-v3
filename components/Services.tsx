@@ -23,16 +23,16 @@ const services = [
 
 export function Services() {
   return (
-    <section id="services" className="py-24 px-8">
+    <section id="services" className="py-16 px-6 md:py-24 md:px-8">
       <div className="max-w-6xl mx-auto">
         <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">What we do</p>
-        <h2 className="font-serif text-4xl font-normal text-navy mb-4 leading-tight">
+        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
           Four practice areas.<br />One goal: margin impact.
         </h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-14">
+        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">
           We work where the biggest P&L opportunities are — not where the noise is.
         </p>
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {services.map((s) => (
             <div
               key={s.title}
