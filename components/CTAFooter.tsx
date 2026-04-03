@@ -22,23 +22,25 @@ export function CTA() {
   )
 }
 
+const footerLinks = [
+  { label: 'Services', href: '#services', external: false },
+  { label: 'How it works', href: '#how', external: false },
+  { label: 'Why OpsFlow', href: '#why', external: false },
+  { label: 'Contact', href: 'https://calendly.com/caio-opsflow-advisory/30min', external: true },
+]
+
 export function Footer() {
   return (
     <footer className="bg-navy-deep border-t border-navy-mid py-8 px-6 md:py-10 md:px-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
         <span className="text-base font-bold text-white">OpsFlow Advisory</span>
         <div className="flex flex-wrap justify-center gap-5 md:gap-7">
-          {[
-            { label: 'Services', href: '#services' },
-            { label: 'How it works', href: '#how' },
-            { label: 'Why OpsFlow', href: '#why' },
-            { label: 'Contact', href: 'https://calendly.com/caio-opsflow-advisory/30min' },
-          ].map((l) => (
+          {footerLinks.map((l) => (
             
               key={l.label}
               href={l.href}
-              target={l.label === 'Contact' ? '_blank' : undefined}
-              rel={l.label === 'Contact' ? 'noopener noreferrer' : undefined}
+              target={l.external ? '_blank' : '_self'}
+              rel={l.external ? 'noopener noreferrer' : ''}
               className="text-teal-muted text-sm hover:text-white transition-colors no-underline"
             >
               {l.label}
