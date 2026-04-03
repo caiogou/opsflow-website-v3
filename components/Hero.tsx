@@ -1,10 +1,10 @@
 export function Hero() {
   return (
-    <section className="bg-navy py-16 px-6 md:py-24 md:px-8">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
+    <section className="bg-navy py-20 px-6 md:py-32 md:px-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 items-center">
         <div>
           <p className="text-xs font-bold tracking-widest text-teal uppercase mb-5">Supply chain advisory · EMEA</p>
-          <h1 className="font-serif text-3xl md:text-5xl font-normal text-white leading-tight mb-6">
+          <h1 className="font-serif text-4xl md:text-6xl font-normal text-white leading-tight mb-6">
             Supply chain excellence for{' '}
             <em className="text-teal not-italic">companies across EMEA</em>
           </h1>
@@ -17,7 +17,7 @@ export function Hero() {
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
-          <svg width="320" height="300" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
+          <svg width="400" height="380" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
             <circle cx="170" cy="160" r="130" fill="none" stroke="#1a3a5c" strokeWidth="1" />
             <circle cx="170" cy="160" r="88" fill="none" stroke="#1a3a5c" strokeWidth="1" />
             <circle cx="170" cy="160" r="48" fill="#1a9e8f" />
