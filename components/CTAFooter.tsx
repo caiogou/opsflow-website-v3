@@ -1,3 +1,7 @@
+'use client'
+
+import React from 'react'
+
 export function CTA() {
   return (
     <section className="py-16 px-6 md:py-24 md:px-8 bg-teal text-center">
