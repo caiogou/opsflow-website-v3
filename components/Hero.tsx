@@ -3,30 +3,17 @@ export function Hero() {
     <section className="bg-navy py-16 px-6 md:py-24 md:px-8">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
         <div>
-          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-5">
-            Supply chain advisory · EMEA
-          </p>
+          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-5">Supply chain advisory · EMEA</p>
           <h1 className="font-serif text-3xl md:text-5xl font-normal text-white leading-tight mb-6">
             Supply chain excellence for{' '}
             <em className="text-teal not-italic">companies across EMEA</em>
           </h1>
           <p className="text-lg text-teal-muted leading-relaxed mb-10 max-w-lg">
-            We design and implement supply chain processes that deliver real margin and working
-            capital impact — structured planning, leaner inventory, stronger operations.
+            We design and implement supply chain processes that deliver real margin and working capital impact — structured planning, leaner inventory, stronger operations.
           </p>
           <div className="flex gap-4 flex-wrap">
-            <a
-              href="mailto:caio@opsflow-advisory.ch"
-              className="bg-teal text-white px-9 py-4 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline"
-            >
-              Book free 90-min session
-            </a>
-            <a
-              href="#how"
-              className="text-teal-muted border border-navy-mid px-7 py-4 rounded text-sm hover:border-teal-muted transition-colors no-underline"
-            >
-              See how it works
-            </a>
+            <a href="https://calendly.com/caio-opsflow-advisory/30min" target="_blank" rel="noopener noreferrer" className="bg-teal text-white px-9 py-4 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book free 90-min session</a>
+            <a href="#how" className="text-teal-muted border border-navy-mid px-7 py-4 rounded text-sm hover:border-teal-muted transition-colors no-underline">See how it works</a>
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
