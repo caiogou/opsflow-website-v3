@@ -9,11 +9,13 @@ export function CTA() {
           90 minutes. Structured thinking about your supply chain challenges. Honest perspectives
           on where the real value is — whether we work together or not.
         </p>
-        <a
-          href="mailto:caio@opsflow-advisory.ch"
+        
+          href="COLA_AQUI_O_TEU_LINK_CALENDLY"
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-block bg-white text-navy px-8 py-4 md:px-10 md:py-5 rounded text-sm md:text-base font-bold hover:opacity-90 transition-opacity no-underline"
         >
-          Book your free session → caio@opsflow-advisory.ch
+          Book your free 90-min session →
         </a>
       </div>
     </section>
@@ -30,11 +32,13 @@ export function Footer() {
             { label: 'Services', href: '#services' },
             { label: 'How it works', href: '#how' },
             { label: 'Why OpsFlow', href: '#why' },
-            { label: 'Contact', href: 'mailto:caio@opsflow-advisory.ch' },
+            { label: 'Contact', href: 'https://calendly.com/caio-opsflow-advisory/30min' },
           ].map((l) => (
-            <a
+            
               key={l.label}
               href={l.href}
+              target={l.label === 'Contact' ? '_blank' : undefined}
+              rel={l.label === 'Contact' ? 'noopener noreferrer' : undefined}
               className="text-teal-muted text-sm hover:text-white transition-colors no-underline"
             >
               {l.label}
