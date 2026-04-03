@@ -8,7 +8,7 @@ export function CTA() {
         <p className="text-base md:text-lg text-emerald-50 leading-relaxed mb-8 md:mb-10">
           90 minutes. Structured thinking about your supply chain challenges. Honest perspectives on where the real value is.
         </p>
-        
+           </a>
           href="https://calendly.com/caio-opsflow-advisory/30min"
           target="_blank"
           rel="noopener noreferrer"
