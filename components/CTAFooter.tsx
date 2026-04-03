@@ -10,7 +10,7 @@ export function CTA() {
           on where the real value is — whether we work together or not.
         </p>
         
-          href="COLA_AQUI_O_TEU_LINK_CALENDLY"
+          href="https://calendly.com/caio-opsflow-advisory/30min"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-white text-navy px-8 py-4 md:px-10 md:py-5 rounded text-sm md:text-base font-bold hover:opacity-90 transition-opacity no-underline"
