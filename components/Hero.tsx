@@ -13,7 +13,7 @@ export function Hero() {
           </p>
           <div className="flex gap-4 flex-wrap">
             <a href="https://calendly.com/caio-opsflow-advisory/30min" target="_blank" rel="noopener noreferrer" className="bg-teal text-white px-9 py-4 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book free 90-min session</a>
-            <a href="#how" className="text-teal-muted border border-navy-mid px-7 py-4 rounded text-sm hover:border-teal-muted transition-colors no-underline">See how it works</a>
+            <a href="/diagnostic" className="text-white border border-teal px-7 py-4 rounded text-sm font-semibold hover:bg-teal/10 transition-colors no-underline">Take the S&OP Health Check</a>
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
