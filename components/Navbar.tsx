@@ -5,7 +5,7 @@ const links = [
   { label: 'Services', href: '#services' },
   { label: 'How it works', href: '#how' },
   { label: 'Why OpsFlow', href: '#why' },
-  { label: 'Cases', href: '#cases' },
+  { label: 'S&OP Health Check', href: '/diagnostic' },
 ]
 
 export function Navbar() {
