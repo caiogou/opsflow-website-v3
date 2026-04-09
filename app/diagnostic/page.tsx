@@ -10,7 +10,7 @@ import {
   Target, ArrowRight, BarChart3, Shield, Network, Cpu,
   ClipboardCheck, TrendingUp, Package, Mail, Building2, User, Briefcase
 } from 'lucide-react'
-// Logo inline — no external component needed
+import { LogoIcon } from '@/components/LogoIcon'
 
 /* ──────────────────── DATA ──────────────────── */
 
@@ -510,19 +510,17 @@ export default function DiagnosticPage() {
         <div className="max-w-xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10 md:p-12">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-teal flex items-center justify-center">
-                <span className="text-white font-bold text-base">OF</span>
-              </div>
+              <LogoIcon size={38} />
               <div className="text-left">
                 <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-                <div className="text-[11px] text-teal-muted tracking-widest uppercase">S&OP Maturity Engine</div>
+                <div className="text-[11px] text-teal-muted tracking-widest uppercase">S&OP Health Check</div>
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl font-serif text-white leading-tight">
               How mature is your <em className="text-teal not-italic">S&OP process</em>?
             </h1>
             <p className="text-teal-muted mt-3 text-sm leading-relaxed max-w-md mx-auto">
-              32 questions across 8 dimensions. Takes around 12 minutes. Get AI-powered insights with your personalised maturity profile and automated recommendations.
+              32 questions across 8 dimensions. Takes around 12 minutes. Get a personalised maturity profile with actionable recommendations.
             </p>
           </div>
 
@@ -609,7 +607,7 @@ export default function DiagnosticPage() {
         {/* Top bar */}
         <div className="px-6 border-b border-navy-mid flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-[#0D9488] flex items-center justify-center"><span className="text-white font-bold text-xs">OF</span></div>
+            <LogoIcon size={28} />
             <span className="text-teal-muted text-xs hidden sm:inline">OpsFlow S&OP Health Check</span>
           </div>
           <div className="flex items-center gap-4">
@@ -712,10 +710,8 @@ export default function DiagnosticPage() {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center p-5">
         <div className="max-w-md w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-teal">
-            <span className="text-white font-bold text-lg">OF</span>
-          </div>
-          <h2 className="text-2xl font-serif text-white mt-6 mb-2">Your AI-powered insights are ready</h2>
+          <LogoIcon size={42} />
+          <h2 className="text-2xl font-serif text-white mt-6 mb-2">Your assessment is ready</h2>
 
           {/* Teaser score */}
           <div className="my-6 p-5 rounded-xl bg-navy-mid/30 border border-navy-mid">
@@ -727,7 +723,7 @@ export default function DiagnosticPage() {
           </div>
 
           <p className="text-teal-muted text-sm leading-relaxed mb-6">
-            Enter your email to unlock the full decision dashboard with your personalised radar chart, automated gap analysis, priority recommendations, and AI-generated action plan.
+            Enter your email to unlock the full dashboard with your personalised radar chart, detailed dimension analysis, priority gaps, and tailored recommendations.
           </p>
 
           <div className="relative mb-4">
@@ -779,7 +775,7 @@ export default function DiagnosticPage() {
         <div className="max-w-5xl mx-auto px-6 pt-6">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#0D9488] flex items-center justify-center"><span className="text-white font-bold text-sm">OF</span></div>
+              <LogoIcon size={32} />
               <div>
                 <div className="text-sm font-bold text-white">S&OP Health Check Results</div>
                 <div className="text-xs text-teal-muted/50">{companyName} &middot; {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
@@ -907,7 +903,7 @@ export default function DiagnosticPage() {
               <div className="rounded-2xl border border-teal/20 bg-gradient-to-br from-teal/10 to-navy-mid/20 p-6">
                 <div className="text-base font-bold text-white mb-2">Ready to close the gaps?</div>
                 <p className="text-xs text-teal-muted leading-relaxed mb-4">
-                  Book a free Problem Session with our senior team. We'll dive deeper into your priority areas and map out a concrete execution plan — not a report.
+                  Book a free 90-minute Problem Session with our team. We will dive deeper into your priority areas and map out a concrete improvement plan.
                 </p>
                 <div className="text-[11px] text-teal-muted/40 mb-4">
                   Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)
