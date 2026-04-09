@@ -1,29 +1,65 @@
 'use client'
-import { LogoIcon } from './LogoIcon'
+
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 
 const links = [
-  { label: 'Services', href: '#services' },
-  { label: 'How it works', href: '#how' },
-  { label: 'Why OpsFlow', href: '#why' },
-  { label: 'S&OP Health Check', href: '/diagnostic' },
+  { label: 'AI Solutions', href: '/#ai-solutions' },
+  { label: 'How it works', href: '/#how' },
+  { label: 'Why Now', href: '/#why-now' },
+  { label: 'S&OP Assessment', href: '/diagnostic' },
 ]
 
 export function Navbar() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
+    <nav className="bg-[#0A1A2F] sticky top-0 z-50 border-b border-[#132D4A]">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3 no-underline">
-          <LogoIcon size={34} />
+        <a href="/" className="flex items-center gap-2.5 no-underline">
+          <div className="w-8 h-8 rounded-lg bg-[#0D9488] flex items-center justify-center">
+            <span className="text-white font-bold text-sm">OF</span>
+          </div>
           <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
+
+        {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
           {links.map((l) => (
-            <a key={l.label} href={l.href} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{l.label}</a>
+            <a key={l.label} href={l.href} className="text-[#5EEAD4] text-sm hover:text-white transition-colors no-underline">{l.label}</a>
           ))}
-          <a href="https://calendly.com/caio-opsflow-advisory/30min" target="_blank" rel="noopener noreferrer" className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book a session</a>
+          <a
+            href="https://calendly.com/caio-opsflow-advisory/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#0D9488] text-white px-5 py-2 rounded text-sm font-semibold hover:bg-[#14B8A6] transition-colors no-underline"
+          >
+            Book a session
+          </a>
         </div>
-        <a href="https://calendly.com/caio-opsflow-advisory/30min" target="_blank" rel="noopener noreferrer" className="md:hidden bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline">Book session</a>
+
+        {/* Mobile toggle */}
+        <button onClick={() => setOpen(!open)} className="md:hidden text-white p-2">
+          {open ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden bg-[#0A1A2F] border-t border-[#132D4A] px-6 py-4 space-y-3">
+          {links.map((l) => (
+            <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block text-[#5EEAD4] text-sm hover:text-white transition-colors no-underline py-2">{l.label}</a>
+          ))}
+          <a
+            href="https://calendly.com/caio-opsflow-advisory/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center bg-[#0D9488] text-white px-5 py-2.5 rounded text-sm font-semibold hover:bg-[#14B8A6] transition-colors no-underline mt-2"
+          >
+            Book a session
+          </a>
+        </div>
+      )}
     </nav>
   )
 }
