@@ -9,7 +9,7 @@ const dashboards = [
     chart: (
       <div className="space-y-4">
         {/* KPI Row */}
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'FORECAST ACCURACY (MAPE)', value: '68%', sub: 'Benchmark: 82%', color: 'text-yellow-400' },
             { label: 'FORECAST BIAS', value: '+12%', sub: 'Over-forecast by avg', color: 'text-red-400' },
@@ -25,7 +25,7 @@ const dashboards = [
         </div>
 
         {/* Value Banner */}
-        <div className="bg-gradient-to-r from-teal/20 to-navy-deep rounded-lg p-4 border border-teal/30 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-teal/20 to-navy-deep rounded-lg p-4 border border-teal/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
             <div className="text-[9px] text-teal-light uppercase tracking-widest">Total Recoverable Value Identified</div>
             <div className="text-2xl font-bold text-white">CHF 1.6M</div>
@@ -39,7 +39,7 @@ const dashboards = [
         </div>
 
         {/* Charts Row */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {/* Bar Chart */}
           <div className="bg-navy-deep rounded-lg p-4 border border-navy-mid">
             <div className="text-xs font-bold text-white mb-1">Forecast Accuracy by Product Family</div>
@@ -102,7 +102,7 @@ const dashboards = [
         <div className="bg-navy-deep rounded-lg p-4 border border-navy-mid">
           <div className="text-xs font-bold text-white mb-1">ABC/XYZ Demand Segmentation Matrix</div>
           <div className="text-[8px] text-teal-muted mb-3">Recommended planning method per segment — CoV = demand variability</div>
-          <div className="grid grid-cols-4 gap-1.5 text-center">
+          <div className="grid grid-cols-4 gap-1 md:gap-1.5 text-center overflow-x-auto">
             <div />
             <div className="text-[8px] text-teal-muted font-semibold py-1">X — Stable</div>
             <div className="text-[8px] text-teal-muted font-semibold py-1">Y — Variable</div>
@@ -147,7 +147,7 @@ const dashboards = [
     desc: 'Automated ABC/XYZ segmentation, safety stock optimization, stockout risk scoring and working capital targets.',
     chart: (
       <div className="space-y-4">
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'INVENTORY VALUE', value: 'CHF 12.4M', sub: 'Target: CHF 9.8M', color: 'text-yellow-400' },
             { label: 'WEEKS OF COVER', value: '8.2', sub: 'Target: 6.0 weeks', color: 'text-red-400' },
@@ -161,7 +161,7 @@ const dashboards = [
             </div>
           ))}
         </div>
-        <div className="bg-gradient-to-r from-teal/20 to-navy-deep rounded-lg p-4 border border-teal/30 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-teal/20 to-navy-deep rounded-lg p-4 border border-teal/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
             <div className="text-[9px] text-teal-light uppercase tracking-widest">Working Capital Release Potential</div>
             <div className="text-2xl font-bold text-white">CHF 2.6M</div>
@@ -173,7 +173,7 @@ const dashboards = [
             <div className="text-[9px] text-teal-muted">with lower inventory</div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-navy-deep rounded-lg p-4 border border-navy-mid">
             <div className="text-xs font-bold text-white mb-1">Inventory Value by Category</div>
             <div className="text-[8px] text-teal-muted mb-3">CHF millions — current vs target</div>
@@ -228,7 +228,7 @@ const dashboards = [
     desc: 'Real-time supplier concentration scoring, automated risk heat maps, tier 1+2 visibility and mitigation paths.',
     chart: (
       <div className="space-y-4">
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'SINGLE-SOURCE SKUs', value: '23%', sub: '194 of 842 SKUs', color: 'text-red-400' },
             { label: 'AVG LEAD TIME', value: '47 days', sub: 'Target: <30 days', color: 'text-yellow-400' },
@@ -242,7 +242,7 @@ const dashboards = [
             </div>
           ))}
         </div>
-        <div className="bg-gradient-to-r from-red-500/20 to-navy-deep rounded-lg p-4 border border-red-500/30 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-red-500/20 to-navy-deep rounded-lg p-4 border border-red-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
             <div className="text-[9px] text-red-300 uppercase tracking-widest">Revenue at Risk from Supply Disruption</div>
             <div className="text-2xl font-bold text-white">CHF 4.2M</div>
@@ -254,7 +254,7 @@ const dashboards = [
             <div className="text-[9px] text-teal-muted">23:1 risk-to-cost ratio</div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-navy-deep rounded-lg p-4 border border-navy-mid">
             <div className="text-xs font-bold text-white mb-1">Risk Heat Map</div>
             <div className="text-[8px] text-teal-muted mb-3">Impact vs Probability — bubble size = revenue exposure</div>
@@ -312,7 +312,7 @@ const dashboards = [
     desc: 'AI-driven 8-dimension maturity assessment with radar profiling, gap identification and automated recommendations.',
     chart: (
       <div className="space-y-4">
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
             { label: 'OVERALL MATURITY', value: '2.4/5', sub: 'Industry avg: 3.1', color: 'text-yellow-400' },
             { label: 'WEAKEST DIMENSION', value: 'Analytics', sub: 'Score: 1.5/5', color: 'text-red-400' },
@@ -326,7 +326,7 @@ const dashboards = [
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="bg-navy-deep rounded-lg p-4 border border-navy-mid">
             <div className="text-xs font-bold text-white mb-1">Maturity Radar Profile</div>
             <div className="text-[8px] text-teal-muted mb-2">Current vs Target across 8 dimensions</div>
