@@ -18,6 +18,13 @@ module.exports = {
           pale: '#e8f7f4',
           muted: '#9fd8d0',
         },
+        zap: {
+          DEFAULT: '#25D366',
+          dark: '#128C7E',
+          deep: '#075E54',
+          bg: '#ECE5DD',
+          bubble: '#DCF8C6',
+        },
       },
       fontFamily: {
         sans: ['system-ui', 'sans-serif'],
