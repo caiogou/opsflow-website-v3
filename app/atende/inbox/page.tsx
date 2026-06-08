@@ -142,7 +142,7 @@ export default function InboxPage() {
               )}
             </div>
 
-            <MessageList messages={conv.messages} />
+            <MessageList messages={conv.messages} typing={conv.pending} />
 
             {conv.assignedTo === 'negocio' ? (
               <form

@@ -110,48 +110,104 @@ export function startConversation(name: string, phone: string): string {
   return id
 }
 
-// Cliente envia mensagem -> robô processa (se a conversa estiver com o robô).
-export function sendCustomerMessage(convId: string, text: string) {
+// Disponibilidade da IA: null = ainda não sabemos, true/false = detectado na 1ª chamada.
+let aiAvailable: boolean | null = null
+
+// Aplica a resposta do robô (IA ou regras) na conversa atual.
+function applyBotReply(
+  convId: string,
+  replies: string[],
+  appointment: Appointment | null | undefined,
+  handoff: boolean,
+  patch: Partial<Conversation> = {}
+) {
   const conv = state.conversations.find((c) => c.id === convId)
   if (!conv) return
-  const now = Date.now()
-  const customerMsg: Message = { id: uid(), from: 'cliente', text, at: now }
+  const base = Date.now()
+  const botMsgs: Message[] = replies
+    .filter((t) => t && t.trim())
+    .map((text, i) => ({ id: uid(), from: 'robo' as const, text, at: base + i + 1 }))
 
-  let updated: Conversation = {
+  const updated: Conversation = {
     ...conv,
-    messages: [...conv.messages, customerMsg],
-    lastActivity: now,
-  }
-
-  let newAppointment: Appointment | undefined
-
-  if (conv.assignedTo === 'robo') {
-    const result = runBot(state, updated, text)
-    const botMsgs: Message[] = result.replies.map((text, i) => ({
-      id: uid(),
-      from: 'robo',
-      text,
-      at: now + i + 1,
-    }))
-    updated = {
-      ...updated,
-      ...result.patch,
-      botCtx: result.patch.botCtx ?? updated.botCtx,
-      messages: [...updated.messages, ...botMsgs],
-    }
-    newAppointment = result.newAppointment
-  } else {
-    // Conversa com o dono: marca como não lida.
-    updated = { ...updated, unread: conv.unread + 1 }
+    ...patch,
+    messages: [...conv.messages, ...botMsgs],
+    pending: false,
+    lastActivity: base,
+    ...(handoff ? { assignedTo: 'negocio' as const, botState: 'humano' as const } : {}),
   }
 
   commit({
     ...state,
     conversations: upsertConversation(updated),
-    appointments: newAppointment
-      ? [...state.appointments, newAppointment]
+    appointments: appointment
+      ? [...state.appointments, appointment]
       : state.appointments,
   })
+}
+
+// Fallback baseado em regras (menu) — usado quando a IA não está configurada.
+function applyRuleBot(convId: string, text: string) {
+  const conv = state.conversations.find((c) => c.id === convId)
+  if (!conv) return
+  const result = runBot(state, conv, text)
+  applyBotReply(convId, result.replies, result.newAppointment, false, {
+    ...result.patch,
+    botCtx: result.patch.botCtx ?? conv.botCtx,
+  })
+}
+
+// Cliente envia mensagem -> robô processa (se a conversa estiver com o robô).
+export async function sendCustomerMessage(convId: string, text: string) {
+  const conv = state.conversations.find((c) => c.id === convId)
+  if (!conv) return
+  const now = Date.now()
+  const customerMsg: Message = { id: uid(), from: 'cliente', text, at: now }
+
+  // Mostra a mensagem do cliente na hora.
+  const isBot = conv.assignedTo === 'robo'
+  commit({
+    ...state,
+    conversations: upsertConversation({
+      ...conv,
+      messages: [...conv.messages, customerMsg],
+      lastActivity: now,
+      pending: isBot,
+      unread: isBot ? conv.unread : conv.unread + 1,
+    }),
+  })
+
+  if (!isBot) return // conversa com o dono: sem robô
+
+  // Tenta a IA; se indisponível ou falhar, cai no modo de regras.
+  if (aiAvailable !== false) {
+    try {
+      const current = state.conversations.find((c) => c.id === convId)!
+      const res = await fetch('/api/atende/bot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          services: state.services,
+          professionals: state.professionals,
+          appointments: state.appointments,
+          messages: current.messages.map((m) => ({ from: m.from, text: m.text })),
+          customer: { name: current.customerName, phone: current.customerPhone },
+        }),
+      })
+      const data = await res.json()
+      if (data.aiUnavailable) {
+        aiAvailable = false
+      } else {
+        aiAvailable = true
+        applyBotReply(convId, [data.reply], data.appointment, !!data.handoff)
+        return
+      }
+    } catch {
+      aiAvailable = false
+    }
+  }
+
+  applyRuleBot(convId, text)
 }
 
 // Dono assume a conversa (sai do robô).

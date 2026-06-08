@@ -7,7 +7,7 @@ import { MessageList } from '../components/MessageList'
 import { useAtende, startConversation, sendCustomerMessage } from '../lib/store'
 import { BUSINESS } from '../lib/types'
 
-const SUGGESTIONS = ['Oi', '1', '2', '3', 'Sim', 'Não', 'menu']
+const SUGGESTIONS = ['Oi', 'Quero agendar um corte', '1', '2', '3', 'Sim', 'menu']
 
 export default function SimuladorPage() {
   const state = useAtende()
@@ -58,7 +58,7 @@ export default function SimuladorPage() {
 
             {/* Mensagens */}
             <div className="h-[460px] flex flex-col">
-              <MessageList messages={conv?.messages ?? []} />
+              <MessageList messages={conv?.messages ?? []} typing={conv?.pending} />
 
               {/* Sugestões rápidas */}
               <div className="flex gap-1.5 px-2 py-2 bg-zap-bg/60 overflow-x-auto border-t border-black/5">
@@ -117,6 +117,12 @@ export default function SimuladorPage() {
               sozinho. Tudo o que acontecer aqui aparece em{' '}
               <strong>Conversas</strong> e os agendamentos vão direto para a{' '}
               <strong>Agenda</strong>.
+            </p>
+            <p className="text-sm text-slate-600 leading-relaxed mt-2">
+              🤖 Com a IA ligada (chave da Anthropic configurada), o robô entende
+              frases naturais como <em>"quero cortar o cabelo amanhã de tarde"</em>.
+              Sem a chave, ele atende pelo menu de números — e tudo continua
+              funcionando.
             </p>
           </div>
 

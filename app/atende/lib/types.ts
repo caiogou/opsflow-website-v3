@@ -69,6 +69,7 @@ export interface Conversation {
   assignedTo: 'robo' | 'negocio'
   unread: number
   lastActivity: number
+  pending?: boolean // robô "digitando" (aguardando resposta da IA)
 }
 
 export interface AtendeState {

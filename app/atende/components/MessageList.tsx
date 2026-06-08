@@ -15,12 +15,18 @@ function renderText(text: string) {
   })
 }
 
-export function MessageList({ messages }: { messages: Message[] }) {
+export function MessageList({
+  messages,
+  typing,
+}: {
+  messages: Message[]
+  typing?: boolean
+}) {
   const endRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages.length])
+  }, [messages.length, typing])
 
   return (
     <div className="flex-1 overflow-y-auto px-3 py-4 space-y-2 bg-zap-bg">
@@ -58,6 +64,17 @@ export function MessageList({ messages }: { messages: Message[] }) {
           </div>
         )
       })}
+      {typing && (
+        <div className="flex justify-start">
+          <div className="bg-white text-navy rounded-lg rounded-bl-none px-3 py-2.5 shadow-sm">
+            <span className="flex gap-1 items-center">
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-slate-400 animate-bounce" />
+            </span>
+          </div>
+        </div>
+      )}
       <div ref={endRef} />
     </div>
   )
