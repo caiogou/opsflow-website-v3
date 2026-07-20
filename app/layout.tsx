@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   description:
     'Supply chain advisory for companies across EMEA. Planning Excellence, Inventory Optimisation, Supply Risk & Distribution Planning. MIT-certified. 17 years EMEA & LATAM. Free 90-min diagnostic session.',
   metadataBase: new URL('https://www.opsflow-advisory.ch'),
-  alternates: { canonical: '/' },
   openGraph: {
     title: 'OpsFlow Advisory',
     description: 'Supply chain excellence for companies across EMEA.',
