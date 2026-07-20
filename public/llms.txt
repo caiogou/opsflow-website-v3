@@ -8,6 +8,7 @@
 ## Pages
 
 - [Home](https://www.opsflow-advisory.ch/): Advisory services overview, engagement model and pricing
+- [OpsFlow Academy](https://www.opsflow-advisory.ch/academy): Process & Capability Sprint — process improvement + team training for Swiss SMEs (FR/EN/DE)
 - [S&OP Health Check](https://www.opsflow-advisory.ch/diagnostic): Free 12-minute S&OP maturity assessment (32 questions, 8 dimensions)
 - [Diagnostic Platform](https://www.opsflow-advisory.ch/platform): Data-driven supply chain diagnostics — inventory, demand & forecast, supply risk, planning KPIs
 
