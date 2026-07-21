@@ -6,9 +6,9 @@ const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
 
 const links = [
   { label: 'Services', href: '/#services' },
-  { label: 'How it works', href: '/#how' },
+  { label: 'Notre approche', href: '/#how' },
   { label: 'Academy', href: '/academy' },
-  { label: 'Platform', href: '/platform' },
+  { label: 'Plateforme', href: '/platform' },
   { label: 'Ressources', href: '/ressources' },
   { label: 'Diagnostic', href: '/diagnostic' },
 ]
@@ -37,7 +37,7 @@ export function Navbar() {
             rel="noopener"
             className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline"
           >
-            Book a session
+            Réserver un échange
           </a>
         </div>
         <a
@@ -46,7 +46,7 @@ export function Navbar() {
           rel="noopener"
           className="md:hidden bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline"
         >
-          Book session
+          Échange
         </a>
       </div>
     </nav>

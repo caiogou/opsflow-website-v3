@@ -1,21 +1,21 @@
 const testimonials = [
   {
-    text: 'The diagnostic session alone gave us more clarity than 6 months of internal discussions. The action plan was concrete, prioritised, and our team could execute it immediately.',
+    text: 'La session de diagnostic à elle seule nous a donné plus de clarté que six mois de discussions internes. Le plan d’action était concret, priorisé, et notre équipe a pu l’exécuter immédiatement.',
     initials: 'VP',
     name: 'VP Supply Chain',
-    role: 'Industrial manufacturer · Switzerland',
+    role: 'Industriel · Suisse',
   },
   {
-    text: 'OpsFlow identified €800K in recoverable working capital in 2 weeks. The investment paid back in the first month. We are now on a retainer for ongoing advisory.',
+    text: 'OpsFlow a identifié 800 K€ de fonds de roulement récupérable en deux semaines. L’investissement a été rentabilisé dès le premier mois. Nous sommes désormais en accompagnement continu.',
     initials: 'CO',
     name: 'COO',
-    role: 'Mid-market manufacturer · Germany',
+    role: 'Industriel mid-market · Allemagne',
   },
   {
-    text: 'Senior-only delivery means no ramp-up time — they understood our business in the first session and delivered a full S&OP redesign in 6 weeks.',
+    text: 'Une exécution 100% senior, donc aucun temps de rodage — ils ont compris notre activité dès la première session et livré une refonte S&OP complète en six semaines.',
     initials: 'SC',
-    name: 'Supply Chain Director',
-    role: 'FMCG company · France',
+    name: 'Directeur Supply Chain',
+    role: 'Entreprise FMCG · France',
   },
 ]
 
@@ -23,12 +23,12 @@ export function Testimonials() {
   return (
     <section id="cases" className="py-16 px-6 md:py-24 md:px-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
-        <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Cases</p>
+        <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Cas</p>
         <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
-          Results that speak<br />for themselves.
+          Des résultats qui parlent<br />d&apos;eux-mêmes.
         </h2>
         <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">
-          First client cases will be published after initial engagements.
+          Les premiers cas clients seront publiés après les missions initiales.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t) => (
@@ -37,7 +37,7 @@ export function Testimonials() {
               className="bg-white border border-gray-200 rounded-lg p-8 border-t-4 border-t-teal-pale"
             >
               <span className="inline-block bg-orange-50 text-orange-600 text-xs font-bold tracking-widest px-2 py-1 rounded mb-4 uppercase">
-                Coming soon
+                Bientôt
               </span>
               <p className="text-sm text-gray-500 leading-relaxed italic mb-6">
                 &ldquo;{t.text}&rdquo;

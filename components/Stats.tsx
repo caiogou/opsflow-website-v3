@@ -1,8 +1,8 @@
 const stats = [
-  { num: '20+', label: 'Years EMEA & LATAM experience' },
-  { num: 'MIT', label: 'Certified in supply chain & logistics' },
-  { num: '4', label: 'Practice areas, one goal: margin impact' },
-  { num: 'CHF 0', label: 'To start — free 90-min session' },
+  { num: '20+', label: 'Ans d’expérience EMEA & LATAM' },
+  { num: 'MIT', label: 'Certifié en supply chain & logistique' },
+  { num: '4', label: 'Domaines, un seul objectif : la marge' },
+  { num: 'CHF 0', label: 'Pour commencer — session gratuite' },
 ]
 
 export function Stats() {

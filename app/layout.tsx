@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'OpsFlow Advisory — Supply Chain Excellence for EMEA',
+  title: 'OpsFlow Advisory — Conseil supply chain & S&OP · Suisse',
   description:
-    'Supply chain advisory for companies across EMEA. Planning Excellence, Inventory Optimisation, Supply Risk & Distribution Planning. MIT-certified. 17 years EMEA & LATAM. Free 90-min diagnostic session.',
+    'Conseil en supply chain pour PME et entreprises en Suisse romande et EMEA : S&OP, optimisation des stocks, gestion des risques et planification de la distribution. Certifié MIT. Session diagnostic gratuite.',
   metadataBase: new URL('https://www.opsflow-advisory.ch'),
   openGraph: {
     title: 'OpsFlow Advisory',
-    description: 'Supply chain excellence for companies across EMEA.',
+    description: 'Conseil en supply chain augmenté par l’IA — Suisse & EMEA.',
     url: 'https://www.opsflow-advisory.ch',
     siteName: 'OpsFlow Advisory',
     type: 'website',
@@ -22,13 +22,14 @@ const orgSchema = {
   url: 'https://www.opsflow-advisory.ch',
   email: 'caio@opsflow-advisory.ch',
   description:
-    'Supply chain advisory for companies across EMEA: Planning Excellence, S&OP, Inventory Optimisation, Supply Risk & Distribution Planning.',
+    'Conseil en supply chain pour la Suisse et l’EMEA : S&OP, optimisation des stocks, gestion des risques et planification de la distribution.',
   areaServed: [
     { '@type': 'Place', name: 'Switzerland' },
     { '@type': 'Place', name: 'EMEA' },
   ],
   address: {
     '@type': 'PostalAddress',
+    addressLocality: 'Nyon',
     addressCountry: 'CH',
   },
   knowsAbout: [
@@ -48,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <body className="bg-white text-navy antialiased">
         <script
           type="application/ld+json"
