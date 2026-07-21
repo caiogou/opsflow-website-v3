@@ -6,45 +6,45 @@ import { Package, TrendingUp, Shield, BarChart3, ArrowRight, Target } from 'luci
 const MODULES = [
   {
     id: 'inventory',
-    name: 'Inventory & Working Capital',
+    name: 'Stocks & fonds de roulement',
     icon: Package,
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Domaine 1 — Excellence de planification',
     price: 'CHF 22–32K',
-    description: 'ABC/XYZ segmentation, excess & obsolete identification, safety stock optimization, working capital release quantification.',
-    metrics: ['Days of Supply', 'Inventory Turns', 'Excess Value', 'Stockout Cost'],
+    description: 'Segmentation ABC/XYZ, identification des surstocks et obsolètes, optimisation du stock de sécurité, quantification du fonds de roulement libérable.',
+    metrics: ['Jours de stock', 'Rotation des stocks', 'Valeur en excès', 'Coût des ruptures'],
     href: '/platform/inventory',
     recoverable: '1.83M',
   },
   {
     id: 'demand',
-    name: 'Demand & Forecast',
+    name: 'Demande & prévision',
     icon: TrendingUp,
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Domaine 1 — Excellence de planification',
     price: 'CHF 22–32K',
-    description: 'Forecast accuracy analysis, bias detection, demand segmentation, methodology recommendations per SKU cluster.',
-    metrics: ['MAPE', 'Forecast Bias', 'Demand Volatility', 'Accuracy by Family'],
+    description: 'Analyse de la fiabilité des prévisions, détection de biais, segmentation de la demande, recommandations de méthode par cluster de SKU.',
+    metrics: ['MAPE', 'Biais de prévision', 'Volatilité de la demande', 'Fiabilité par famille'],
     href: '/platform/demand',
     recoverable: '1.52M',
   },
   {
     id: 'supply-risk',
-    name: 'Supply Risk & Resilience',
+    name: 'Risques & résilience',
     icon: Shield,
-    practice: 'Practice 2 — Supply Resilience',
+    practice: 'Domaine 2 — Résilience de l’approvisionnement',
     price: 'CHF 22–30K',
-    description: 'Single-source exposure, supplier concentration, geographic risk, disruption cost quantification, dual-source roadmap.',
-    metrics: ['Single-Source %', 'Concentration Risk', 'Disruption Cost', 'Geographic Spread'],
+    description: 'Exposition mono-source, concentration fournisseurs, risque géographique, quantification du coût de rupture, feuille de route de double sourcing.',
+    metrics: ['% mono-source', 'Risque de concentration', 'Coût de rupture', 'Répartition géographique'],
     href: '/platform/supply-risk',
     recoverable: '1.22M',
   },
   {
     id: 'kpis',
-    name: 'Planning KPIs & Performance',
+    name: 'KPIs & performance de planification',
     icon: BarChart3,
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Domaine 1 — Excellence de planification',
     price: 'CHF 14–18K',
-    description: 'Balanced scorecard benchmarking, operational rhythm assessment, root cause analysis, KPI gap quantification.',
-    metrics: ['OTIF', 'Forecast Accuracy', 'Plan Adherence', 'SC Cost %'],
+    description: 'Benchmark de tableau de bord équilibré, évaluation du rythme opérationnel, analyse des causes racines, quantification des écarts de KPI.',
+    metrics: ['OTIF', 'Fiabilité des prévisions', 'Respect du plan', '% coût SC'],
     href: '/platform/kpis',
     recoverable: '1.06M',
   },
@@ -59,15 +59,15 @@ export default function PlatformIndex() {
           <div className="flex items-center gap-3">
             <LogoIcon size={32} />
             <div>
-              <div className="text-base font-bold text-white">OpsFlow Diagnostic Platform</div>
-              <div className="text-[11px] text-teal-muted/50">Data-driven supply chain diagnostics</div>
+              <div className="text-base font-bold text-white">Plateforme de diagnostic OpsFlow</div>
+              <div className="text-[11px] text-teal-muted/50">Diagnostics supply chain pilotés par les données</div>
             </div>
           </div>
           <a
             href="/"
             className="text-teal-muted text-xs hover:text-white transition-colors no-underline"
           >
-            Back to website
+            Retour au site
           </a>
         </div>
       </div>
@@ -76,22 +76,22 @@ export default function PlatformIndex() {
         {/* Hero */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal/10 border border-teal/20 text-teal text-xs font-semibold mb-4">
-            <Target size={14} /> 4 Diagnostic Modules
+            <Target size={14} /> 4 modules de diagnostic
           </div>
           <h1 className="text-3xl md:text-4xl font-serif text-white leading-tight mb-4">
-            Quantify your supply chain gaps.<br />
-            <em className="text-teal not-italic">See the cost of inaction.</em>
+            Quantifiez les écarts de votre supply chain.<br />
+            <em className="text-teal not-italic">Voyez le coût de l’inaction.</em>
           </h1>
           <p className="text-teal-muted text-sm leading-relaxed max-w-xl mx-auto">
-            Upload your data, get an automated health check, and receive a full diagnostic dashboard with prioritised recommendations and ROI quantification. Each module maps to a specific OpsFlow engagement.
+            Importez vos données, obtenez un bilan automatisé et recevez un tableau de bord de diagnostic complet, avec recommandations priorisées et quantification du ROI. Chaque module correspond à une mission OpsFlow précise.
           </p>
         </div>
 
         {/* Total recoverable */}
         <div className="rounded-2xl border-2 border-teal/20 bg-gradient-to-r from-teal/5 to-navy-deep/60 p-6 mb-8 text-center">
-          <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Combined Recoverable Value (Typical Client)</div>
+          <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Valeur récupérable combinée (client type)</div>
           <div className="text-4xl font-extrabold text-white">CHF 5.63M</div>
-          <div className="text-sm text-teal-muted mt-1">across all 4 modules — average industrial manufacturer CHF 50-200M revenue</div>
+          <div className="text-sm text-teal-muted mt-1">sur les 4 modules — industriel moyen, chiffre d’affaires CHF 50-200M</div>
         </div>
 
         {/* Module cards */}
@@ -125,7 +125,7 @@ export default function PlatformIndex() {
 
               <div className="flex items-center justify-between pt-3 border-t border-navy-mid/40">
                 <div>
-                  <div className="text-[10px] text-teal-muted/30 uppercase tracking-wider">Typical recoverable value</div>
+                  <div className="text-[10px] text-teal-muted/30 uppercase tracking-wider">Valeur récupérable type</div>
                   <div className="text-lg font-extrabold text-teal">CHF {mod.recoverable}</div>
                 </div>
                 <div className="w-8 h-8 rounded-full bg-teal/10 flex items-center justify-center group-hover:bg-teal/20 transition-colors">
@@ -138,14 +138,14 @@ export default function PlatformIndex() {
 
         {/* How it works */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-8">
-          <div className="text-sm font-semibold text-white mb-5 text-center">How it works</div>
+          <div className="text-sm font-semibold text-white mb-5 text-center">Comment ça marche</div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
             {[
-              { step: '1', title: 'Upload Data', desc: 'Use our templates or your own exports' },
-              { step: '2', title: 'Health Check', desc: 'Automated data quality assessment' },
-              { step: '3', title: 'Analysis', desc: 'Segmentation, benchmarks, patterns' },
-              { step: '4', title: 'Dashboard', desc: 'Visual findings with ROI quantification' },
-              { step: '5', title: 'Recommendations', desc: 'Prioritised actions + 90-day roadmap' },
+              { step: '1', title: 'Importer les données', desc: 'Nos modèles ou vos propres exports' },
+              { step: '2', title: 'Bilan', desc: 'Évaluation automatisée de la qualité des données' },
+              { step: '3', title: 'Analyse', desc: 'Segmentation, benchmarks, tendances' },
+              { step: '4', title: 'Tableau de bord', desc: 'Résultats visuels avec quantification du ROI' },
+              { step: '5', title: 'Recommandations', desc: 'Actions priorisées + feuille de route 90 jours' },
             ].map((s) => (
               <div key={s.step} className="p-3">
                 <div className="w-8 h-8 rounded-full bg-teal/10 flex items-center justify-center mx-auto mb-2 text-teal text-sm font-bold">
@@ -166,18 +166,18 @@ export default function PlatformIndex() {
             rel="noopener noreferrer"
             className="inline-block px-8 py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors no-underline"
           >
-            Book Free 90-min Problem Session
+            Réserver une session gratuite
           </a>
           <div className="text-xs text-teal-muted/30 mt-3">
-            Not sure which module fits? Start with a conversation.
+            Vous ne savez pas quel module choisir ? Commençons par un échange.
           </div>
         </div>
       </div>
 
       {/* Footer */}
       <div className="text-center py-6 border-t border-navy-mid/40">
-        <div className="text-xs text-teal-muted/40">OpsFlow Advisory — Smarter supply chains. Built by people. Powered by AI.</div>
-        <div className="text-[10px] text-teal-muted/20 mt-1">opsflow-advisory.ch &middot; Nyon, Canton Vaud, Switzerland</div>
+        <div className="text-xs text-teal-muted/40">OpsFlow Advisory — Des supply chains plus intelligentes. Portées par l’humain. Augmentées par l’IA.</div>
+        <div className="text-[10px] text-teal-muted/20 mt-1">opsflow-advisory.ch &middot; Nyon, Canton de Vaud, Suisse</div>
       </div>
     </div>
   )
