@@ -2,19 +2,21 @@
 
 import { LogoIcon } from './LogoIcon'
 
+const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+
 const links = [
-  { label: 'Services', href: '#services' },
-  { label: 'How it works', href: '#how' },
-  { label: 'Why OpsFlow', href: '#why' },
+  { label: 'Services', href: '/#services' },
+  { label: 'How it works', href: '/#how' },
   { label: 'Academy', href: '/academy' },
-  { label: 'Cases', href: '#cases' },
+  { label: 'Platform', href: '/platform' },
+  { label: 'Diagnostic', href: '/diagnostic' },
 ]
 
 export function Navbar() {
   return (
     <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3 no-underline">
+        <a href="/" className="flex items-center gap-3 no-underline">
           <LogoIcon size={34} />
           <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
@@ -29,14 +31,18 @@ export function Navbar() {
             </a>
           ))}
           <a
-            href="mailto:caio@opsflow-advisory.ch"
+            href={CALENDLY}
+            target="_blank"
+            rel="noopener"
             className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline"
           >
             Book a session
           </a>
         </div>
         <a
-          href="mailto:caio@opsflow-advisory.ch"
+          href={CALENDLY}
+          target="_blank"
+          rel="noopener"
           className="md:hidden bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline"
         >
           Book session
