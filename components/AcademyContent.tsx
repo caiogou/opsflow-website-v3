@@ -213,7 +213,7 @@ const DICT: Record<Lang, Record<string, string>> = {
 }
 
 // TODO: remplacer par le lien Calendly « Diagnostic 45 min » lorsqu'il sera créé.
-const BOOK_HREF = 'mailto:caio@opsflow-advisory.ch'
+const BOOK_HREF = 'https://calendly.com/caio-opsflow-advisory/30min'
 
 const LANGS: Lang[] = ['fr', 'en', 'de']
 
@@ -462,3 +462,4 @@ export function AcademyContent() {
     </div>
   )
 }
+
