@@ -9,6 +9,7 @@ const links = [
   { label: 'How it works', href: '/#how' },
   { label: 'Academy', href: '/academy' },
   { label: 'Platform', href: '/platform' },
+  { label: 'Ressources', href: '/ressources' },
   { label: 'Diagnostic', href: '/diagnostic' },
 ]
 
@@ -20,7 +21,7 @@ export function Navbar() {
           <LogoIcon size={34} />
           <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-7">
           {links.map((l) => (
             <a
               key={l.label}
