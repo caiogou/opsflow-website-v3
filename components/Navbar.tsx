@@ -5,7 +5,7 @@ import { LogoIcon } from './LogoIcon'
 const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
 
 const links = [
-  { label: 'Services', href: '/#services' },
+  { label: 'Services', href: '/services' },
   { label: 'Notre approche', href: '/#how' },
   { label: 'Academy', href: '/academy' },
   { label: 'Plateforme', href: '/platform' },
