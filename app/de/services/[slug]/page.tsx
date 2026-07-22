@@ -22,7 +22,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   if (!r) notFound()
   const url = `${BASE}/de/services/${r.slug}`
   const others = servicesDe.filter((x) => x.slug !== r.slug)
-  const main = { '@context': 'https://schema.org', '@type': 'Service', name: r.h1, description: r.description, inLanguage: 'de', serviceType: r.h1, areaServed: ['Switzerland','EMEA'], provider: {{ '@type':'Organization', name:'OpsFlow Advisory', url: BASE }}, url }
+  const main = { '@context': 'https://schema.org', '@type': 'Service', name: r.h1, description: r.description, inLanguage: 'de', serviceType: r.h1, areaServed: ['Switzerland','EMEA'], provider: { '@type':'Organization', name:'OpsFlow Advisory', url: BASE }, url }
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: r.faq.map((f) => ({ '@type':'Question', name: f.q, acceptedAnswer: { '@type':'Answer', text: f.a } })) }
   return (
     <>
