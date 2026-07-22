@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Navbar } from '@/components/Navbar'
-import { ressourcesEn, getRessourceEn } from '@/lib/ressources_de'
+import { ressourcesEn, getRessourceEn } from '@/lib/ressources_en'
 
 const BASE = 'https://www.opsflow-advisory.ch'
 const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
