@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Navbar } from '@/components/Navbar'
-import { servicesEn } from '@/lib/services_de'
+import { servicesEn } from '@/lib/services_en'
 
 export const metadata: Metadata = {
   title: 'Services — Supply Chain Consulting & S&OP for SMEs',
