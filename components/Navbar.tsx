@@ -19,9 +19,9 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
     { label: t.services, href: `${base}/services` },
     { label: t.how, href: `${base}/#how` },
     { label: t.academy, href: '/academy' },
-    { label: t.platform, href: `${base}/platform` },
+    { label: t.platform, href: `/platform` },
     { label: t.ressources, href: `${base}/ressources` },
-    { label: t.diagnostic, href: `${base}/diagnostic` },
+    { label: t.diagnostic, href: `/diagnostic` },
   ]
   return (
     <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">

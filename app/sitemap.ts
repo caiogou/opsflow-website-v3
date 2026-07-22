@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next'
 import { ressources } from '@/lib/ressources'
 import { services } from '@/lib/services'
+import { ressourcesDe } from '@/lib/ressources_de'
+import { servicesDe } from '@/lib/services_de'
 
 const BASE = 'https://www.opsflow-advisory.ch'
 
@@ -17,12 +19,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/platform/supply-risk`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE}/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/de`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/de/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/de/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ]
-  const svc: MetadataRoute.Sitemap = services.map((r) => ({
-    url: `${BASE}/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.8,
-  }))
-  const res: MetadataRoute.Sitemap = ressources.map((r) => ({
-    url: `${BASE}/ressources/${r.slug}`, lastModified: now, changeFrequency: 'monthly', priority: 0.7,
-  }))
-  return [...core, ...svc, ...res]
+  const fr: MetadataRoute.Sitemap = [
+    ...services.map((r) => ({ url: `${BASE}/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
+    ...ressources.map((r) => ({ url: `${BASE}/ressources/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 })),
+  ]
+  const de: MetadataRoute.Sitemap = [
+    ...servicesDe.map((r) => ({ url: `${BASE}/de/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
+    ...ressourcesDe.map((r) => ({ url: `${BASE}/de/ressources/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 })),
+  ]
+  return [...core, ...fr, ...de]
 }
