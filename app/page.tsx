@@ -12,7 +12,7 @@ import { CTA, Footer } from '@/components/CTAFooter'
 export const metadata: Metadata = {
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/',
-    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', 'x-default': 'https://www.opsflow-advisory.ch/' },
+    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/' },
   },
 }
 
