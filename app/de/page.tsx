@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     'Supply-Chain-Beratung für KMU in der Schweiz und EMEA: S&OP, Bestandsoptimierung, Risikomanagement und Distributionsplanung. MIT-zertifiziert. Kostenlose Standortbestimmung.',
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/de',
-    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', 'x-default': 'https://www.opsflow-advisory.ch/' },
+    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/' },
   },
   openGraph: { title: 'OpsFlow Advisory', description: 'Supply-Chain-Beratung, verstärkt durch KI — Schweiz & EMEA.', url: 'https://www.opsflow-advisory.ch/de', type: 'website' },
 }
