@@ -38,6 +38,8 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
             <a href="/" className={`no-underline ${lang === 'fr' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>FR</a>
             <span className="text-navy-mid">|</span>
             <a href="/de" className={`no-underline ${lang === 'de' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>DE</a>
+            <span className="text-navy-mid">|</span>
+            <a href="/en" className={`no-underline ${lang === 'en' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>EN</a>
           </div>
           <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">{t.cta}</a>
         </div>
