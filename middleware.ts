@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
   let target = cookie
   if (!target) {
     const al = (req.headers.get('accept-language') || '').split(',')[0].split('-')[0].toLowerCase()
-    target = al === 'de' ? 'de' : 'fr'
+    target = al === 'de' ? 'de' : al === 'en' ? 'en' : 'fr'
   }
 
   if (target === 'de') {
@@ -17,6 +17,13 @@ export function middleware(req: NextRequest) {
     url.pathname = '/de'
     const res = NextResponse.redirect(url)
     res.cookies.set(COOKIE, 'de', { path: '/', maxAge: 60 * 60 * 24 * 365 })
+    return res
+  }
+  if (target === 'en') {
+    const url = req.nextUrl.clone()
+    url.pathname = '/en'
+    const res = NextResponse.redirect(url)
+    res.cookies.set(COOKIE, 'en', { path: '/', maxAge: 60 * 60 * 24 * 365 })
     return res
   }
   const res = NextResponse.next()
