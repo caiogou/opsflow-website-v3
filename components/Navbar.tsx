@@ -26,11 +26,11 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
   return (
     <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <a href={base || '/'} className="flex items-center gap-3 no-underline">
+        <a href={base || '/'} className="flex items-center gap-3 no-underline shrink-0 mr-6">
           <LogoIcon size={34} />
           <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden md:flex items-center gap-5">
           {links.map((l) => (
             <a key={l.label} href={l.href} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{l.label}</a>
           ))}
