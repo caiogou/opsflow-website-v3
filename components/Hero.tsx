@@ -43,7 +43,7 @@ export function Hero({ lang = 'fr' }: { lang?: Lang }) {
         <div>
           <p className="text-xs font-bold tracking-widest text-teal uppercase mb-5">{t.kicker}</p>
           <h1 className="font-serif text-4xl md:text-6xl font-normal text-white leading-tight mb-6">
-            {t.h1a}{' '}
+            {t.h1a}<br />
             <em className="text-teal not-italic">{t.h1b}</em>
           </h1>
           <p className="text-lg text-teal-muted leading-relaxed mb-10 max-w-lg">{t.lead}</p>
