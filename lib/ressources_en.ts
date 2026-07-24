@@ -211,6 +211,112 @@ export const ressourcesEn: Ressource[] = [
       }
     ]
   }
+,
+{
+  "slug": "aggregate-planning",
+  "title": "Aggregate planning: the tactical production plan",
+  "description": "Aggregate planning is the tactical layer of planning, between S&OP and the master schedule. Definition, role and why it matters for an SME.",
+  "h1": "Aggregate planning: the tactical production plan",
+  "bodyHtml": "<h1>Aggregate planning: the tactical production plan</h1>\n<p><strong>Aggregate planning</strong> is the tactical layer of planning: it translates management's direction into volumes by product family, over a horizon of a few months to about a year and a half. Sitting between the big picture and the shop-floor detail, it answers a simple but decisive question: given the expected demand, what must we produce, source and stock — by broad family — to hold service without inflating inventory?</p>\n\n<h2>Aggregate planning between S&OP and the master schedule</h2>\n<p>Aggregate planning belongs to a three-tier planning chain. Above it, the decision process — often called S&OP — aligns management on a single plan; our fiche <a href=\"/en/ressources/what-is-sop\">What is S&OP?</a> details the logic. Aggregate planning is the tactical link: it reasons by product family, not by item, and settles the big balances between demand and capacity. Below it comes the master production schedule (MPS), which drills down to the finished product and the week. Aggregate planning is therefore the bridge between the strategic decision and detailed execution.</p>\n\n<h2>How to build an aggregate plan, step by step</h2>\n<p>Building an aggregate plan follows a constant logic. You start from the aggregated demand forecast by family. You confront it with available capacity — production, sourcing, resources. You simulate scenarios (build stock ahead, smooth the load, adjust lead times) and quantify their consequences. Then you decide: management approves a plan by family, which becomes the reference for the MPS. Aggregate planning does not seek item-level precision; it seeks the right overall balance — the one that avoids both stockouts and overstock at the family level.</p>\n\n<h2>When does an SME need it?</h2>\n<p>An SME benefits from a formal aggregate plan as soon as its capacity decisions — hiring, subcontracting, building seasonal stock — can no longer be made on instinct. This is especially true with marked seasonality or long lead times, where you must decide months ahead. Aggregate planning is a clear illustration of the <strong>Two-Layer Model</strong>: it belongs to the decision layer (the big trade-offs approved by management), while the MPS and scheduling belong to the execution layer that carries them out.</p>\n\n<h2>The common mistake</h2>\n<p>The most frequent mistake is to skip the tactical level: jumping straight from strategy to production detail, with no aggregate plan. Capacity trade-offs are then made in a rush, item by item, with no overall view. The other trap is to build an aggregate plan at item level: it becomes heavy, unreadable and duplicates the MPS. Aggregate planning must stay at the right grain — the family — to play its steering role.</p>\n\n<h2>Review your planning</h2>\n<p>Wondering whether your tactical planning is at the right level? Our <a href=\"/diagnostic\">free assessment</a> of forty-five minutes takes stock, with no commitment.</p>\n\n<h2>Frequently asked questions</h2>\n<h3>What is aggregate planning?</h3>\n<p>It is the tactical layer of planning, translating strategy into volumes by product family over a few months to about eighteen months, between S&OP and the master schedule.</p>\n<h3>What is the difference between aggregate planning and the master schedule?</h3>\n<p>Aggregate planning reasons by product family and settles the big balances; the master schedule drills down to the finished product and the week for execution.</p>\n<h3>Does an SME need aggregate planning?</h3>\n<p>Yes, as soon as capacity decisions must be made months ahead, notably with seasonality or long sourcing lead times.</p>",
+  "faq": [
+    {
+      "q": "What is aggregate planning?",
+      "a": "It is the tactical layer of planning, translating strategy into volumes by product family over a few months to about eighteen months, between S&OP and the master schedule."
+    },
+    {
+      "q": "What is the difference between aggregate planning and the master schedule?",
+      "a": "Aggregate planning reasons by product family and settles the big balances; the master schedule drills down to the finished product and the week for execution."
+    },
+    {
+      "q": "Does an SME need aggregate planning?",
+      "a": "Yes, as soon as capacity decisions must be made months ahead, notably with seasonality or long sourcing lead times."
+    }
+  ]
+},
+{
+  "slug": "reorder-point-economic-order-quantity",
+  "title": "Reorder point and economic order quantity (EOQ)",
+  "description": "The reorder point tells you when to replenish; the economic order quantity (EOQ, Wilson), how much to order. Logic, method and the mistake to avoid.",
+  "h1": "Reorder point and economic order quantity",
+  "bodyHtml": "<h1>Reorder point and economic order quantity</h1>\n<p>The <strong>reorder point</strong> is the stock level at which you must trigger a replenishment. It answers the question «when to order?», while the economic order quantity answers «how much to order?». Together, these two notions form the basis of sound inventory management: ordering neither too early nor too late, neither too much nor too little. Set correctly, they avoid both stockouts and needless accumulation.</p>\n\n<h2>The reorder point: when to replenish</h2>\n<p>The principle is simple: while you wait for a delivery, stock keeps falling at the pace of demand. The reorder point therefore equals the quantity needed to cover demand during the lead time, plus the safety stock that absorbs variability. In short: reorder point = demand during lead time + safety stock. As soon as stock drops to this threshold, you place an order, and it arrives before stock hits zero.</p>\n\n<h2>The economic order quantity: how much to order</h2>\n<p>The economic order quantity, formalised by the Wilson formula, seeks the best trade-off between two costs that move in opposite directions. Ordering often in small quantities multiplies ordering costs (processing, transport, receiving). Ordering rarely in large quantities inflates holding costs (capital tied up, storage, obsolescence). The economic order quantity is the point where the sum of these two costs is lowest. The idea to remember is not the formula itself but its intuition: there is an order size that minimises total cost, and ordering «by feel» almost always drifts away from it.</p>\n\n<h2>When to use them in an SME</h2>\n<p>These two references become useful as soon as an SME manages items with regular demand and recurring replenishment. They turn an intuitive purchasing decision into a simple, repeatable rule that teams apply without recomputing each time. This is the execution layer of the <strong>Two-Layer Model</strong>: once the service policy is decided upstream, the reorder point and the economic order quantity are the concrete settings that bring it to life day to day.</p>\n\n<h2>The common mistake</h2>\n<p>The most widespread mistake is setting the reorder point without accounting for the real lead time or its variability: you then trigger too late and stockouts set in. The other trap concerns the economic order quantity: applying it blindly to items with very irregular demand or to perishables, when it assumes relatively stable demand. These tools are starting points to adjust to context, not absolute truths.</p>\n\n<h2>Check your replenishment rules</h2>\n<p>Suspect your order thresholds are poorly set? Our <a href=\"/diagnostic\">free assessment</a> of forty-five minutes examines the logic of your replenishment, with no commitment.</p>\n\n<h2>Frequently asked questions</h2>\n<h3>What is the reorder point?</h3>\n<p>It is the stock level at which you trigger a replenishment: demand during the lead time, plus the safety stock.</p>\n<h3>What is the economic order quantity (Wilson formula)?</h3>\n<p>It is the order size that minimises total cost, balancing ordering costs (ordering often) against holding costs (ordering a lot).</p>\n<h3>Do these formulas suit every item?</h3>\n<p>No. They assume relatively regular demand; for very irregular or perishable items they serve as a reference to adjust, not a strict rule.</p>",
+  "faq": [
+    {
+      "q": "What is the reorder point?",
+      "a": "It is the stock level at which you trigger a replenishment: demand during the lead time, plus the safety stock."
+    },
+    {
+      "q": "What is the economic order quantity (Wilson formula)?",
+      "a": "It is the order size that minimises total cost, balancing ordering costs (ordering often) against holding costs (ordering a lot)."
+    },
+    {
+      "q": "Do these formulas suit every item?",
+      "a": "No. They assume relatively regular demand; for very irregular or perishable items they serve as a reference to adjust, not a strict rule."
+    }
+  ]
+},
+{
+  "slug": "inventory-turnover",
+  "title": "Inventory turnover: how to calculate and read it",
+  "description": "Inventory turnover measures how many times stock renews over a period. How to calculate it, how to interpret it and the mistake to avoid in an SME.",
+  "h1": "Inventory turnover",
+  "bodyHtml": "<h1>Inventory turnover</h1>\n<p><strong>Inventory turnover</strong> measures how many times stock fully renews over a given period, usually a year. It is one of the most telling indicators of a stock's health: high turnover means goods are not sitting idle, while low turnover signals tied-up capital, obsolescence risk and space taken up for nothing. In a single value, it tells you whether stock is working for the business or against it.</p>\n\n<h2>How to calculate inventory turnover</h2>\n<p>The calculation is direct: you divide what went out over the period by the average stock held during that period. In practice, you relate the cost of goods sold (or the volume shipped) to average inventory. A result of six, for example, means stock renewed six times in the year. From it you easily derive coverage — the number of days of stock — by dividing the period length by turnover. Turnover and coverage are two sides of the same reality: one in number of turns, the other in days.</p>\n\n<h2>How to interpret it</h2>\n<p>There is no universal «good» rate: turnover is always read against a sector and a product type. A grocery turns far faster than a maker of industrial parts. What matters is the comparison over time (is my turnover improving?) and across item families (which products are sleeping?). Falling turnover flags overstock or weakening demand; very high turnover can, conversely, hide frequent stockouts. The indicator opens the question; it does not answer it alone.</p>\n\n<h2>When to track it in an SME</h2>\n<p>As soon as an SME ties up capital in stock, turnover deserves tracking, at least by broad item family. It is a steering indicator typical of the execution layer of the <strong>Two-Layer Model</strong>: it measures whether the stock policy decided upstream actually produces the intended effect on the ground, and shows where to act when it does not.</p>\n\n<h2>The common mistake</h2>\n<p>The most frequent mistake is to compute a single global turnover for the whole company and be content with it. That average hides the essential: a few fast-moving items can mask a mass of references that sit idle. Turnover is only valuable when segmented, family by family. The other trap is reading it in isolation: high turnover is only good if service holds at the same time. A third error is chasing a single target rate borrowed from another company or sector, without checking that it fits your own products, margins and lead times — a figure that means little out of context.</p>\n\n<h2>Analyse your stock health</h2>\n<p>Want to know which item families are dragging down your turnover? Our <a href=\"/diagnostic\">free assessment</a> of forty-five minutes takes stock, with no commitment.</p>\n\n<h2>Frequently asked questions</h2>\n<h3>What is inventory turnover?</h3>\n<p>It is the number of times stock fully renews over a period, usually a year; it shows whether goods sit idle or circulate.</p>\n<h3>How do you calculate inventory turnover?</h3>\n<p>By dividing what went out over the period (cost of goods sold or volume shipped) by the average stock held during that same period.</p>\n<h3>What is a good turnover rate?</h3>\n<p>There is no universal value: turnover is read against the sector, the product type and its evolution over time.</p>",
+  "faq": [
+    {
+      "q": "What is inventory turnover?",
+      "a": "It is the number of times stock fully renews over a period, usually a year; it shows whether goods sit idle or circulate."
+    },
+    {
+      "q": "How do you calculate inventory turnover?",
+      "a": "By dividing what went out over the period (cost of goods sold or volume shipped) by the average stock held during that same period."
+    },
+    {
+      "q": "What is a good turnover rate?",
+      "a": "There is no universal value: turnover is read against the sector, the product type and its evolution over time."
+    }
+  ]
+},
+{
+  "slug": "mrp-net-requirements-calculation",
+  "title": "MRP: the net requirements calculation explained",
+  "description": "MRP and the net requirements calculation: from gross to net requirements using stock and open orders. Method, role in an SME and the mistake to avoid.",
+  "h1": "MRP: the net requirements calculation",
+  "bodyHtml": "<h1>MRP: the net requirements calculation</h1>\n<p>The <strong>net requirements calculation</strong> is the heart of MRP (Material Requirements Planning), the method that turns a production plan into concrete sourcing and manufacturing orders. Its principle: start from what you need (the gross requirement), subtract what you already hold, and buy or produce only the difference. That is what prevents ordering what is already in stock — and missing what is not.</p>\n\n<h2>The net requirements calculation: from gross to net</h2>\n<p>The net requirements calculation follows a logical subtraction. You start from the gross requirement: the total quantity needed, drawn from forecasts and firm orders. You subtract available stock and quantities already ordered but not yet received (open orders). You add, if policy requires, the safety stock to rebuild. The result is the net requirement: the real quantity to source or manufacture. This net is then positioned in time by accounting for lead times, so the order is launched early enough to arrive at the right moment.</p>\n\n<h2>MRP, execution of the forecast</h2>\n<p>MRP does not decide demand: it executes a decision already made. The demand forecast, whose methods our fiche <a href=\"/en/ressources/demand-forecasting\">demand forecasting</a> details, feeds the gross requirement; MRP turns it into precise actions. It is a clear illustration of the <strong>Two-Layer Model</strong>: the decision (what do we want to produce and sell?) belongs to an upper layer, and the net requirements calculation belongs to the execution layer that makes it operational, item by item.</p>\n\n<h2>When does an SME need it?</h2>\n<p>The net requirements calculation becomes useful as soon as an SME assembles or manufactures from several components with different lead times. As long as there are only a handful of items, manual tracking is enough; but once bills of materials multiply, computing requirements «by hand» becomes a source of errors and stockouts. MRP structures this calculation and makes it reliable and repeatable.</p>\n\n<h2>The common mistake</h2>\n<p>The classic mistake is to trust MRP without making its input data reliable: a wrong theoretical stock, an obsolete bill of materials or a mis-entered lead time produce an erroneous net requirement. MRP does not correct bad data; it propagates it, sometimes amplifying it. The other trap is ignoring lead-time variability, which leads to launching orders too late. The quality of the net requirements calculation depends entirely on the quality of the data feeding it.</p>\n\n<h2>Review your requirements planning</h2>\n<p>Want to know whether your planning data is reliable enough for MRP? Our <a href=\"/diagnostic\">free assessment</a> of forty-five minutes takes stock, with no commitment.</p>\n\n<h2>Frequently asked questions</h2>\n<h3>What is the net requirements calculation?</h3>\n<p>It is the heart of MRP: start from the gross requirement, subtract available stock and open orders, and source or produce only the difference.</p>\n<h3>What is the difference between gross and net requirements?</h3>\n<p>The gross requirement is the total quantity needed; the net requirement is what remains to source once stock and open orders are subtracted.</p>\n<h3>Does an SME need MRP?</h3>\n<p>Yes, as soon as it manufactures or assembles from several components with different lead times, where manual calculation becomes a source of errors.</p>",
+  "faq": [
+    {
+      "q": "What is the net requirements calculation?",
+      "a": "It is the heart of MRP: start from the gross requirement, subtract available stock and open orders, and source or produce only the difference."
+    },
+    {
+      "q": "What is the difference between gross and net requirements?",
+      "a": "The gross requirement is the total quantity needed; the net requirement is what remains to source once stock and open orders are subtracted."
+    },
+    {
+      "q": "Does an SME need MRP?",
+      "a": "Yes, as soon as it manufactures or assembles from several components with different lead times, where manual calculation becomes a source of errors."
+    }
+  ]
+},
+{
+  "slug": "supply-chain-kpis-dashboard",
+  "title": "Supply chain KPIs: building your dashboard",
+  "description": "Which supply chain KPIs should an SME track? The 5 to 7 essential metrics — OTIF, turnover, cost-to-serve — and how to build your dashboard.",
+  "h1": "Supply chain KPIs: building your dashboard",
+  "bodyHtml": "<h1>Supply chain KPIs: building your dashboard</h1>\n<p><strong>Supply chain KPIs</strong> are the metrics that let you steer a supply chain instead of enduring it. For an SME, the trap is not having too few but too many: a dashboard overloaded with measures no one looks at steers nothing. The point is to choose the five to seven metrics that truly matter, to tie them to the decisions they inform, and to track them consistently.</p>\n\n<h2>The essential supply chain KPIs for an SME</h2>\n<p>A few indicators cover the essentials of a chain. The service level, or <a href=\"/en/ressources/otif\">OTIF</a> (on time, in full), measures the promise kept to the customer. <a href=\"/en/ressources/inventory-turnover\">Inventory turnover</a> tells whether tied-up capital is working. <a href=\"/en/ressources/cost-to-serve\">Cost-to-serve</a> reveals what serving each customer really costs. Forecast accuracy (the gap between forecast and actual) sheds light on planning quality. And on-time supplier delivery measures how well suppliers hold. Five to seven metrics of this kind are enough to cover demand, stock, service and cost.</p>\n\n<h2>How to build the dashboard</h2>\n<p>A good dashboard is built backwards: you start from the decisions to make, then choose the metrics that inform them — never the other way around. For each KPI, you define a reliable data source, an update frequency and an owner. You set a target or a reference trend, so that a gap triggers an action rather than a mere observation. Finally, you keep the dashboard readable: a few well-chosen figures, updated regularly, beat an exhaustive report consulted once a quarter.</p>\n\n<h2>When to put it in place</h2>\n<p>As soon as an SME wants to decide on facts rather than impressions, the dashboard becomes necessary. It bridges the two levels of the <strong>Two-Layer Model</strong>: KPIs measure whether execution truly holds what the decision promised, and close the loop between the two. Without shared metrics, the decision layer steers blind.</p>\n\n<h2>The common mistake</h2>\n<p>The most widespread mistake is piling up indicators: a dashboard of thirty measures drowns the essential and is never looked at. The other trap is tracking KPIs that lead to no decision — figures you contemplate without ever acting on. A useful indicator is one that, when it drifts, triggers something. If it changes no decision, it has no place on the dashboard. A related trap is changing the definition of a metric over time, so that today's figure can no longer be compared with last quarter's — a KPI only steers if it is measured the same way each period.</p>\n\n<h2>Build your dashboard</h2>\n<p>Want to identify the few supply chain KPIs that would truly matter for your SME? Our <a href=\"/diagnostic\">free assessment</a> of forty-five minutes helps frame them, with no commitment.</p>\n\n<h2>Frequently asked questions</h2>\n<h3>What are the essential supply chain KPIs?</h3>\n<p>The service level (OTIF), inventory turnover, cost-to-serve, forecast accuracy and on-time supplier delivery.</p>\n<h3>How many KPIs should an SME track?</h3>\n<p>Five to seven well-chosen metrics are enough: an overloaded dashboard drowns the essential and stops being looked at.</p>\n<h3>How do you build a supply chain dashboard?</h3>\n<p>By starting from the decisions to make, then choosing the metrics that inform them, with a reliable source, a frequency and an owner for each.</p>",
+  "faq": [
+    {
+      "q": "What are the essential supply chain KPIs?",
+      "a": "The service level (OTIF), inventory turnover, cost-to-serve, forecast accuracy and on-time supplier delivery."
+    },
+    {
+      "q": "How many KPIs should an SME track?",
+      "a": "Five to seven well-chosen metrics are enough: an overloaded dashboard drowns the essential and stops being looked at."
+    },
+    {
+      "q": "How do you build a supply chain dashboard?",
+      "a": "By starting from the decisions to make, then choosing the metrics that inform them, with a reliable source, a frequency and an owner for each."
+    }
+  ]
+}
 ]
 
 export const getRessourceEn = (slug: string) => ressourcesEn.find((r) => r.slug === slug)
