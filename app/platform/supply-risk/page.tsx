@@ -12,9 +12,12 @@ import {
   Activity, AlertOctagon, Zap
 } from 'lucide-react'
 import { LogoIcon } from '@/components/LogoIcon'
+import { RealUploader } from '@/components/platform/RealUploader'
+import { analyzeSupplyRisk, parseImpact, SUPPLY_RISK_TEMPLATES, type SupplyRiskDataset } from '@/lib/engine/supplyRisk'
 
 /* ══════════════════════════════════════════════════════════════
-   SIMULATED DATA — Replace with real upload/parse in production
+   DEMO DATA (fictional company) — real uploads are computed by
+   lib/engine/supplyRisk.ts into the same shape (see DEMO below).
    ══════════════════════════════════════════════════════════════ */
 
 const COMPANY = { name: 'Simulated Client', currency: 'CHF', supplierCount: 127, activeSuppliers: 89 }
@@ -27,6 +30,8 @@ const EXECUTIVE_SUMMARY = {
   singleSourceSpend: 42,
   top5Spend: 61,
   annualDisruptionCost: 840_000,
+  disruptionCostAvailable: true,
+  disruptionCostBasis: 'based on 6-year history',
 }
 
 // Supplier Concentration Data
@@ -44,9 +49,6 @@ const SUPPLIER_CONCENTRATION = [
   { name: 'Others', spend: 10.0, spending: 10.0 },
 ]
 
-const PIE_DATA = SUPPLIER_CONCENTRATION.slice(0, 5).concat(
-  { name: 'Others', spend: SUPPLIER_CONCENTRATION.slice(5).reduce((sum, s) => sum + s.spend, 0), spending: 0 }
-)
 
 const COLORS = ['#1a9e8f', '#4ab8ae', '#9fd8d0', '#7dc9c2', '#b0e0d8', '#d4eee9']
 
@@ -165,9 +167,57 @@ const RECOMMENDATIONS = [
   },
 ]
 
+const ROADMAP = [
+  {
+    phase: 'Week 1-4',
+    title: 'Risk Assessment & Quick Wins',
+    color: '#22C55E',
+    items: ['Complete single-source material audit', 'Launch supplier health scoring system', 'Establish industry risk intelligence subscription'],
+  },
+  {
+    phase: 'Week 5-8',
+    title: 'Sourcing Resilience',
+    color: '#EAB308',
+    items: ['Qualify alternative suppliers for 8 critical materials', 'Negotiate long-term agreements with top 5 suppliers', 'Begin geographic diversification for Asia spend'],
+  },
+  {
+    phase: 'Week 9-12',
+    title: 'Sustain & Monitor',
+    color: '#0EA5E9',
+    items: ['Build contingency inventory for high-risk materials', 'Deploy real-time supplier resilience dashboard', 'Establish quarterly supply chain risk review'],
+  },
+]
+
+const DATA_HEALTH = {
+  overall: 78,
+  dimensions: [
+    { name: 'Completeness', score: 88, detail: '8% of suppliers missing financial stability data' },
+    { name: 'Accuracy', score: 75, detail: 'Supplier locations and lead times inconsistent in 18% of records' },
+    { name: 'Timeliness', score: 82, detail: 'Procurement data updated weekly (daily recommended for risk monitoring)' },
+    { name: 'Consistency', score: 70, detail: 'Supplier codes differ across ERP and procurement systems' },
+    { name: 'Granularity', score: 72, detail: 'Material sourcing tracked by supplier, not risk category' },
+  ],
+}
+
+const DEMO: SupplyRiskDataset = {
+  isDemo: true,
+  COMPANY, EXECUTIVE_SUMMARY, SUPPLIER_CONCENTRATION, RISK_HEAT_MAP, SINGLE_SOURCE_MATERIALS,
+  GEOGRAPHIC_DATA, DISRUPTION_HISTORY, ROADMAP, DATA_HEALTH,
+  RECOMMENDATIONS: RECOMMENDATIONS as SupplyRiskDataset['RECOMMENDATIONS'],
+  META: {
+    hhi: 1105, hhiLabel: 'unconcentrated',
+    concentrationText: 'Top 5 suppliers = 61% of total spend',
+    heatMapRule: 'Probability vs Impact matrix — supplier count per quadrant',
+    singleSourceRule: '',
+    incidentsProvided: true, incidentCount: 6, totalSpend: 0,
+    periodLabel: 'Fictional sample data', notes: [],
+  },
+}
+
 /* ══════════════════════════════════════════════════════════════ */
 
 const fmt = (n: number) => {
+  if (!isFinite(n)) return '0'
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`
   return n.toString()
@@ -182,103 +232,63 @@ const PRIORITY_COLORS: Record<string, string> = {
 
 export default function SupplyRiskDiagnostic() {
   const [screen, setScreen] = useState<'upload' | 'health' | 'dashboard'>('upload')
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [ds, setDs] = useState<SupplyRiskDataset>(DEMO)
+  const {
+    COMPANY, EXECUTIVE_SUMMARY, SUPPLIER_CONCENTRATION, RISK_HEAT_MAP, SINGLE_SOURCE_MATERIALS,
+    GEOGRAPHIC_DATA, DISRUPTION_HISTORY, RECOMMENDATIONS, ROADMAP, DATA_HEALTH, META,
+  } = ds
+  const isDemo = ds.isDemo
+  const cur = COMPANY.currency ? `${COMPANY.currency} ` : ''
 
-  const handleUpload = () => {
-    setIsProcessing(true)
-    setTimeout(() => { setIsProcessing(false); setScreen('health') }, 2000)
-  }
+  const PIE_DATA = useMemo(() => {
+    const top = SUPPLIER_CONCENTRATION.slice(0, 5)
+    const rest = Math.round(SUPPLIER_CONCENTRATION.slice(5).reduce((sum, s) => sum + (isFinite(s.spend) ? s.spend : 0), 0) * 10) / 10
+    return rest > 0 ? top.concat({ name: 'Others', spend: rest, spending: 0 }) : top
+  }, [SUPPLIER_CONCENTRATION])
 
   const handleProceed = () => setScreen('dashboard')
 
-  const totalRecoverableValue = RECOMMENDATIONS.reduce(
-    (sum, r) => sum + parseInt(r.impact.replace('K', '000').replace('M', '000000')), 0
-  )
+  const totalRecoverableValue = RECOMMENDATIONS.reduce((sum, r) => sum + parseImpact(r.impact), 0)
+  const quantifiedRecs = RECOMMENDATIONS.filter((r) => parseImpact(r.impact) > 0).length
+  const singleSourceSpendValue = Math.round((META.totalSpend * EXECUTIVE_SUMMARY.singleSourceSpend) / 100)
+  const heatTotal = Math.max(1, RISK_HEAT_MAP.reduce((s, q) => s + q.count, 0))
+  const geoMax = Math.max(30, Math.ceil(Math.max(0, ...GEOGRAPHIC_DATA.map((g) => g.spend)) / 10) * 10)
 
   /* ─── UPLOAD SCREEN ─── */
   if (screen === 'upload') {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center p-5">
-        <div className="max-w-xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10">
-          <div className="flex items-center gap-3 mb-8">
-            <LogoIcon size={38} />
-            <div>
-              <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-              <div className="text-[11px] text-teal-muted tracking-widest uppercase">Supply Risk & Resilience Diagnostic</div>
-            </div>
-          </div>
-
-          <h1 className="text-2xl font-serif text-white mb-3">
-            Upload your supplier & procurement data
-          </h1>
-          <p className="text-teal-muted text-sm leading-relaxed mb-8">
-            We need three data files to run the diagnostic. Download our templates or upload your own exports — the system will map the fields automatically.
-          </p>
-
-          {/* Templates */}
-          <div className="space-y-3 mb-8">
-            {[
-              { name: 'Supplier Master', desc: 'Supplier info, location, volume, performance metrics, lead times, quality scores', icon: Package },
-              { name: 'Procurement History', desc: '12-24 months of purchase orders, materials sourced, spend by supplier and region', icon: TrendingUp },
-              { name: 'Supply Chain Risk Data', desc: 'Disruption history, geopolitical exposure, single-source materials, capacity constraints', icon: FileSpreadsheet },
-            ].map((t) => (
-              <div key={t.name} className="flex items-center gap-4 p-4 rounded-xl border border-navy-mid bg-navy/40">
-                <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center">
-                  <t.icon size={18} className="text-teal" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">{t.name}</div>
-                  <div className="text-xs text-teal-muted/50">{t.desc}</div>
-                </div>
-                <button className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
-                  Template
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Upload area */}
-          <div
-            className="border-2 border-dashed border-navy-mid rounded-xl p-8 text-center mb-6 hover:border-teal/40 transition-colors cursor-pointer"
-            onClick={handleUpload}
-          >
-            {isProcessing ? (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-2 border-teal border-t-transparent rounded-full animate-spin" />
-                <span className="text-teal text-sm">Processing data...</span>
-              </div>
-            ) : (
-              <>
-                <Upload size={32} className="text-teal-muted/30 mx-auto mb-3" />
-                <div className="text-sm text-teal-muted mb-1">Drop files here or click to upload</div>
-                <div className="text-xs text-teal-muted/30">.xlsx, .csv — max 50MB per file</div>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={handleUpload}
-            className="w-full py-3.5 rounded-lg bg-teal/20 text-teal text-sm font-semibold hover:bg-teal/30 transition-colors border border-teal/30"
-          >
-            Use demo data to preview the diagnostic
-          </button>
-        </div>
-      </div>
+      <RealUploader
+        engine="platform/supply-risk"
+        eyebrow="Supply Risk & Resilience Diagnostic"
+        title="Upload your supplier & procurement data"
+        intro="One spend file is enough: supplier, material, annual spend (or PO lines) and supplier country. Add lead time and an alternative-supplier flag for sharper risk levels, and an optional incident log to measure disruption cost. Headers in English, French, German or Portuguese are mapped automatically."
+        templates={[
+          { ...SUPPLY_RISK_TEMPLATES[0], icon: (p: { size?: number; className?: string }) => <Package {...p} /> },
+          { ...SUPPLY_RISK_TEMPLATES[1], icon: (p: { size?: number; className?: string }) => <AlertTriangle {...p} /> },
+        ]}
+        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onAnalyze={(tables) => {
+          const res = analyzeSupplyRisk(tables)
+          setDs(res)
+          setScreen('health')
+          return {
+            summary: {
+              suppliers: res.EXECUTIVE_SUMMARY.totalSuppliers,
+              active_suppliers: res.EXECUTIVE_SUMMARY.activeSuppliers,
+              single_source_materials: res.EXECUTIVE_SUMMARY.singleSourceMaterials,
+              single_source_spend_pct: res.EXECUTIVE_SUMMARY.singleSourceSpend,
+              top5_spend_pct: res.EXECUTIVE_SUMMARY.top5Spend,
+              hhi: res.META.hhi,
+              incidents: res.META.incidentCount,
+            },
+          }
+        }}
+      />
     )
   }
 
   /* ─── DATA HEALTH CHECK ─── */
   if (screen === 'health') {
-    const DATA_HEALTH = {
-      overall: 78,
-      dimensions: [
-        { name: 'Completeness', score: 88, detail: '8% of suppliers missing financial stability data' },
-        { name: 'Accuracy', score: 75, detail: 'Supplier locations and lead times inconsistent in 18% of records' },
-        { name: 'Timeliness', score: 82, detail: 'Procurement data updated weekly (daily recommended for risk monitoring)' },
-        { name: 'Consistency', score: 70, detail: 'Supplier codes differ across ERP and procurement systems' },
-        { name: 'Granularity', score: 72, detail: 'Material sourcing tracked by supplier, not risk category' },
-      ],
-    }
     const healthColor = DATA_HEALTH.overall >= 80 ? '#1a9e8f' : DATA_HEALTH.overall >= 60 ? '#EAB308' : '#EF4444'
 
     return (
@@ -326,7 +336,9 @@ export default function SupplyRiskDiagnostic() {
               <div>
                 <div className="text-sm font-semibold text-white mb-1">Data quality impacts risk assessment</div>
                 <div className="text-xs text-teal-muted/60 leading-relaxed">
-                  The gaps identified above mean some risk assessments will be directional. Completing supplier financial data, standardizing supplier codes, and adding geopolitical risk data would significantly improve the precision of sourcing recommendations and early warning indicators.
+                  {isDemo
+                    ? 'The gaps identified above mean some risk assessments will be directional. Completing supplier financial data, standardizing supplier codes, and adding geopolitical risk data would significantly improve the precision of sourcing recommendations and early warning indicators.'
+                    : `Scores are measured on your upload (${META.periodLabel}). ${META.notes.join(' ')} Filling the gaps above — especially lead times, alternative-supplier flags and an incident log — makes the risk levels and heat map more precise.`}
                 </div>
               </div>
             </div>
@@ -349,20 +361,20 @@ export default function SupplyRiskDiagnostic() {
   return (
     <div className="min-h-screen bg-navy pb-16">
       {/* Header */}
-      <div className="border-b border-navy-mid px-6 py-4">
+      <div className="border-b border-navy-mid px-6 py-4 no-print">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <LogoIcon size={28} />
             <div>
               <div className="text-sm font-bold text-white">Supply Risk & Resilience Diagnostic</div>
-              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.supplierCount} suppliers &middot; {COMPANY.activeSuppliers} active</div>
+              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.supplierCount} suppliers &middot; {COMPANY.activeSuppliers} active{!isDemo && <> &middot; {META.periodLabel}</>}</div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <button onClick={() => setScreen('health')} className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
               Data Health
             </button>
-            <button className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
+            <button onClick={() => window.print()} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
               Export PDF
             </button>
           </div>
@@ -379,7 +391,7 @@ export default function SupplyRiskDiagnostic() {
               { label: 'Total Suppliers', value: `${EXECUTIVE_SUMMARY.totalSuppliers}`, sub: `${EXECUTIVE_SUMMARY.activeSuppliers} active`, icon: Package, alert: false },
               { label: 'Single-Source Materials', value: `${EXECUTIVE_SUMMARY.singleSourceMaterials}`, sub: `${EXECUTIVE_SUMMARY.singleSourceSpend}% of spend at risk`, icon: AlertOctagon, alert: true },
               { label: 'Top 5 Concentration', value: `${EXECUTIVE_SUMMARY.top5Spend}%`, sub: 'of total supplier spend', icon: TrendingUp, alert: true },
-              { label: 'Annual Disruption Cost', value: `CHF ${fmt(EXECUTIVE_SUMMARY.annualDisruptionCost)}`, sub: 'based on 6-year history', icon: AlertTriangle, alert: true },
+              { label: 'Annual Disruption Cost', value: EXECUTIVE_SUMMARY.disruptionCostAvailable ? `${cur}${fmt(EXECUTIVE_SUMMARY.annualDisruptionCost)}` : 'n/a', sub: EXECUTIVE_SUMMARY.disruptionCostBasis, icon: AlertTriangle, alert: EXECUTIVE_SUMMARY.disruptionCostAvailable },
             ].map((m) => (
               <div key={m.label} className="p-4 rounded-xl bg-navy/40 border border-navy-mid/60">
                 <div className="flex items-center gap-2 mb-2">
@@ -397,21 +409,30 @@ export default function SupplyRiskDiagnostic() {
         <div className="rounded-2xl border-2 border-teal/30 bg-gradient-to-r from-teal/10 to-navy-deep/60 p-6 mb-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Total Recoverable Value Identified</div>
+              <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">
+                {isDemo || totalRecoverableValue > 0 ? (isDemo ? 'Total Recoverable Value Identified' : 'Logged Disruption Cost Addressed') : 'Single-Source Spend Exposure'}
+              </div>
               <div className="text-4xl md:text-5xl font-extrabold text-white">
-                CHF {fmt(totalRecoverableValue)}
+                {cur}{fmt(isDemo || totalRecoverableValue > 0 ? totalRecoverableValue : singleSourceSpendValue)}
               </div>
               <div className="text-sm text-teal-muted mt-1">
-                across {RECOMMENDATIONS.length} recommendations — {RECOMMENDATIONS.filter(r => r.effort === 'Low').length} quick wins available
+                {isDemo || totalRecoverableValue > 0
+                  ? <>across {isDemo ? RECOMMENDATIONS.length : quantifiedRecs} recommendations — {RECOMMENDATIONS.filter(r => r.effort === 'Low').length} quick wins available</>
+                  : <>{EXECUTIVE_SUMMARY.singleSourceSpend}% of spend sits on single-source materials &middot; {RECOMMENDATIONS.length} recommendations</>}
               </div>
+              {!isDemo && (
+                <div className="text-xs text-teal-muted/40 mt-1">
+                  {totalRecoverableValue > 0 ? 'Last-12-month incident cost linked to the suppliers in the recommendations (from your incident log).' : 'Savings are not estimated: they cannot be derived from spend data alone.'}
+                </div>
+              )}
             </div>
-            <div className="text-center md:text-right">
+            {isDemo && <div className="text-center md:text-right">
               <div className="text-xs text-teal-muted/40 mb-1">Resilience investment required</div>
-              <div className="text-3xl font-bold text-teal">CHF {fmt(420_000 + 380_000)}</div>
+              <div className="text-3xl font-bold text-teal">{cur}{fmt(420_000 + 380_000)}</div>
               <div className="text-xs text-teal-muted/40 mt-1">
                 for alternative sourcing & diversification (ROI: 1.5x first year)
               </div>
-            </div>
+            </div>}
           </div>
         </div>
 
@@ -420,7 +441,7 @@ export default function SupplyRiskDiagnostic() {
           {/* Pie Chart */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="text-sm font-semibold text-white mb-1">Supplier Concentration by Spend</div>
-            <div className="text-xs text-teal-muted/40 mb-4">Top 5 suppliers = 61% of total spend</div>
+            <div className="text-xs text-teal-muted/40 mb-4">{META.concentrationText}</div>
             <ResponsiveContainer width="100%" height={240}>
               <PieChart>
                 <Pie
@@ -446,7 +467,7 @@ export default function SupplyRiskDiagnostic() {
           {/* Bar Chart - Top 10 */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="text-sm font-semibold text-white mb-1">Top 10 Suppliers by Spend %</div>
-            <div className="text-xs text-teal-muted/40 mb-4">Cumulative spend concentration</div>
+            <div className="text-xs text-teal-muted/40 mb-4">{isDemo ? 'Cumulative spend concentration' : `Share of ${cur}${fmt(META.totalSpend)} total spend`}</div>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={SUPPLIER_CONCENTRATION.slice(0, 10)}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
@@ -462,7 +483,7 @@ export default function SupplyRiskDiagnostic() {
         {/* ── RISK HEAT MAP (2x2) ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-1">Supplier Risk Heat Map</div>
-          <div className="text-xs text-teal-muted/40 mb-4">Probability vs Impact matrix — supplier count per quadrant</div>
+          <div className="text-xs text-teal-muted/40 mb-4 leading-relaxed">{META.heatMapRule}</div>
           <div className="grid grid-cols-2 gap-4">
             {RISK_HEAT_MAP.map((quadrant, i) => (
               <div key={i} className="p-6 rounded-xl border border-navy-mid" style={{ backgroundColor: `${quadrant.bgColor}15` }}>
@@ -474,7 +495,7 @@ export default function SupplyRiskDiagnostic() {
                   <div className="text-3xl font-extrabold" style={{ color: quadrant.bgColor }}>{quadrant.count}</div>
                 </div>
                 <div className="w-full bg-navy-mid/30 rounded-full h-2">
-                  <div className="h-full rounded-full" style={{ width: `${(quadrant.count / 127) * 100}%`, backgroundColor: quadrant.bgColor }} />
+                  <div className="h-full rounded-full" style={{ width: `${(quadrant.count / heatTotal) * 100}%`, backgroundColor: quadrant.bgColor }} />
                 </div>
               </div>
             ))}
@@ -487,6 +508,8 @@ export default function SupplyRiskDiagnostic() {
             <AlertOctagon size={16} className="text-orange-400" />
             <span className="text-sm font-semibold text-white">Single-Source Exposure — Top 10 Materials at Risk</span>
           </div>
+          {!isDemo && <div className="text-xs text-teal-muted/40 mb-3 leading-relaxed">{META.singleSourceRule}</div>}
+          {SINGLE_SOURCE_MATERIALS.length === 0 && <div className="text-sm text-teal-muted/60 py-4">No single-source materials found — every material is bought from at least two suppliers.</div>}
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -506,7 +529,7 @@ export default function SupplyRiskDiagnostic() {
                     <td className="py-3 px-4 text-teal font-semibold">#{i + 1}</td>
                     <td className="py-3 px-4 text-white font-medium">{material.material}</td>
                     <td className="py-3 px-4 text-teal-muted text-xs">{material.supplier}</td>
-                    <td className="py-3 px-4 text-right font-semibold text-white">CHF {fmt(material.spend)}</td>
+                    <td className="py-3 px-4 text-right font-semibold text-white">{cur}{fmt(material.spend)}</td>
                     <td className="py-3 px-4 text-center text-teal-muted text-xs">{material.leadTime}</td>
                     <td className="py-3 px-4 text-center">
                       <span className={`px-2 py-1 rounded text-[10px] font-semibold ${material.alternative === 'Yes' ? 'bg-teal/20 text-teal' : 'bg-red-500/20 text-red-400'}`}>
@@ -540,7 +563,7 @@ export default function SupplyRiskDiagnostic() {
               <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
               <XAxis dataKey="region" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
               <YAxis yAxisId="left" tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Suppliers', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10 }} />
-              <YAxis yAxisId="right" orientation="right" domain={[0, 30]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Spend %', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10 }} />
+              <YAxis yAxisId="right" orientation="right" domain={[0, geoMax]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Spend %', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10 }} />
               <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
               <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
               <Bar yAxisId="left" dataKey="suppliers" name="Supplier Count" fill="#4ab8ae" radius={[4, 4, 0, 0]} />
@@ -553,8 +576,15 @@ export default function SupplyRiskDiagnostic() {
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle size={16} className="text-orange-400" />
-            <span className="text-sm font-semibold text-white">Disruption History — Last 6 Incidents</span>
+            <span className="text-sm font-semibold text-white">
+              Disruption History — {DISRUPTION_HISTORY.length ? `Last ${DISRUPTION_HISTORY.length} Incidents` : 'No Incidents'}{!isDemo && META.incidentCount > DISRUPTION_HISTORY.length ? ` (of ${META.incidentCount} logged)` : ''}
+            </span>
           </div>
+          {DISRUPTION_HISTORY.length === 0 && (
+            <div className="text-sm text-teal-muted/60 p-4 rounded-xl bg-navy/30 border border-navy-mid/40">
+              No incident log provided. Add the optional incident file (date, supplier, cause, duration_days, impact_value) to measure disruption cost and score supplier history.
+            </div>
+          )}
           <div className="space-y-3">
             {DISRUPTION_HISTORY.map((incident, i) => (
               <div key={i} className="p-4 rounded-xl bg-navy/30 border border-navy-mid/40 hover:border-navy-mid transition-colors">
@@ -584,7 +614,7 @@ export default function SupplyRiskDiagnostic() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <div className="text-sm font-semibold text-white">Prioritised Recommendations</div>
-              <div className="text-xs text-teal-muted/40">Ranked by financial impact — total recoverable: CHF {fmt(totalRecoverableValue)}</div>
+              <div className="text-xs text-teal-muted/40">{isDemo ? <>Ranked by financial impact — total recoverable: {cur}{fmt(totalRecoverableValue)}</> : <>Ranked by priority, then quantified impact — derived from your data</>}</div>
             </div>
           </div>
           <div className="space-y-3">
@@ -604,8 +634,8 @@ export default function SupplyRiskDiagnostic() {
                     </div>
                   </div>
                   <div className="text-right min-w-[100px]">
-                    <div className="text-xl font-extrabold text-teal">CHF {rec.impact}</div>
-                    <div className="text-[10px] text-teal-muted/30">estimated impact</div>
+                    <div className="text-xl font-extrabold text-teal">{parseImpact(rec.impact) > 0 ? `${cur}${rec.impact}` : '—'}</div>
+                    <div className="text-[10px] text-teal-muted/30">{parseImpact(rec.impact) > 0 ? (isDemo ? 'estimated impact' : 'logged cost at stake') : 'not quantified'}</div>
                   </div>
                 </div>
                 <p className="text-xs text-teal-muted/60 leading-relaxed mb-3">{rec.description}</p>
@@ -624,26 +654,7 @@ export default function SupplyRiskDiagnostic() {
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-4">Recommended 90-Day Roadmap</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              {
-                phase: 'Week 1-4',
-                title: 'Risk Assessment & Quick Wins',
-                color: '#22C55E',
-                items: ['Complete single-source material audit', 'Launch supplier health scoring system', 'Establish industry risk intelligence subscription'],
-              },
-              {
-                phase: 'Week 5-8',
-                title: 'Sourcing Resilience',
-                color: '#EAB308',
-                items: ['Qualify alternative suppliers for 8 critical materials', 'Negotiate long-term agreements with top 5 suppliers', 'Begin geographic diversification for Asia spend'],
-              },
-              {
-                phase: 'Week 9-12',
-                title: 'Sustain & Monitor',
-                color: '#0EA5E9',
-                items: ['Build contingency inventory for high-risk materials', 'Deploy real-time supplier resilience dashboard', 'Establish quarterly supply chain risk review'],
-              },
-            ].map((p) => (
+            {ROADMAP.map((p) => (
               <div key={p.phase} className="p-4 rounded-xl border border-navy-mid/50 bg-navy/20">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
@@ -666,15 +677,21 @@ export default function SupplyRiskDiagnostic() {
         {/* ── CTA ── */}
         <div className="rounded-2xl border border-teal/20 bg-gradient-to-br from-teal/10 to-navy-mid/20 p-8 text-center mb-5">
           <div className="text-2xl font-bold text-white mb-2">
-            CHF {fmt(totalRecoverableValue)} in recoverable value identified
+            {isDemo
+              ? <>{cur}{fmt(totalRecoverableValue)} in recoverable value identified</>
+              : <>{RECOMMENDATIONS.length} resilience actions identified</>}
           </div>
           <p className="text-sm text-teal-muted leading-relaxed mb-2 max-w-xl mx-auto">
-            This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities with an estimated annual impact of CHF {fmt(totalRecoverableValue)}. The next step is a structured engagement to implement supply chain resilience improvements — starting with alternative sourcing qualification in weeks 1-4.
+            {isDemo
+              ? <>This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities with an estimated annual impact of {cur}{fmt(totalRecoverableValue)}. The next step is a structured engagement to implement supply chain resilience improvements — starting with alternative sourcing qualification in weeks 1-4.</>
+              : <>This diagnostic found {EXECUTIVE_SUMMARY.singleSourceMaterials} single-source materials ({EXECUTIVE_SUMMARY.singleSourceSpend}% of spend) and a top-5 concentration of {EXECUTIVE_SUMMARY.top5Spend}%. The next step is a structured engagement to implement supply chain resilience improvements — starting with alternative sourcing qualification in weeks 1-4.</>}
           </p>
-          <p className="text-xs text-teal-muted/40 mb-6">
-            Investment: CHF 22-30K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 26000)}x
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {isDemo && (
+            <p className="text-xs text-teal-muted/40 mb-6">
+              Investment: {cur}22-30K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 26000)}x
+            </p>
+          )}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center no-print mt-6">
             <a
               href="https://calendly.com/caio-opsflow-advisory/30min"
               target="_blank"
@@ -683,7 +700,7 @@ export default function SupplyRiskDiagnostic() {
             >
               Discuss Implementation Plan
             </a>
-            <button className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
+            <button onClick={() => window.print()} className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
               Download Executive Report
             </button>
           </div>

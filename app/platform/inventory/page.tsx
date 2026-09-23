@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, type ComponentType } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
   PieChart, Pie, ScatterChart, Scatter, ZAxis, LineChart, Line, Legend,
@@ -13,9 +13,12 @@ import {
   Activity
 } from 'lucide-react'
 import { LogoIcon } from '@/components/LogoIcon'
+import { RealUploader } from '@/components/platform/RealUploader'
+import { analyzeInventory, INVENTORY_TEMPLATES, type InventoryDataset } from '@/lib/engine/inventory'
 
 /* ══════════════════════════════════════════════════════════════
-   SIMULATED DATA — Replace with real upload/parse in production
+   DEMO DATA — shown by "preview a sample diagnostic".
+   Real uploads are computed by lib/engine/inventory.ts (same shape).
    ══════════════════════════════════════════════════════════════ */
 
 const COMPANY = { name: 'Simulated Client', currency: 'CHF', skuCount: 842, warehouseCount: 3 }
@@ -150,12 +153,74 @@ const RECOMMENDATIONS = [
   },
 ]
 
+const DEMO: InventoryDataset = {
+  isDemo: true,
+  COMPANY,
+  ABC_XYZ_MATRIX,
+  HEALTH_METRICS: {
+    ...HEALTH_METRICS,
+    serviceLevelAvailable: true,
+    safetyStockAccuracyAvailable: true,
+    benchmarkLabel: 'benchmark',
+    stockoutLabel: 'Monthly Stockout Cost',
+    stockoutSub: `${HEALTH_METRICS.skusUnderstocked} SKUs understocked`,
+    serviceLevelNote: '',
+    safetyStockNote: '',
+  },
+  MONTHLY_TREND,
+  TREND: {
+    title: '9-Month Trend Analysis',
+    subtitle: 'Inventory value growing while service level declining — classic over-investment without return',
+    series: [
+      { key: 'inventory', name: 'Inventory (K CHF)', color: '#4ab8ae', axis: 'left' },
+      { key: 'excess', name: 'Excess (K CHF)', color: '#F97316', axis: 'left', dashed: true },
+      { key: 'serviceLevel', name: 'Service Level (%)', color: '#EAB308', axis: 'right' },
+    ],
+    rightDomain: [85, 95],
+  },
+  TOP_EXCESS,
+  TOP_STOCKOUT,
+  STOCKOUT_LABELS: { title: 'Top 5 Stockout Impact Items', daysSuffix: 'd out of stock' },
+  DATA_HEALTH,
+  HEALTH_NOTE: 'The gaps identified above mean some recommendations will be directional rather than precise. Fixing the master data issues (lead times, BOMs) would significantly improve the accuracy of safety stock and replenishment calculations. This is flagged as a recommendation in the diagnostic.',
+  RECOMMENDATIONS: RECOMMENDATIONS as InventoryDataset['RECOMMENDATIONS'],
+  ABC_DATA: [
+    { name: 'A items', skus: 185, revenue: 78, inventory: 55, color: '#1a9e8f' },
+    { name: 'B items', skus: 286, revenue: 20, inventory: 33, color: '#4ab8ae' },
+    { name: 'C items', skus: 371, revenue: 2, inventory: 12, color: '#9fd8d0' },
+  ],
+  DOS_DISTRIBUTION: [
+    { range: '0-7', skus: 45, color: '#EF4444' },
+    { range: '8-14', skus: 89, color: '#F97316' },
+    { range: '15-25', skus: 198, color: '#1a9e8f' },
+    { range: '26-45', skus: 245, color: '#EAB308' },
+    { range: '46-90', skus: 167, color: '#F97316' },
+    { range: '90+', skus: 98, color: '#EF4444' },
+  ],
+  DOS_SUBTITLE: 'Target range: 15-25 days (green zone)',
+  ROADMAP: [
+    { phase: 'Week 1-3', title: 'Quick Wins', color: '#22C55E', items: ['Launch slow-mover disposition (CHF 450K)', 'Establish monthly inventory review', 'Define service level targets by segment'] },
+    { phase: 'Week 4-8', title: 'Structural Fixes', color: '#EAB308', items: ['Implement ABC/XYZ safety stock policy (CHF 680K)', 'Clean master data gaps (lead times, BOMs)', 'Recalibrate reorder points and lot sizes'] },
+    { phase: 'Week 9-12', title: 'Sustain & Scale', color: '#0EA5E9', items: ['Redesign replenishment parameters (CHF 330K)', 'Automate KPI tracking and alerts', 'Implement continuous improvement process'] },
+  ],
+  CTA: { showInvestment: true, impactPhrase: 'an estimated annual impact of' },
+  NOTES: [],
+}
+
+/** Parses '680K' / '1.2M' / '950' into a number; anything else -> 0. */
+const parseImpact = (s: string) => {
+  const m = String(s).trim().match(/^([\d.]+)\s*([KM]?)$/i)
+  if (!m) return 0
+  const n = parseFloat(m[1]) * (m[2].toUpperCase() === 'M' ? 1e6 : m[2].toUpperCase() === 'K' ? 1e3 : 1)
+  return isFinite(n) ? n : 0
+}
+
 /* ══════════════════════════════════════════════════════════════ */
 
 const fmt = (n: number) => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`
-  return n.toString()
+  return isFinite(n) ? String(Math.round(n)) : '0'
 }
 
 const PRIORITY_COLORS: Record<string, string> = {
@@ -173,88 +238,41 @@ const SEGMENT_COLORS: Record<string, string> = {
 
 export default function InventoryDiagnostic() {
   const [screen, setScreen] = useState<'upload' | 'health' | 'dashboard'>('upload')
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleUpload = () => {
-    setIsProcessing(true)
-    setTimeout(() => { setIsProcessing(false); setScreen('health') }, 2000)
-  }
+  const [ds, setDs] = useState<InventoryDataset>(DEMO)
+  const {
+    COMPANY, ABC_XYZ_MATRIX, HEALTH_METRICS, MONTHLY_TREND, TREND, TOP_EXCESS, TOP_STOCKOUT, STOCKOUT_LABELS,
+    DATA_HEALTH, HEALTH_NOTE, RECOMMENDATIONS, ABC_DATA, DOS_DISTRIBUTION, DOS_SUBTITLE, ROADMAP, CTA, NOTES,
+  } = ds
+  const cur = COMPANY.currency ? `${COMPANY.currency} ` : ''
 
   const handleProceed = () => setScreen('dashboard')
 
   const totalRecoverableValue = RECOMMENDATIONS.reduce(
-    (sum, r) => sum + parseInt(r.impact.replace('K', '000').replace('M', '000000')), 0
+    (sum, r) => sum + (r.countInTotal === false ? 0 : parseImpact(r.impact)), 0
   )
+  const pctOf = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0)
 
   /* ─── UPLOAD SCREEN ─── */
   if (screen === 'upload') {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center p-5">
-        <div className="max-w-xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10">
-          <div className="flex items-center gap-3 mb-8">
-            <LogoIcon size={38} />
-            <div>
-              <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-              <div className="text-[11px] text-teal-muted tracking-widest uppercase">Inventory & Working Capital Diagnostic</div>
-            </div>
-          </div>
-
-          <h1 className="text-2xl font-serif text-white mb-3">
-            Upload your inventory data
-          </h1>
-          <p className="text-teal-muted text-sm leading-relaxed mb-8">
-            We need three data files to run the diagnostic. Download our templates or upload your own exports — the system will map the fields automatically.
-          </p>
-
-          {/* Templates */}
-          <div className="space-y-3 mb-8">
-            {[
-              { name: 'Inventory Snapshot', desc: 'Current stock by SKU, warehouse, value, last movement date', icon: Package },
-              { name: 'Demand History', desc: '12-24 months of shipments/consumption by SKU (monthly)', icon: TrendingUp },
-              { name: 'SKU Master', desc: 'Lead times, safety stock, reorder points, UoM, ABC class', icon: FileSpreadsheet },
-            ].map((t) => (
-              <div key={t.name} className="flex items-center gap-4 p-4 rounded-xl border border-navy-mid bg-navy/40">
-                <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center">
-                  <t.icon size={18} className="text-teal" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">{t.name}</div>
-                  <div className="text-xs text-teal-muted/50">{t.desc}</div>
-                </div>
-                <button className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
-                  Template
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Upload area */}
-          <div
-            className="border-2 border-dashed border-navy-mid rounded-xl p-8 text-center mb-6 hover:border-teal/40 transition-colors cursor-pointer"
-            onClick={handleUpload}
-          >
-            {isProcessing ? (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-2 border-teal border-t-transparent rounded-full animate-spin" />
-                <span className="text-teal text-sm">Processing data...</span>
-              </div>
-            ) : (
-              <>
-                <Upload size={32} className="text-teal-muted/30 mx-auto mb-3" />
-                <div className="text-sm text-teal-muted mb-1">Drop files here or click to upload</div>
-                <div className="text-xs text-teal-muted/30">.xlsx, .csv — max 50MB per file</div>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={handleUpload}
-            className="w-full py-3.5 rounded-lg bg-teal/20 text-teal text-sm font-semibold hover:bg-teal/30 transition-colors border border-teal/30"
-          >
-            Use demo data to preview the diagnostic
-          </button>
-        </div>
-      </div>
+      <RealUploader
+        engine="platform/inventory"
+        eyebrow="Inventory & Working Capital Diagnostic"
+        title="Upload your inventory data"
+        intro="Two files are needed: a current stock snapshot and 12-24 months of consumption history. Download the templates or upload your own ERP exports (xlsx/csv) — common column names in English, French, German and Portuguese are recognised. Files are processed in your browser."
+        templates={[
+          { ...INVENTORY_TEMPLATES.stock, icon: Package as ComponentType<any> },
+          { ...INVENTORY_TEMPLATES.history, icon: TrendingUp as ComponentType<any> },
+        ]}
+        onAnalyze={(tables) => {
+          const res = analyzeInventory(tables)
+          setDs(res)
+          setScreen('health')
+          const h = res.HEALTH_METRICS
+          return { summary: { skus: res.COMPANY.skuCount, inventory_value: h.totalInventoryValue, excess_value: h.excessInventoryValue, obsolete_value: h.obsoleteRisk, turns: h.inventoryTurns, data_health: res.DATA_HEALTH.overall } }
+        }}
+        onDemo={() => { setDs(DEMO); setScreen('health') }}
+      />
     )
   }
 
@@ -307,13 +325,13 @@ export default function InventoryDiagnostic() {
               <div>
                 <div className="text-sm font-semibold text-white mb-1">Data quality impacts accuracy</div>
                 <div className="text-xs text-teal-muted/60 leading-relaxed">
-                  The gaps identified above mean some recommendations will be directional rather than precise. Fixing the master data issues (lead times, BOMs) would significantly improve the accuracy of safety stock and replenishment calculations. This is flagged as a recommendation in the diagnostic.
+                  {HEALTH_NOTE}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 no-print">
             <button onClick={() => setScreen('upload')} className="flex-1 py-3 rounded-lg border border-navy-mid text-teal-muted text-sm hover:border-teal transition-colors">
               Upload different data
             </button>
@@ -327,20 +345,8 @@ export default function InventoryDiagnostic() {
   }
 
   /* ─── MAIN DASHBOARD ─── */
-  const abcData = [
-    { name: 'A items', skus: 185, revenue: 78, inventory: 55, color: '#1a9e8f' },
-    { name: 'B items', skus: 286, revenue: 20, inventory: 33, color: '#4ab8ae' },
-    { name: 'C items', skus: 371, revenue: 2, inventory: 12, color: '#9fd8d0' },
-  ]
-
-  const dosDistribution = [
-    { range: '0-7', skus: 45, color: '#EF4444' },
-    { range: '8-14', skus: 89, color: '#F97316' },
-    { range: '15-25', skus: 198, color: '#1a9e8f' },
-    { range: '26-45', skus: 245, color: '#EAB308' },
-    { range: '46-90', skus: 167, color: '#F97316' },
-    { range: '90+', skus: 98, color: '#EF4444' },
-  ]
+  const abcData = ABC_DATA
+  const dosDistribution = DOS_DISTRIBUTION
 
   return (
     <div className="min-h-screen bg-navy pb-16">
@@ -351,14 +357,19 @@ export default function InventoryDiagnostic() {
             <LogoIcon size={28} />
             <div>
               <div className="text-sm font-bold text-white">Inventory & Working Capital Diagnostic</div>
-              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.skuCount} SKUs &middot; {COMPANY.warehouseCount} warehouses</div>
+              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.skuCount} SKUs &middot; {COMPANY.warehouseCount} {COMPANY.warehouseCount === 1 ? 'location' : 'locations'}</div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 no-print">
+            {!ds.isDemo && <span className="px-2 py-1 rounded bg-teal/10 text-teal text-[10px] font-semibold uppercase tracking-wider">Computed from your files</span>}
+            {ds.isDemo && <span className="px-2 py-1 rounded bg-orange-500/10 text-orange-400 text-[10px] font-semibold uppercase tracking-wider">Sample data</span>}
+            <button onClick={() => setScreen('upload')} className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
+              New analysis
+            </button>
             <button onClick={() => setScreen('health')} className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
               Data Health
             </button>
-            <button className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
+            <button onClick={() => window.print()} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
               Export PDF
             </button>
           </div>
@@ -372,10 +383,10 @@ export default function InventoryDiagnostic() {
           <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-4">Executive Summary</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             {[
-              { label: 'Total Inventory', value: `${COMPANY.currency} ${fmt(HEALTH_METRICS.totalInventoryValue)}`, sub: `${HEALTH_METRICS.avgDaysOfSupply} days of supply`, icon: Package, alert: HEALTH_METRICS.avgDaysOfSupply > 30 },
-              { label: 'Excess Inventory', value: `${COMPANY.currency} ${fmt(HEALTH_METRICS.excessInventoryValue)}`, sub: `${Math.round(HEALTH_METRICS.excessInventoryValue / HEALTH_METRICS.totalInventoryValue * 100)}% of total`, icon: TrendingDown, alert: true },
-              { label: 'Obsolescence Risk', value: `${COMPANY.currency} ${fmt(HEALTH_METRICS.obsoleteRisk)}`, sub: `${HEALTH_METRICS.skusWithNoMovement90d} SKUs no movement 90d`, icon: AlertTriangle, alert: true },
-              { label: 'Monthly Stockout Cost', value: `${COMPANY.currency} ${fmt(HEALTH_METRICS.stockoutCostMonthly)}`, sub: `${HEALTH_METRICS.skusUnderstocked} SKUs understocked`, icon: XCircle, alert: true },
+              { label: 'Total Inventory', value: `${cur}${fmt(HEALTH_METRICS.totalInventoryValue)}`, sub: `${HEALTH_METRICS.avgDaysOfSupply} days of supply`, icon: Package, alert: HEALTH_METRICS.avgDaysOfSupply > 30 },
+              { label: 'Excess Inventory', value: `${cur}${fmt(HEALTH_METRICS.excessInventoryValue)}`, sub: `${pctOf(HEALTH_METRICS.excessInventoryValue, HEALTH_METRICS.totalInventoryValue)}% of total`, icon: TrendingDown, alert: HEALTH_METRICS.excessInventoryValue > 0 },
+              { label: 'Obsolescence Risk', value: `${cur}${fmt(HEALTH_METRICS.obsoleteRisk)}`, sub: `${HEALTH_METRICS.skusWithNoMovement90d} SKUs no movement 90d`, icon: AlertTriangle, alert: HEALTH_METRICS.obsoleteRisk > 0 },
+              { label: HEALTH_METRICS.stockoutLabel, value: `${cur}${fmt(HEALTH_METRICS.stockoutCostMonthly)}`, sub: HEALTH_METRICS.stockoutSub, icon: XCircle, alert: HEALTH_METRICS.skusUnderstocked > 0 },
             ].map((m) => (
               <div key={m.label} className="p-4 rounded-xl bg-navy/40 border border-navy-mid/60">
                 <div className="flex items-center gap-2 mb-2">
@@ -390,23 +401,33 @@ export default function InventoryDiagnostic() {
           {/* KPI benchmarks */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { label: 'Inventory Turns', actual: HEALTH_METRICS.inventoryTurns, benchmark: HEALTH_METRICS.benchmarkTurns, unit: 'x', higher: true },
-              { label: 'Service Level', actual: HEALTH_METRICS.serviceLevel, benchmark: HEALTH_METRICS.targetServiceLevel, unit: '%', higher: true },
-              { label: 'Days of Supply', actual: HEALTH_METRICS.avgDaysOfSupply, benchmark: HEALTH_METRICS.targetDaysOfSupply, unit: 'd', higher: false },
-              { label: 'Safety Stock Accuracy', actual: HEALTH_METRICS.safetyStockAccuracy, benchmark: 85, unit: '%', higher: true },
+              { label: 'Inventory Turns', actual: HEALTH_METRICS.inventoryTurns, benchmark: HEALTH_METRICS.benchmarkTurns, unit: 'x', higher: true, available: true, note: '', bl: HEALTH_METRICS.benchmarkLabel },
+              { label: 'Service Level', actual: HEALTH_METRICS.serviceLevel, benchmark: HEALTH_METRICS.targetServiceLevel, unit: '%', higher: true, available: HEALTH_METRICS.serviceLevelAvailable, note: HEALTH_METRICS.serviceLevelNote, bl: 'target' },
+              { label: 'Days of Supply', actual: HEALTH_METRICS.avgDaysOfSupply, benchmark: HEALTH_METRICS.targetDaysOfSupply, unit: 'd', higher: false, available: true, note: '', bl: HEALTH_METRICS.benchmarkLabel },
+              { label: 'Safety Stock Accuracy', actual: HEALTH_METRICS.safetyStockAccuracy, benchmark: 85, unit: '%', higher: true, available: HEALTH_METRICS.safetyStockAccuracyAvailable, note: HEALTH_METRICS.safetyStockNote, bl: 'benchmark' },
             ].map((k) => {
               const gap = k.higher ? k.benchmark - k.actual : k.actual - k.benchmark
               const isGood = gap <= 0
               return (
                 <div key={k.label} className="p-3 rounded-lg bg-navy/20 border border-navy-mid/40">
                   <div className="text-[10px] text-teal-muted/40 uppercase tracking-wider mb-1">{k.label}</div>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-lg font-bold text-white">{k.actual}{k.unit}</span>
-                    <span className="text-xs text-teal-muted/30">vs {k.benchmark}{k.unit} benchmark</span>
-                  </div>
-                  <div className={`text-xs font-semibold mt-1 ${isGood ? 'text-teal' : 'text-orange-400'}`}>
-                    {isGood ? 'On target' : `Gap: ${Math.abs(gap).toFixed(1)}${k.unit}`}
-                  </div>
+                  {k.available ? (
+                    <>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg font-bold text-white">{k.actual}{k.unit}</span>
+                        <span className="text-xs text-teal-muted/30">vs {k.benchmark}{k.unit} {k.bl}</span>
+                      </div>
+                      <div className={`text-xs font-semibold mt-1 ${isGood ? 'text-teal' : 'text-orange-400'}`}>
+                        {isGood ? 'On target' : `Gap: ${Math.abs(gap).toFixed(1)}${k.unit}`}
+                      </div>
+                      {k.note && <div className="text-[10px] text-teal-muted/30 mt-0.5">{k.note}</div>}
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-lg font-bold text-teal-muted/40">n/a</div>
+                      <div className="text-[10px] text-teal-muted/40 mt-1">Not computable — {k.note}</div>
+                    </>
+                  )}
                 </div>
               )
             })}
@@ -419,7 +440,7 @@ export default function InventoryDiagnostic() {
             <div>
               <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Total Recoverable Value Identified</div>
               <div className="text-4xl md:text-5xl font-extrabold text-white">
-                {COMPANY.currency} {fmt(totalRecoverableValue)}
+                {cur}{fmt(totalRecoverableValue)}
               </div>
               <div className="text-sm text-teal-muted mt-1">
                 across {RECOMMENDATIONS.length} recommendations — {RECOMMENDATIONS.filter(r => r.effort === 'Low').length} quick wins available
@@ -427,9 +448,9 @@ export default function InventoryDiagnostic() {
             </div>
             <div className="text-center md:text-right">
               <div className="text-xs text-teal-muted/40 mb-1">Working capital release potential</div>
-              <div className="text-3xl font-bold text-teal">{COMPANY.currency} {fmt(HEALTH_METRICS.potentialRelease)}</div>
+              <div className="text-3xl font-bold text-teal">{cur}{fmt(HEALTH_METRICS.potentialRelease)}</div>
               <div className="text-xs text-teal-muted/40 mt-1">
-                {Math.round(HEALTH_METRICS.potentialRelease / HEALTH_METRICS.totalInventoryValue * 100)}% of current inventory value
+                {pctOf(HEALTH_METRICS.potentialRelease, HEALTH_METRICS.totalInventoryValue)}% of current inventory value
               </div>
             </div>
           </div>
@@ -452,7 +473,7 @@ export default function InventoryDiagnostic() {
                     {abc} ({abc === 'A' ? 'High' : abc === 'B' ? 'Med' : 'Low'})
                   </div>
                   {['X', 'Y', 'Z'].map(xyz => {
-                    const cell = ABC_XYZ_MATRIX.find(c => c.abc === abc && c.xyz === xyz)!
+                    const cell = ABC_XYZ_MATRIX.find(c => c.abc === abc && c.xyz === xyz) || { skus: 0, pctRevenue: 0, pctInventory: 0, avgDOS: 0 }
                     const mismatch = cell.pctInventory - cell.pctRevenue
                     const bgOpacity = Math.min(Math.abs(mismatch) / 20, 1)
                     const bg = mismatch > 5 ? `rgba(239,68,68,${bgOpacity * 0.3})` : mismatch < -5 ? `rgba(26,158,143,${bgOpacity * 0.3})` : 'rgba(255,255,255,0.02)'
@@ -482,7 +503,7 @@ export default function InventoryDiagnostic() {
           {/* Days of Supply Distribution */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="text-sm font-semibold text-white mb-1">Days of Supply Distribution</div>
-            <div className="text-xs text-teal-muted/40 mb-4">Target range: 15-25 days (green zone)</div>
+            <div className="text-xs text-teal-muted/40 mb-4">{DOS_SUBTITLE}</div>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={dosDistribution}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
@@ -513,19 +534,19 @@ export default function InventoryDiagnostic() {
 
         {/* ── CHARTS ROW 2: Trends ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
-          <div className="text-sm font-semibold text-white mb-1">9-Month Trend Analysis</div>
-          <div className="text-xs text-teal-muted/40 mb-4">Inventory value growing while service level declining — classic over-investment without return</div>
+          <div className="text-sm font-semibold text-white mb-1">{TREND.title}</div>
+          <div className="text-xs text-teal-muted/40 mb-4">{TREND.subtitle}</div>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={MONTHLY_TREND}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
               <XAxis dataKey="month" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
               <YAxis yAxisId="left" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
-              <YAxis yAxisId="right" orientation="right" domain={[85, 95]} tick={{ fill: '#9fd8d0', fontSize: 11 }} />
+              <YAxis yAxisId="right" orientation="right" domain={TREND.rightDomain || ['auto', 'auto']} tick={{ fill: '#9fd8d0', fontSize: 11 }} />
               <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
               <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
-              <Line yAxisId="left" type="monotone" dataKey="inventory" name="Inventory (K CHF)" stroke="#4ab8ae" strokeWidth={2} dot={{ r: 3 }} />
-              <Line yAxisId="left" type="monotone" dataKey="excess" name="Excess (K CHF)" stroke="#F97316" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="5 5" />
-              <Line yAxisId="right" type="monotone" dataKey="serviceLevel" name="Service Level (%)" stroke="#EAB308" strokeWidth={2} dot={{ r: 3 }} />
+              {TREND.series.map((sr) => (
+                <Line key={sr.key} yAxisId={sr.axis} type="monotone" dataKey={sr.key} name={sr.name} stroke={sr.color} strokeWidth={2} dot={{ r: 3 }} strokeDasharray={sr.dashed ? '5 5' : undefined} />
+              ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -536,9 +557,10 @@ export default function InventoryDiagnostic() {
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingDown size={16} className="text-orange-400" />
-              <span className="text-sm font-semibold text-white">Top 5 Excess Inventory Items</span>
+              <span className="text-sm font-semibold text-white">Top {TOP_EXCESS.length} Excess Inventory Items</span>
             </div>
             <div className="space-y-2">
+              {TOP_EXCESS.length === 0 && <div className="text-xs text-teal-muted/40 p-3">No SKU above its order-up-to level.</div>}
               {TOP_EXCESS.map((item, i) => (
                 <div key={item.sku} className="flex items-center gap-3 p-3 rounded-lg bg-navy/30 border border-navy-mid/40">
                   <span className="text-xs font-bold text-orange-400 w-5">#{i + 1}</span>
@@ -547,7 +569,7 @@ export default function InventoryDiagnostic() {
                     <div className="text-[10px] text-teal-muted/40">{item.sku} &middot; Segment {item.segment}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-orange-400">{COMPANY.currency} {fmt(item.value)}</div>
+                    <div className="text-sm font-bold text-orange-400">{cur}{fmt(item.value)}</div>
                     <div className="text-[10px] text-teal-muted/40">{item.dos} days</div>
                   </div>
                 </div>
@@ -559,9 +581,10 @@ export default function InventoryDiagnostic() {
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="flex items-center gap-2 mb-4">
               <XCircle size={16} className="text-red-400" />
-              <span className="text-sm font-semibold text-white">Top 5 Stockout Impact Items</span>
+              <span className="text-sm font-semibold text-white">{STOCKOUT_LABELS.title}</span>
             </div>
             <div className="space-y-2">
+              {TOP_STOCKOUT.length === 0 && <div className="text-xs text-teal-muted/40 p-3">No SKU with active demand below safety stock.</div>}
               {TOP_STOCKOUT.map((item, i) => (
                 <div key={item.sku} className="flex items-center gap-3 p-3 rounded-lg bg-navy/30 border border-navy-mid/40">
                   <span className="text-xs font-bold text-red-400 w-5">#{i + 1}</span>
@@ -570,8 +593,8 @@ export default function InventoryDiagnostic() {
                     <div className="text-[10px] text-teal-muted/40">{item.sku} &middot; Segment {item.segment}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-bold text-red-400">{COMPANY.currency} {fmt(item.missedRevenue)}</div>
-                    <div className="text-[10px] text-teal-muted/40">{item.daysOut}d out of stock</div>
+                    <div className="text-sm font-bold text-red-400">{cur}{fmt(item.missedRevenue)}{ds.isDemo ? '' : '/mo'}</div>
+                    <div className="text-[10px] text-teal-muted/40">{item.daysOut}{STOCKOUT_LABELS.daysSuffix}</div>
                   </div>
                 </div>
               ))}
@@ -584,7 +607,7 @@ export default function InventoryDiagnostic() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <div className="text-sm font-semibold text-white">Prioritised Recommendations</div>
-              <div className="text-xs text-teal-muted/40">Ranked by financial impact — total recoverable: {COMPANY.currency} {fmt(totalRecoverableValue)}</div>
+              <div className="text-xs text-teal-muted/40">Ranked by priority and financial impact — total recoverable: {cur}{fmt(totalRecoverableValue)}</div>
             </div>
           </div>
           <div className="space-y-3">
@@ -604,8 +627,8 @@ export default function InventoryDiagnostic() {
                     </div>
                   </div>
                   <div className="text-right min-w-[100px]">
-                    <div className="text-xl font-extrabold text-teal">{COMPANY.currency} {rec.impact}</div>
-                    <div className="text-[10px] text-teal-muted/30">estimated impact</div>
+                    <div className="text-xl font-extrabold text-teal">{parseImpact(rec.impact) > 0 ? `${cur}${rec.impact}` : '—'}</div>
+                    <div className="text-[10px] text-teal-muted/30">{parseImpact(rec.impact) <= 0 ? 'not quantified' : rec.countInTotal === false ? 'not in recoverable total' : 'estimated impact'}</div>
                   </div>
                 </div>
                 <p className="text-xs text-teal-muted/60 leading-relaxed mb-3">{rec.description}</p>
@@ -620,30 +643,24 @@ export default function InventoryDiagnostic() {
           </div>
         </div>
 
+        {NOTES.length > 0 && (
+          <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
+            <div className="text-sm font-semibold text-white mb-3">Method &amp; assumptions</div>
+            <ul className="space-y-1.5">
+              {NOTES.map((n, i) => (
+                <li key={i} className="flex items-start gap-2 text-xs text-teal-muted/60 leading-relaxed">
+                  <ChevronRight size={12} className="mt-0.5 text-teal-muted/30 shrink-0" />{n}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* ── 90-DAY ROADMAP ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-4">Recommended 90-Day Roadmap</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              {
-                phase: 'Week 1-3',
-                title: 'Quick Wins',
-                color: '#22C55E',
-                items: ['Launch slow-mover disposition (CHF 450K)', 'Establish monthly inventory review', 'Define service level targets by segment'],
-              },
-              {
-                phase: 'Week 4-8',
-                title: 'Structural Fixes',
-                color: '#EAB308',
-                items: ['Implement ABC/XYZ safety stock policy (CHF 680K)', 'Clean master data gaps (lead times, BOMs)', 'Recalibrate reorder points and lot sizes'],
-              },
-              {
-                phase: 'Week 9-12',
-                title: 'Sustain & Scale',
-                color: '#0EA5E9',
-                items: ['Redesign replenishment parameters (CHF 330K)', 'Automate KPI tracking and alerts', 'Implement continuous improvement process'],
-              },
-            ].map((p) => (
+            {ROADMAP.map((p) => (
               <div key={p.phase} className="p-4 rounded-xl border border-navy-mid/50 bg-navy/20">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
@@ -666,15 +683,17 @@ export default function InventoryDiagnostic() {
         {/* ── CTA ── */}
         <div className="rounded-2xl border border-teal/20 bg-gradient-to-br from-teal/10 to-navy-mid/20 p-8 text-center mb-5">
           <div className="text-2xl font-bold text-white mb-2">
-            {COMPANY.currency} {fmt(totalRecoverableValue)} in recoverable value identified
+            {cur}{fmt(totalRecoverableValue)} in recoverable value identified
           </div>
           <p className="text-sm text-teal-muted leading-relaxed mb-2 max-w-xl mx-auto">
-            This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities with an estimated annual impact of {COMPANY.currency} {fmt(totalRecoverableValue)}. The next step is a structured engagement to implement these recommendations — starting with the quick wins in weeks 1-3.
+            This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities with {CTA.impactPhrase} {cur}{fmt(totalRecoverableValue)}. The next step is a structured engagement to implement these recommendations — starting with the quick wins in weeks 1-3.
           </p>
-          <p className="text-xs text-teal-muted/40 mb-6">
-            Investment: CHF 22-32K &middot; Duration: 4-6 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {CTA.showInvestment ? (
+            <p className="text-xs text-teal-muted/40 mb-6">
+              Investment: CHF 22-32K &middot; Duration: 4-6 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
+            </p>
+          ) : <div className="mb-6" />}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center no-print">
             <a
               href="https://calendly.com/caio-opsflow-advisory/30min"
               target="_blank"
@@ -683,7 +702,7 @@ export default function InventoryDiagnostic() {
             >
               Discuss Implementation Plan
             </a>
-            <button className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
+            <button onClick={() => window.print()} className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
               Download Executive Report
             </button>
           </div>

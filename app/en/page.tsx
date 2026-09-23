@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     'Supply chain consulting for SMEs in Switzerland and EMEA: S&OP, inventory optimization, supply risk and distribution planning. MIT-certified. Free diagnostic session.',
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/en',
-    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/' },
+    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/en' },
   },
   openGraph: { title: 'OpsFlow Advisory', description: 'AI-powered supply chain advisory — Switzerland & EMEA.', url: 'https://www.opsflow-advisory.ch/en', type: 'website' },
 }

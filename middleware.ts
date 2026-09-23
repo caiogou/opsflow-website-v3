@@ -9,7 +9,8 @@ export function middleware(req: NextRequest) {
   let target = cookie
   if (!target) {
     const al = (req.headers.get('accept-language') || '').split(',')[0].split('-')[0].toLowerCase()
-    target = al === 'de' ? 'de' : al === 'en' ? 'en' : 'fr'
+    // 23/set/2026: English is the lead language (international positioning). FR only for French browsers.
+    target = al === 'de' ? 'de' : al === 'fr' ? 'fr' : 'en'
   }
 
   if (target === 'de') {

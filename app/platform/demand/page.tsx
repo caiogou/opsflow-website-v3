@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, type ComponentType } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
   LineChart, Line, Legend, ScatterChart, Scatter, ZAxis, PieChart, Pie
@@ -11,6 +11,8 @@ import {
   ArrowUpRight, Activity, Zap
 } from 'lucide-react'
 import { LogoIcon } from '@/components/LogoIcon'
+import { RealUploader } from '@/components/platform/RealUploader'
+import { analyzeDemand, DEMAND_TEMPLATES, type DemandDataset } from '@/lib/engine/demand'
 
 /* ══════════════════════════════════════════════════════════════
    SIMULATED DATA — Replace with real upload/parse in production
@@ -161,7 +163,40 @@ const RECOMMENDATIONS = [
   },
 ]
 
+const DEMO_META: DemandDataset['META'] = {
+  isDemo: true,
+  hasForecast: true,
+  hasValue: true,
+  periodLabel: 'Forecast period: 12 months',
+  accuracyLabel: 'Forecast Accuracy (MAPE)',
+  benchmarkLabel: `Benchmark: ${HEALTH_METRICS.mapeBenchmark}%`,
+  biasLabel: 'Over-forecast by avg',
+  noForecastLabel: 'Insufficient history',
+  volumeLabel: 'Volume (K units)',
+  trendTitle: '12-Month Forecast Bias Trend',
+  trendSubtitle: 'Actual demand vs forecast — positive = over-forecast',
+  worstTitle: 'Top 10 Worst Forecast Accuracy SKUs',
+  roadmap: [
+    ['Conduct detailed demand pattern analysis by family', 'Fix demand history gaps (134 SKUs)', 'Implement weekly forecast bias monitoring'],
+    ['Deploy segment-specific forecasting methods (CHF 580K)', 'Build causal models for seasonal SKUs (CHF 280K)', 'Integrate promotional calendar and external signals'],
+    ['Establish demand sensing dashboard', 'Implement forecast governance process', 'Train planning team and go-live with new methods'],
+  ],
+  notes: [],
+}
+
+const DEMO: DemandDataset = {
+  COMPANY, FORECAST_BY_FAMILY, FORECAST_TREND, DEMAND_SEGMENTATION, WORST_FORECAST_SKUS,
+  DEMAND_PATTERNS, HEALTH_METRICS, DATA_HEALTH, RECOMMENDATIONS, META: DEMO_META,
+}
+
 /* ══════════════════════════════════════════════════════════════ */
+
+/** '580K' | '1.2M' | '0' → number (never NaN). */
+const parseImpact = (s: string) => {
+  const n = parseFloat(String(s).replace(/[^\d.\-]/g, ''))
+  if (!isFinite(n)) return 0
+  return n * (/M\s*$/i.test(s) ? 1_000_000 : /K\s*$/i.test(s) ? 1_000 : 1)
+}
 
 const fmt = (n: number) => {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
@@ -178,87 +213,47 @@ const PRIORITY_COLORS: Record<string, string> = {
 
 export default function DemandForecastDiagnostic() {
   const [screen, setScreen] = useState<'upload' | 'health' | 'dashboard'>('upload')
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleUpload = () => {
-    setIsProcessing(true)
-    setTimeout(() => { setIsProcessing(false); setScreen('health') }, 2000)
-  }
+  const [ds, setDs] = useState<DemandDataset>(DEMO)
+  const {
+    COMPANY, FORECAST_BY_FAMILY, FORECAST_TREND, DEMAND_SEGMENTATION, WORST_FORECAST_SKUS,
+    DEMAND_PATTERNS, HEALTH_METRICS, DATA_HEALTH, RECOMMENDATIONS, META,
+  } = ds
 
   const handleProceed = () => setScreen('dashboard')
 
-  const totalRecoverableValue = RECOMMENDATIONS.reduce(
-    (sum, r) => sum + parseInt(r.impact.replace('K', '000').replace('M', '000000')), 0
-  )
+  const totalRecoverableValue = RECOMMENDATIONS.reduce((sum, r) => sum + parseImpact(r.impact), 0)
+  const hasMoney = totalRecoverableValue > 0
+  const money = (n: number) => (n > 0 ? `${COMPANY.currency ? COMPANY.currency + ' ' : ''}${fmt(n)}` : '—')
+  const familyMax = Math.max(100, ...FORECAST_BY_FAMILY.map((f) => f.mape))
+  const biasVals = FORECAST_TREND.map((t) => t.bias)
+  const biasDomain: [number, number] = META.isDemo ? [-15, 10] : [Math.floor(Math.min(-5, ...biasVals) / 5) * 5, Math.ceil(Math.max(5, ...biasVals) / 5) * 5]
+  const skuDen = Math.max(1, COMPANY.skuCount)
 
   /* ─── UPLOAD SCREEN ─── */
   if (screen === 'upload') {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center p-5">
-        <div className="max-w-xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10">
-          <div className="flex items-center gap-3 mb-8">
-            <LogoIcon size={38} />
-            <div>
-              <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-              <div className="text-[11px] text-teal-muted tracking-widest uppercase">Demand & Forecast Diagnostic</div>
-            </div>
-          </div>
-
-          <h1 className="text-2xl font-serif text-white mb-3">
-            Upload your demand data
-          </h1>
-          <p className="text-teal-muted text-sm leading-relaxed mb-8">
-            We need two data files to run the diagnostic. Download our templates or upload your own exports — the system will map the fields automatically.
-          </p>
-
-          {/* Templates */}
-          <div className="space-y-3 mb-8">
-            {[
-              { name: 'Demand History', desc: '12-24 months of shipments/consumption by SKU (monthly)', icon: TrendingUp },
-              { name: 'SKU Master', desc: 'Product families, current forecast method, safety stock policy', icon: FileSpreadsheet },
-            ].map((t) => (
-              <div key={t.name} className="flex items-center gap-4 p-4 rounded-xl border border-navy-mid bg-navy/40">
-                <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center">
-                  <t.icon size={18} className="text-teal" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">{t.name}</div>
-                  <div className="text-xs text-teal-muted/50">{t.desc}</div>
-                </div>
-                <button className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
-                  Template
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Upload area */}
-          <div
-            className="border-2 border-dashed border-navy-mid rounded-xl p-8 text-center mb-6 hover:border-teal/40 transition-colors cursor-pointer"
-            onClick={handleUpload}
-          >
-            {isProcessing ? (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-2 border-teal border-t-transparent rounded-full animate-spin" />
-                <span className="text-teal text-sm">Processing data...</span>
-              </div>
-            ) : (
-              <>
-                <Upload size={32} className="text-teal-muted/30 mx-auto mb-3" />
-                <div className="text-sm text-teal-muted mb-1">Drop files here or click to upload</div>
-                <div className="text-xs text-teal-muted/30">.xlsx, .csv — max 50MB per file</div>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={handleUpload}
-            className="w-full py-3.5 rounded-lg bg-teal/20 text-teal text-sm font-semibold hover:bg-teal/30 transition-colors border border-teal/30"
-          >
-            Use demo data to preview the diagnostic
-          </button>
-        </div>
-      </div>
+      <RealUploader
+        engine="platform/demand"
+        eyebrow="Demand & Forecast Diagnostic"
+        title="Upload your demand data"
+        intro="Upload your monthly demand history (and, if you have it, the forecast you used each month). An SKU master is optional. Files are processed in your browser — headers are mapped automatically (English, French, German, Portuguese)."
+        templates={DEMAND_TEMPLATES.map((t, i) => ({ ...t, icon: (i === 0 ? TrendingUp : FileSpreadsheet) as ComponentType<any> }))}
+        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onAnalyze={(tables) => {
+          const d = analyzeDemand(tables)
+          setDs(d)
+          setScreen('health')
+          return {
+            summary: {
+              skus: d.COMPANY.skuCount,
+              wmape: d.HEALTH_METRICS.mapeActual,
+              bias: d.HEALTH_METRICS.forecastBias,
+              forecast_provided: d.META.hasForecast,
+              data_health: d.DATA_HEALTH.overall,
+            },
+          }
+        }}
+      />
     )
   }
 
@@ -317,7 +312,13 @@ export default function DemandForecastDiagnostic() {
             </div>
           </div>
 
-          <div className="flex gap-3">
+          {META.notes.length > 0 && (
+            <ul className="mb-6 space-y-1 text-[11px] text-teal-muted/50 leading-relaxed list-disc pl-5">
+              {META.notes.map((n, i) => <li key={i}>{n}</li>)}
+            </ul>
+          )}
+
+          <div className="flex gap-3 no-print">
             <button onClick={() => setScreen('upload')} className="flex-1 py-3 rounded-lg border border-navy-mid text-teal-muted text-sm hover:border-teal transition-colors">
               Upload different data
             </button>
@@ -340,14 +341,14 @@ export default function DemandForecastDiagnostic() {
             <LogoIcon size={28} />
             <div>
               <div className="text-sm font-bold text-white">Demand & Forecast Diagnostic</div>
-              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.skuCount} SKUs &middot; Forecast period: 12 months</div>
+              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {COMPANY.skuCount} SKUs &middot; {META.periodLabel}</div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 no-print">
             <button onClick={() => setScreen('health')} className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
               Data Health
             </button>
-            <button className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
+            <button onClick={() => window.print()} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
               Export PDF
             </button>
           </div>
@@ -361,10 +362,10 @@ export default function DemandForecastDiagnostic() {
           <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-4">Executive Summary</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             {[
-              { label: 'Forecast Accuracy (MAPE)', value: `${HEALTH_METRICS.mapeActual}%`, sub: `Benchmark: ${HEALTH_METRICS.mapeBenchmark}%`, icon: BarChart3, alert: HEALTH_METRICS.mapeActual > HEALTH_METRICS.mapeBenchmark },
-              { label: 'Forecast Bias', value: `+${HEALTH_METRICS.forecastBias}%`, sub: 'Over-forecast by avg', icon: TrendingUp, alert: true },
+              { label: META.accuracyLabel, value: `${HEALTH_METRICS.mapeActual}%`, sub: META.benchmarkLabel, icon: BarChart3, alert: META.hasForecast ? HEALTH_METRICS.mapeActual > HEALTH_METRICS.mapeBenchmark : HEALTH_METRICS.mapeActual > 50 },
+              { label: META.hasForecast ? 'Forecast Bias' : 'Naive-Forecast Bias', value: `${HEALTH_METRICS.forecastBias > 0 ? '+' : ''}${HEALTH_METRICS.forecastBias}%`, sub: META.biasLabel, icon: HEALTH_METRICS.forecastBias >= 0 ? TrendingUp : TrendingDown, alert: Math.abs(HEALTH_METRICS.forecastBias) >= 5 },
               { label: 'Demand Volatility', value: `${HEALTH_METRICS.demandVolatility}`, sub: 'Coefficient of Variation', icon: Activity, alert: HEALTH_METRICS.demandVolatility > 0.35 },
-              { label: 'SKUs with No Forecast', value: `${HEALTH_METRICS.skusNoForecast}/${HEALTH_METRICS.totalSkus}`, sub: 'Insufficient history', icon: AlertTriangle, alert: true },
+              { label: 'SKUs with No Forecast', value: `${HEALTH_METRICS.skusNoForecast}/${HEALTH_METRICS.totalSkus}`, sub: META.noForecastLabel, icon: AlertTriangle, alert: HEALTH_METRICS.skusNoForecast > 0 },
             ].map((m) => (
               <div key={m.label} className="p-4 rounded-xl bg-navy/40 border border-navy-mid/60">
                 <div className="flex items-center gap-2 mb-2">
@@ -384,15 +385,17 @@ export default function DemandForecastDiagnostic() {
             <div>
               <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Total Recoverable Value Identified</div>
               <div className="text-4xl md:text-5xl font-extrabold text-white">
-                {COMPANY.currency} {fmt(totalRecoverableValue)}
+                {money(totalRecoverableValue)}
               </div>
               <div className="text-sm text-teal-muted mt-1">
-                across {RECOMMENDATIONS.length} recommendations — {RECOMMENDATIONS.filter(r => r.effort === 'Low').length} quick win available
+                {hasMoney
+                  ? <>across {RECOMMENDATIONS.length} recommendations — {RECOMMENDATIONS.filter(r => r.effort === 'Low').length} quick win available</>
+                  : <>{RECOMMENDATIONS.length} recommendations — {META.hasValue ? 'impacts not quantifiable from this data' : 'add unit cost/price data to quantify impact'}</>}
               </div>
             </div>
             <div className="text-center md:text-right">
               <div className="text-xs text-teal-muted/40 mb-1">Forecast error cost impact</div>
-              <div className="text-3xl font-bold text-teal">{COMPANY.currency} {fmt(totalRecoverableValue)}</div>
+              <div className="text-3xl font-bold text-teal">{money(totalRecoverableValue)}</div>
               <div className="text-xs text-teal-muted/40 mt-1">
                 from reduced bullwhip & stockouts
               </div>
@@ -405,11 +408,11 @@ export default function DemandForecastDiagnostic() {
           {/* Forecast Accuracy by Product Family */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
             <div className="text-sm font-semibold text-white mb-1">Forecast Accuracy by Product Family</div>
-            <div className="text-xs text-teal-muted/40 mb-4">8 families — higher MAPE = worse accuracy</div>
+            <div className="text-xs text-teal-muted/40 mb-4">{FORECAST_BY_FAMILY.length} {FORECAST_BY_FAMILY.length === 1 ? 'family' : 'families'} — higher {META.isDemo ? 'MAPE' : 'WMAPE'} = worse accuracy</div>
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={FORECAST_BY_FAMILY} layout="vertical">
                 <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
-                <XAxis type="number" domain={[0, 100]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'MAPE (%)', position: 'bottom', fill: '#9fd8d0', fontSize: 10, offset: -5 }} />
+                <XAxis type="number" domain={[0, familyMax]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'MAPE (%)', position: 'bottom', fill: '#9fd8d0', fontSize: 10, offset: -5 }} />
                 <YAxis dataKey="family" type="category" tick={{ fill: '#9fd8d0', fontSize: 10 }} width={100} />
                 <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} formatter={(value) => `${value}%`} />
                 <Bar dataKey="mape" radius={[0, 4, 4, 0]}>
@@ -429,18 +432,18 @@ export default function DemandForecastDiagnostic() {
 
           {/* Forecast Bias Trend */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
-            <div className="text-sm font-semibold text-white mb-1">12-Month Forecast Bias Trend</div>
-            <div className="text-xs text-teal-muted/40 mb-4">Actual demand vs forecast — positive = over-forecast</div>
+            <div className="text-sm font-semibold text-white mb-1">{META.trendTitle}</div>
+            <div className="text-xs text-teal-muted/40 mb-4">{META.trendSubtitle}</div>
             <ResponsiveContainer width="100%" height={240}>
               <LineChart data={FORECAST_TREND}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
                 <XAxis dataKey="month" tick={{ fill: '#9fd8d0', fontSize: 10 }} />
-                <YAxis yAxisId="left" tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Volume (K units)', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10 }} />
-                <YAxis yAxisId="right" orientation="right" domain={[-15, 10]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Bias (%)', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10 }} />
+                <YAxis yAxisId="left" tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: META.volumeLabel, angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10 }} />
+                <YAxis yAxisId="right" orientation="right" domain={biasDomain} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Bias (%)', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10 }} />
                 <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
                 <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
                 <Line yAxisId="left" type="monotone" dataKey="actual" name="Actual Demand" stroke="#1a9e8f" strokeWidth={2.5} dot={{ r: 3 }} />
-                <Line yAxisId="left" type="monotone" dataKey="forecast" name="Forecast" stroke="#4ab8ae" strokeWidth={2.5} dot={{ r: 2 }} strokeDasharray="5 5" />
+                <Line yAxisId="left" type="monotone" dataKey="forecast" name={META.hasForecast ? 'Forecast' : 'Naive forecast (3-mo MA)'} stroke="#4ab8ae" strokeWidth={2.5} dot={{ r: 2 }} strokeDasharray="5 5" />
                 <Line yAxisId="right" type="monotone" dataKey="bias" name="Bias %" stroke="#EF4444" strokeWidth={2} dot={{ r: 2.5 }} />
               </LineChart>
             </ResponsiveContainer>
@@ -483,7 +486,7 @@ export default function DemandForecastDiagnostic() {
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle size={16} className="text-orange-400" />
-            <span className="text-sm font-semibold text-white">Top 10 Worst Forecast Accuracy SKUs</span>
+            <span className="text-sm font-semibold text-white">{META.worstTitle}</span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
@@ -492,7 +495,7 @@ export default function DemandForecastDiagnostic() {
                   <th className="text-left py-3 px-3 text-teal-muted/50 font-semibold">SKU</th>
                   <th className="text-left py-3 px-3 text-teal-muted/50 font-semibold">Description</th>
                   <th className="text-left py-3 px-3 text-teal-muted/50 font-semibold">Family</th>
-                  <th className="text-center py-3 px-3 text-teal-muted/50 font-semibold">MAPE</th>
+                  <th className="text-center py-3 px-3 text-teal-muted/50 font-semibold">{META.isDemo ? 'MAPE' : 'WMAPE'}</th>
                   <th className="text-center py-3 px-3 text-teal-muted/50 font-semibold">Pattern</th>
                   <th className="text-center py-3 px-3 text-teal-muted/50 font-semibold">Seasonality</th>
                 </tr>
@@ -527,9 +530,9 @@ export default function DemandForecastDiagnostic() {
                     <span className="text-lg font-bold" style={{ color: pattern.color }}>{pattern.count}</span>
                   </div>
                 </div>
-                <div className="text-[10px] text-teal-muted/40 mb-2">{Math.round(pattern.count / COMPANY.skuCount * 100)}% of SKUs</div>
+                <div className="text-[10px] text-teal-muted/40 mb-2">{Math.round(pattern.count / skuDen * 100)}% of SKUs</div>
                 <div className="h-1.5 rounded-full bg-navy-mid/40">
-                  <div className="h-full rounded-full" style={{ width: `${Math.round(pattern.count / COMPANY.skuCount * 100)}%`, backgroundColor: pattern.color, opacity: 0.8 }} />
+                  <div className="h-full rounded-full" style={{ width: `${Math.round(pattern.count / skuDen * 100)}%`, backgroundColor: pattern.color, opacity: 0.8 }} />
                 </div>
                 <div className="text-[9px] text-teal-muted/50 mt-2">{pattern.description}</div>
               </div>
@@ -542,7 +545,7 @@ export default function DemandForecastDiagnostic() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <div className="text-sm font-semibold text-white">Prioritised Recommendations</div>
-              <div className="text-xs text-teal-muted/40">Ranked by financial impact — total recoverable: {COMPANY.currency} {fmt(totalRecoverableValue)}</div>
+              <div className="text-xs text-teal-muted/40">{hasMoney ? <>Ranked by priority and financial impact — total recoverable: {money(totalRecoverableValue)}</> : <>Ranked by priority — financial impact not quantified</>}</div>
             </div>
           </div>
           <div className="space-y-3">
@@ -562,7 +565,7 @@ export default function DemandForecastDiagnostic() {
                     </div>
                   </div>
                   <div className="text-right min-w-[100px]">
-                    <div className="text-xl font-extrabold text-teal">{COMPANY.currency} {rec.impact}</div>
+                    <div className="text-xl font-extrabold text-teal">{parseImpact(rec.impact) > 0 ? `${COMPANY.currency ? COMPANY.currency + ' ' : ''}${rec.impact}` : '—'}</div>
                     <div className="text-[10px] text-teal-muted/30">estimated impact</div>
                   </div>
                 </div>
@@ -587,19 +590,19 @@ export default function DemandForecastDiagnostic() {
                 phase: 'Week 1-3',
                 title: 'Assessment & Quick Wins',
                 color: '#22C55E',
-                items: ['Conduct detailed demand pattern analysis by family', 'Fix demand history gaps (134 SKUs)', 'Implement weekly forecast bias monitoring'],
+                items: META.roadmap[0],
               },
               {
                 phase: 'Week 4-8',
                 title: 'Model Development',
                 color: '#EAB308',
-                items: ['Deploy segment-specific forecasting methods (CHF 580K)', 'Build causal models for seasonal SKUs (CHF 280K)', 'Integrate promotional calendar and external signals'],
+                items: META.roadmap[1],
               },
               {
                 phase: 'Week 9-12',
                 title: 'Operationalization',
                 color: '#0EA5E9',
-                items: ['Establish demand sensing dashboard', 'Implement forecast governance process', 'Train planning team and go-live with new methods'],
+                items: META.roadmap[2],
               },
             ].map((p) => (
               <div key={p.phase} className="p-4 rounded-xl border border-navy-mid/50 bg-navy/20">
@@ -624,15 +627,17 @@ export default function DemandForecastDiagnostic() {
         {/* ── CTA ── */}
         <div className="rounded-2xl border border-teal/20 bg-gradient-to-br from-teal/10 to-navy-mid/20 p-8 text-center mb-5">
           <div className="text-2xl font-bold text-white mb-2">
-            {COMPANY.currency} {fmt(totalRecoverableValue)} in recoverable value identified
+            {hasMoney ? <>{money(totalRecoverableValue)} in recoverable value identified</> : <>{RECOMMENDATIONS.length} improvement opportunities identified</>}
           </div>
           <p className="text-sm text-teal-muted leading-relaxed mb-2 max-w-xl mx-auto">
-            This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities in demand forecasting and planning, with an estimated annual impact of {COMPANY.currency} {fmt(totalRecoverableValue)}. The next step is a structured engagement to implement these recommendations — starting with quick wins in weeks 1-3.
+            This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities in demand forecasting and planning, {hasMoney ? <>with an estimated impact of {money(totalRecoverableValue)}</> : <>(financial impact requires cost data)</>}. The next step is a structured engagement to implement these recommendations — starting with quick wins in weeks 1-3.
           </p>
-          <p className="text-xs text-teal-muted/40 mb-6">
-            Investment: CHF 22-32K &middot; Duration: 12-16 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {META.isDemo ? (
+            <p className="text-xs text-teal-muted/40 mb-6">
+              Investment: {COMPANY.currency} 22-32K &middot; Duration: 12-16 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
+            </p>
+          ) : <div className="mb-6" />}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center no-print">
             <a
               href="https://calendly.com/caio-opsflow-advisory/30min"
               target="_blank"
@@ -641,7 +646,7 @@ export default function DemandForecastDiagnostic() {
             >
               Discuss Implementation Plan
             </a>
-            <button className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
+            <button onClick={() => window.print()} className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
               Download Executive Report
             </button>
           </div>

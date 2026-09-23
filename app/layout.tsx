@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'OpsFlow Advisory — Conseil supply chain & S&OP · Suisse',
+  title: 'OpsFlow Advisory — Supply chain strategy & S&OP advisory',
   description:
-    'Conseil en supply chain pour PME et entreprises en Suisse romande et EMEA : S&OP, optimisation des stocks, gestion des risques et planification de la distribution. Certifié MIT. Session diagnostic gratuite.',
+    'Senior supply chain advisory plus a lean planning team: S&OP/IBP, inventory optimisation, supply risk and distribution planning — with data-driven diagnostics. Free diagnostic session.',
   metadataBase: new URL('https://www.opsflow-advisory.ch'),
   openGraph: {
     title: 'OpsFlow Advisory',
-    description: 'Conseil en supply chain augmenté par l’IA — Suisse & EMEA.',
+    description: 'Supply chain strategy and planning, powered by AI diagnostics.',
     url: 'https://www.opsflow-advisory.ch',
     siteName: 'OpsFlow Advisory',
     type: 'website',
@@ -22,10 +22,10 @@ const orgSchema = {
   url: 'https://www.opsflow-advisory.ch',
   email: 'caio@opsflow-advisory.ch',
   description:
-    'Conseil en supply chain pour la Suisse et l’EMEA : S&OP, optimisation des stocks, gestion des risques et planification de la distribution.',
+    'Supply chain advisory: senior strategic direction plus a planning team that runs and supervises the client’s S&OP cycle — S&OP/IBP, inventory optimisation, supply risk and distribution planning.',
   areaServed: [
-    { '@type': 'Place', name: 'Switzerland' },
-    { '@type': 'Place', name: 'EMEA' },
+    { '@type': 'Place', name: 'Europe' },
+    { '@type': 'Place', name: 'Worldwide' },
   ],
   address: {
     '@type': 'PostalAddress',

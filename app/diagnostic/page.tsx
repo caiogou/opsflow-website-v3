@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { captureLead, isEmail } from '@/lib/engine/io'
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell
@@ -454,6 +455,8 @@ export default function DiagnosticPage() {
   const [email, setEmail] = useState('')
   const [industry, setIndustry] = useState('')
   const [revenue, setRevenue] = useState('')
+  const [sending, setSending] = useState(false)
+  const [gateError, setGateError] = useState<string | null>(null)
 
   const totalQuestions = DIMENSIONS.reduce((s, d) => s + d.questions.length, 0)
   const answeredCount = Object.keys(answers).length
@@ -738,13 +741,27 @@ export default function DiagnosticPage() {
           </div>
 
           <button
-            onClick={() => { if (email) setScreen('results') }}
-            disabled={!email}
+            onClick={async () => {
+              setGateError(null)
+              if (!isEmail(email)) { setGateError('Please enter a valid work e-mail.'); return }
+              setSending(true)
+              const r = await captureLead({
+                origem: 'diagnostic', email, nome: respondentName, empresa: companyName, cargo: respondentRole,
+                setor: industry, faturamento: revenue, score: overallScore,
+                nivel: MATURITY_LABELS[Math.round(overallScore)] || '',
+                respostas: { answers, dimensions: scores.map((d) => ({ id: d.id, score: d.score })) },
+              })
+              setSending(false)
+              if (!r.ok && r.erro === 'email_invalido') { setGateError('Please enter a valid work e-mail.'); return }
+              setScreen('results')
+            }}
+            disabled={!email || sending}
             className="w-full py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors disabled:opacity-30 disabled:cursor-default flex items-center justify-center gap-2"
           >
             Unlock Full Report <ArrowRight size={16} />
           </button>
 
+          {gateError && <p className="text-red-300 text-xs mt-3">{gateError}</p>}
           <p className="text-teal-muted/30 text-[11px] mt-4">No spam. We may reach out with relevant insights.</p>
         </div>
       </div>
@@ -781,12 +798,20 @@ export default function DiagnosticPage() {
                 <div className="text-xs text-teal-muted/50">{companyName} &middot; {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
               </div>
             </div>
-            <button
-              onClick={() => { setScreen('assessment'); setCurrentDim(0); setCurrentQ(0) }}
-              className="px-4 py-2 rounded-lg border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors"
-            >
-              Edit Answers
-            </button>
+            <div className="flex gap-2 no-print">
+              <button
+                onClick={() => { setScreen('assessment'); setCurrentDim(0); setCurrentQ(0) }}
+                className="px-4 py-2 rounded-lg border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors"
+              >
+                Edit Answers
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 rounded-lg bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors"
+              >
+                Download PDF
+              </button>
+            </div>
           </div>
 
           {/* Overall */}

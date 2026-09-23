@@ -1,29 +1,34 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, type ComponentType } from 'react'
 import {
-  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
+  ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LineChart, Line, Legend
 } from 'recharts'
 import {
-  Upload, CheckCircle, AlertTriangle, TrendingDown, TrendingUp, Target,
-  AlertCircle, ArrowRight, ChevronRight, BarChart3, FileSpreadsheet,
-  ArrowUpRight, Activity, Clock
+  CheckCircle, AlertTriangle, TrendingDown, TrendingUp,
+  AlertCircle, ArrowRight, ChevronRight, BarChart3,
+  ArrowUpRight, Activity, Info
 } from 'lucide-react'
 import { LogoIcon } from '@/components/LogoIcon'
+import { RealUploader } from '@/components/platform/RealUploader'
+import { analyzeKpis, kpiSummary, KPI_TEMPLATES, type KpiDataset } from '@/lib/engine/kpis'
 
 /* ══════════════════════════════════════════════════════════════
-   SIMULATED DATA — Replace with real upload/parse in production
+   DEMO DATA (fictional company) — shown with "preview a sample diagnostic".
+   Real uploads are computed by lib/engine/kpis.ts (same shape).
    ══════════════════════════════════════════════════════════════ */
 
 const COMPANY = { name: 'Simulated Client', currency: 'CHF' }
 
-// KPI Data
+// KPI Data (targets = industry reference values)
 const KPI_METRICS = {
   otif: 91.2,
   otifTarget: 95,
   otd: 88.5,
   otdTarget: 93,
+  fillRate: null as number | null,
+  fillRateTarget: 97,
   scCost: 8.2,
   scCostBench: 6.5,
   freightCost: 14,
@@ -151,114 +156,153 @@ const RECOMMENDATIONS = [
   },
 ]
 
+const DATA_HEALTH = {
+  overall: 78,
+  dimensions: [
+    { name: 'Completeness', score: 85, detail: '95% of KPI data available; some gaps in supplier metrics' },
+    { name: 'Accuracy', score: 72, detail: 'Definition inconsistency for OTIF (in vs. full variation)' },
+    { name: 'Timeliness', score: 82, detail: 'KPI data updated daily; demand signals updated weekly' },
+    { name: 'Consistency', score: 78, detail: 'Definitions aligned across regions but not all customer segments' },
+    { name: 'Granularity', score: 68, detail: 'Metrics at company level; limited visibility by SKU/customer/region' },
+  ],
+}
+
+const ROADMAP = [
+  {
+    phase: 'Week 1-4',
+    title: 'Diagnose & Quick Wins',
+    color: '#22C55E',
+    items: [`Implement weekly demand planning cycle (${COMPANY.currency} 380K)`, 'Launch forecast bias tracking', 'Establish KPI dashboard with alerts'],
+  },
+  {
+    phase: 'Week 5-8',
+    title: 'Build Foundation',
+    color: '#EAB308',
+    items: [`Implement ABC-based safety stock (${COMPANY.currency} 280K)`, 'Redesign S&OP (tactical + strategic)', 'Fix KPI definitions & granularity'],
+  },
+  {
+    phase: 'Week 9-12',
+    title: 'Sustain & Scale',
+    color: '#0EA5E9',
+    items: [`Launch supplier collaboration (${COMPANY.currency} 100K)`, 'Automate exception management', 'Establish continuous improvement rhythms'],
+  },
+]
+
+const DEMO: KpiDataset = {
+  COMPANY,
+  KPI_METRICS,
+  RADAR_DATA,
+  MONTHLY_TREND,
+  ROOT_CAUSES,
+  GAP_ANALYSIS,
+  OPERATIONAL_RHYTHM,
+  RECOMMENDATIONS,
+  DATA_HEALTH,
+  ROADMAP,
+  META: {
+    isDemo: true,
+    subtitle: '12-month KPI history · 8 core metrics',
+    trendNote: 'OTIF flat, forecast accuracy stable, plan adherence drifting',
+    rootCauseNote: 'Top 8 causes contributing to OTIF/OTD shortfalls (% of incidents)',
+    impactDrivers: 'OTIF +3.8% / Forecast Acc +14%',
+    impactDrivers2: 'Plan adherence +16% / Turns +3.3x',
+    valueLabel: 'Total Recoverable Value Identified',
+    showInvestment: true,
+    notes: [],
+  },
+}
+
 const PRIORITY_COLORS: Record<string, string> = {
   CRITICAL: '#EF4444',
   HIGH: '#F97316',
   MEDIUM: '#EAB308',
   LOW: '#22C55E',
+  'N/A': '#64748B',
 }
 
 const fmt = (n: number) => {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`
-  return n.toString()
+  if (!isFinite(n)) return '0'
+  if (Math.abs(n) >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  if (Math.abs(n) >= 1_000) return `${(n / 1_000).toFixed(0)}K`
+  return Math.round(n).toString()
+}
+/** '380K' | '1.2M' | '950' -> number (0 when empty / unparsable). */
+const parseImpact = (s: string) => {
+  const m = String(s || '').trim().match(/^([\d.]+)\s*([KM]?)$/i)
+  if (!m) return 0
+  const v = parseFloat(m[1]) * (m[2].toUpperCase() === 'M' ? 1_000_000 : m[2].toUpperCase() === 'K' ? 1_000 : 1)
+  return isFinite(v) ? v : 0
+}
+
+/* One scorecard metric. value === null -> "n/a · Not provided". */
+function KpiBar({ label, value, target, unit, lowerIsBetter = false, max, digits = 1, prefix = '' }: {
+  label: string; value: number | null; target: number; unit: string; lowerIsBetter?: boolean; max?: number; digits?: number; prefix?: string
+}) {
+  if (value === null || !isFinite(value)) {
+    return (
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-teal-muted/50">{label}</span>
+          <span className="text-sm font-bold text-teal-muted/40">n/a</span>
+        </div>
+        <div className="h-2 rounded-full bg-navy-mid/40" />
+        <div className="text-xs text-teal-muted/30 mt-1">Not provided in your files · ref. {prefix}{target}{unit}</div>
+      </div>
+    )
+  }
+  const gap = value - target
+  const bad = lowerIsBetter ? gap > 0 : gap < 0
+  const width = Math.max(0, Math.min(100, max ? (value / max) * 100 : lowerIsBetter ? (value > 0 ? (target / value) * 100 : 100) : (value / target) * 100))
+  const color = bad ? (lowerIsBetter ? 'bg-red-400' : 'bg-orange-400') : 'bg-teal'
+  const txt = bad ? (lowerIsBetter ? 'text-red-400' : 'text-orange-400') : 'text-teal'
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-teal-muted/50">{label}</span>
+        <span className="text-sm font-bold text-white">{prefix}{value}{unit} / {prefix}{target}{unit} <span className="text-[10px] font-normal text-teal-muted/40">reference</span></span>
+      </div>
+      <div className="h-2 rounded-full bg-navy-mid/40">
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${width}%` }} />
+      </div>
+      <div className={`text-xs ${txt} mt-1 font-semibold`}>
+        {bad ? 'Gap' : lowerIsBetter ? 'Within reference' : 'Above reference'}: {gap >= 0 ? '+' : '-'}{Math.abs(gap).toFixed(digits)}{unit}
+      </div>
+    </div>
+  )
 }
 
 export default function KPIsDiagnostic() {
   const [screen, setScreen] = useState<'upload' | 'health' | 'dashboard'>('upload')
-  const [isProcessing, setIsProcessing] = useState(false)
-
-  const handleUpload = () => {
-    setIsProcessing(true)
-    setTimeout(() => { setIsProcessing(false); setScreen('health') }, 2000)
-  }
+  const [ds, setDs] = useState<KpiDataset>(DEMO)
+  const {
+    COMPANY, KPI_METRICS, RADAR_DATA, MONTHLY_TREND, ROOT_CAUSES, GAP_ANALYSIS,
+    OPERATIONAL_RHYTHM, RECOMMENDATIONS, DATA_HEALTH, ROADMAP, META,
+  } = ds
 
   const handleProceed = () => setScreen('dashboard')
+  const money = (n: number) => `${COMPANY.currency ? COMPANY.currency + ' ' : ''}${fmt(n)}`
 
-  const DATA_HEALTH = {
-    overall: 78,
-    dimensions: [
-      { name: 'Completeness', score: 85, detail: '95% of KPI data available; some gaps in supplier metrics' },
-      { name: 'Accuracy', score: 72, detail: 'Definition inconsistency for OTIF (in vs. full variation)' },
-      { name: 'Timeliness', score: 82, detail: 'KPI data updated daily; demand signals updated weekly' },
-      { name: 'Consistency', score: 78, detail: 'Definitions aligned across regions but not all customer segments' },
-      { name: 'Granularity', score: 68, detail: 'Metrics at company level; limited visibility by SKU/customer/region' },
-    ],
-  }
-
-  const totalRecoverableValue = RECOMMENDATIONS.reduce(
-    (sum, r) => sum + parseInt(r.impact.replace('K', '000').replace('M', '000000')), 0
-  )
+  const totalRecoverableValue = RECOMMENDATIONS.reduce((sum, r) => sum + parseImpact(r.impact), 0)
+  const hasSeries = (k: 'otif' | 'otd' | 'turns' | 'forecastAcc' | 'planAdhere') =>
+    MONTHLY_TREND.some((p) => typeof (p as any)[k] === 'number' && isFinite((p as any)[k]))
 
   /* ─── UPLOAD SCREEN ─── */
   if (screen === 'upload') {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center p-5">
-        <div className="max-w-xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10">
-          <div className="flex items-center gap-3 mb-8">
-            <LogoIcon size={38} />
-            <div>
-              <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-              <div className="text-[11px] text-teal-muted tracking-widest uppercase">Planning KPIs Diagnostic</div>
-            </div>
-          </div>
-
-          <h1 className="text-2xl font-serif text-white mb-3">
-            Upload your planning KPI data
-          </h1>
-          <p className="text-teal-muted text-sm leading-relaxed mb-8">
-            We need your historical KPI data (12+ months) and operational metrics to diagnose planning performance. Download our templates or upload your own exports.
-          </p>
-
-          {/* Templates */}
-          <div className="space-y-3 mb-8">
-            {[
-              { name: 'KPI History', desc: 'Monthly OTIF, OTD, turns, forecast accuracy, plan adherence (12-24m)', icon: Activity },
-              { name: 'Operational Data', desc: 'Service failures, demand signals, supply chain disruptions, lead times', icon: AlertTriangle },
-              { name: 'Meeting Log', desc: 'S&OP, demand planning, inventory reviews (frequency, duration, outcomes)', icon: Clock },
-            ].map((t) => (
-              <div key={t.name} className="flex items-center gap-4 p-4 rounded-xl border border-navy-mid bg-navy/40">
-                <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center">
-                  <t.icon size={18} className="text-teal" />
-                </div>
-                <div className="flex-1">
-                  <div className="text-sm font-semibold text-white">{t.name}</div>
-                  <div className="text-xs text-teal-muted/50">{t.desc}</div>
-                </div>
-                <button className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
-                  Template
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Upload area */}
-          <div
-            className="border-2 border-dashed border-navy-mid rounded-xl p-8 text-center mb-6 hover:border-teal/40 transition-colors cursor-pointer"
-            onClick={handleUpload}
-          >
-            {isProcessing ? (
-              <div className="flex flex-col items-center gap-3">
-                <div className="w-10 h-10 border-2 border-teal border-t-transparent rounded-full animate-spin" />
-                <span className="text-teal text-sm">Processing data...</span>
-              </div>
-            ) : (
-              <>
-                <Upload size={32} className="text-teal-muted/30 mx-auto mb-3" />
-                <div className="text-sm text-teal-muted mb-1">Drop files here or click to upload</div>
-                <div className="text-xs text-teal-muted/30">.xlsx, .csv — max 50MB per file</div>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={handleUpload}
-            className="w-full py-3.5 rounded-lg bg-teal/20 text-teal text-sm font-semibold hover:bg-teal/30 transition-colors border border-teal/30"
-          >
-            Use demo data to preview the diagnostic
-          </button>
-        </div>
-      </div>
+      <RealUploader
+        engine="platform/kpis"
+        eyebrow="Supply Chain KPI Diagnostic"
+        title="Upload your order lines and planning data"
+        intro="We compute OTIF, OTD and fill rate from your order lines (ideally 12 months), and forecast accuracy, plan adherence, inventory turns and SC cost % from an optional monthly plan-vs-actual file. KPIs we cannot compute are shown as n/a — nothing is estimated."
+        templates={KPI_TEMPLATES.map((t, i) => ({ ...t, icon: (i === 0 ? Activity : BarChart3) as ComponentType<any> }))}
+        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onAnalyze={(tables) => {
+          const d = analyzeKpis(tables)
+          setDs(d)
+          setScreen('health')
+          return { summary: kpiSummary(d) }
+        }}
+      />
     )
   }
 
@@ -271,7 +315,7 @@ export default function KPIsDiagnostic() {
         <div className="max-w-2xl w-full bg-navy-deep/50 rounded-2xl border border-navy-mid p-10">
           <div className="flex items-center gap-3 mb-8">
             <LogoIcon size={32} />
-            <span className="text-teal-muted text-xs">Planning KPIs Diagnostic — Data Health Check</span>
+            <span className="text-teal-muted text-xs">Supply Chain KPI Diagnostic — Data Health Check{META.isDemo ? ' (sample data)' : ''}</span>
           </div>
 
           <div className="text-center mb-8">
@@ -309,10 +353,16 @@ export default function KPIsDiagnostic() {
             <div className="flex items-start gap-3">
               <AlertCircle size={16} className="text-teal mt-0.5" />
               <div>
-                <div className="text-sm font-semibold text-white mb-1">Data quality impacts accuracy</div>
-                <div className="text-xs text-teal-muted/60 leading-relaxed">
-                  The gaps identified above mean some recommendations will be directional rather than precise. Improving KPI definitions and implementing SKU/customer-level granularity would significantly improve recommendation accuracy. This is flagged as a recommendation in the diagnostic.
-                </div>
+                <div className="text-sm font-semibold text-white mb-1">{META.isDemo ? 'Data quality impacts accuracy' : 'How your KPIs were computed'}</div>
+                {META.isDemo ? (
+                  <div className="text-xs text-teal-muted/60 leading-relaxed">
+                    The gaps identified above mean some recommendations will be directional rather than precise. Improving KPI definitions and implementing SKU/customer-level granularity would significantly improve recommendation accuracy. This is flagged as a recommendation in the diagnostic.
+                  </div>
+                ) : (
+                  <ul className="text-xs text-teal-muted/60 leading-relaxed list-disc pl-4 space-y-1">
+                    {META.notes.map((n, i) => <li key={i}>{n}</li>)}
+                  </ul>
+                )}
               </div>
             </div>
           </div>
@@ -339,15 +389,15 @@ export default function KPIsDiagnostic() {
           <div className="flex items-center gap-3">
             <LogoIcon size={28} />
             <div>
-              <div className="text-sm font-bold text-white">Planning KPIs Diagnostic</div>
-              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; 12-month KPI history &middot; 8 core metrics</div>
+              <div className="text-sm font-bold text-white">Supply Chain KPI Diagnostic</div>
+              <div className="text-xs text-teal-muted/40">{COMPANY.name} &middot; {META.subtitle}</div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 no-print">
             <button onClick={() => setScreen('health')} className="px-3 py-1.5 rounded border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors">
               Data Health
             </button>
-            <button className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
+            <button onClick={() => window.print()} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors">
               Export PDF
             </button>
           </div>
@@ -358,32 +408,17 @@ export default function KPIsDiagnostic() {
 
         {/* ── BALANCED SCORECARD (4 QUADRANTS) ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
-          <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-4">Balanced Scorecard — Current Performance vs Targets</div>
+          <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-4">Balanced Scorecard — Current Performance vs Reference</div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Service Quadrant */}
             <div className="p-5 rounded-xl bg-navy/40 border border-navy-mid/60">
               <div className="text-sm font-semibold text-white mb-4">Service</div>
               <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">OTIF</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.otif}% / {KPI_METRICS.otifTarget}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.otif / KPI_METRICS.otifTarget) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: -{(KPI_METRICS.otifTarget - KPI_METRICS.otif).toFixed(1)}%</div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">OTD</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.otd}% / {KPI_METRICS.otdTarget}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.otd / KPI_METRICS.otdTarget) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: -{(KPI_METRICS.otdTarget - KPI_METRICS.otd).toFixed(1)}%</div>
-                </div>
+                <KpiBar label="OTIF" value={KPI_METRICS.otif} target={KPI_METRICS.otifTarget} unit="%" />
+                <KpiBar label="OTD" value={KPI_METRICS.otd} target={KPI_METRICS.otdTarget} unit="%" />
+                {KPI_METRICS.fillRate !== null && (
+                  <KpiBar label="Fill Rate (units)" value={KPI_METRICS.fillRate} target={KPI_METRICS.fillRateTarget} unit="%" />
+                )}
               </div>
             </div>
 
@@ -391,26 +426,8 @@ export default function KPIsDiagnostic() {
             <div className="p-5 rounded-xl bg-navy/40 border border-navy-mid/60">
               <div className="text-sm font-semibold text-white mb-4">Cost</div>
               <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">SC Cost %</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.scCost}% / {KPI_METRICS.scCostBench}% benchmark</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-red-400" style={{ width: `${Math.min((KPI_METRICS.scCost / 12) * 100, 100)}%` }} />
-                  </div>
-                  <div className="text-xs text-red-400 mt-1 font-semibold">Gap: +{(KPI_METRICS.scCost - KPI_METRICS.scCostBench).toFixed(1)}%</div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">Freight Cost Inflation</span>
-                    <span className="text-sm font-bold text-white">+{KPI_METRICS.freightCost}% / target +8%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-red-400" style={{ width: `${Math.min((KPI_METRICS.freightCost / 20) * 100, 100)}%` }} />
-                  </div>
-                  <div className="text-xs text-red-400 mt-1 font-semibold">Gap: +{(KPI_METRICS.freightCost - 8).toFixed(0)}%</div>
-                </div>
+                <KpiBar label="SC Cost % of revenue" value={KPI_METRICS.scCost} target={KPI_METRICS.scCostBench} unit="%" lowerIsBetter max={12} />
+                <KpiBar label="Freight Cost Inflation" value={KPI_METRICS.freightCost} target={8} unit="%" prefix="+" lowerIsBetter max={20} digits={0} />
               </div>
             </div>
 
@@ -418,26 +435,8 @@ export default function KPIsDiagnostic() {
             <div className="p-5 rounded-xl bg-navy/40 border border-navy-mid/60">
               <div className="text-sm font-semibold text-white mb-4">Inventory</div>
               <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">Turns</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.inventoryTurns}x / {KPI_METRICS.inventoryTurnsTarget}x</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.inventoryTurns / KPI_METRICS.inventoryTurnsTarget) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: -{(KPI_METRICS.inventoryTurnsTarget - KPI_METRICS.inventoryTurns).toFixed(1)}x</div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">DOS</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.dos}d / {KPI_METRICS.dosTarget}d</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.dosTarget / KPI_METRICS.dos) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: +{(KPI_METRICS.dos - KPI_METRICS.dosTarget).toFixed(0)}d</div>
-                </div>
+                <KpiBar label="Turns" value={KPI_METRICS.inventoryTurns} target={KPI_METRICS.inventoryTurnsTarget} unit="x" />
+                <KpiBar label="DOS" value={KPI_METRICS.dos} target={KPI_METRICS.dosTarget} unit="d" lowerIsBetter digits={0} />
               </div>
             </div>
 
@@ -445,48 +444,42 @@ export default function KPIsDiagnostic() {
             <div className="p-5 rounded-xl bg-navy/40 border border-navy-mid/60">
               <div className="text-sm font-semibold text-white mb-4">Planning</div>
               <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">Forecast Accuracy</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.forecastAccuracy}% / {KPI_METRICS.forecastAccuracyTarget}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.forecastAccuracy / KPI_METRICS.forecastAccuracyTarget) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: -{(KPI_METRICS.forecastAccuracyTarget - KPI_METRICS.forecastAccuracy).toFixed(0)}%</div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-teal-muted/50">Plan Adherence</span>
-                    <span className="text-sm font-bold text-white">{KPI_METRICS.planAdherence}% / {KPI_METRICS.planAdherenceTarget}%</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-navy-mid/40">
-                    <div className="h-full rounded-full bg-orange-400" style={{ width: `${(KPI_METRICS.planAdherence / KPI_METRICS.planAdherenceTarget) * 100}%` }} />
-                  </div>
-                  <div className="text-xs text-orange-400 mt-1 font-semibold">Gap: -{(KPI_METRICS.planAdherenceTarget - KPI_METRICS.planAdherence).toFixed(0)}%</div>
-                </div>
+                <KpiBar label="Forecast Accuracy" value={KPI_METRICS.forecastAccuracy} target={KPI_METRICS.forecastAccuracyTarget} unit="%" digits={META.isDemo ? 0 : 1} />
+                <KpiBar label="Plan Adherence" value={KPI_METRICS.planAdherence} target={KPI_METRICS.planAdherenceTarget} unit="%" digits={META.isDemo ? 0 : 1} />
               </div>
             </div>
           </div>
+          <div className="text-[10px] text-teal-muted/30 mt-3">Reference values are industry reference levels, not targets set for your business.</div>
         </div>
 
         {/* ── FINANCIAL IMPACT BOX ── */}
         <div className="rounded-2xl border-2 border-teal/30 bg-gradient-to-r from-teal/10 to-navy-deep/60 p-6 mb-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">Total Recoverable Value Identified</div>
-              <div className="text-4xl md:text-5xl font-extrabold text-white">
-                {COMPANY.currency} {fmt(totalRecoverableValue)}
-              </div>
-              <div className="text-sm text-teal-muted mt-1">
-                across {RECOMMENDATIONS.length} recommendations — improved KPI performance in 90 days
-              </div>
+              <div className="text-xs text-teal uppercase tracking-widest font-semibold mb-1">{META.valueLabel}</div>
+              {totalRecoverableValue > 0 ? (
+                <>
+                  <div className="text-4xl md:text-5xl font-extrabold text-white">
+                    {money(totalRecoverableValue)}
+                  </div>
+                  <div className="text-sm text-teal-muted mt-1">
+                    across {RECOMMENDATIONS.filter((r) => parseImpact(r.impact) > 0).length} quantified recommendations{META.isDemo ? ' — improved KPI performance in 90 days' : ' (see each recommendation for the basis)'}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl md:text-3xl font-extrabold text-white">Not quantified</div>
+                  <div className="text-sm text-teal-muted mt-1 max-w-md">
+                    Add a line value column, or inventory value + COGS / SC cost + revenue in the monthly file, to quantify value. {RECOMMENDATIONS.length} recommendations below.
+                  </div>
+                </>
+              )}
             </div>
             <div className="text-center md:text-right">
-              <div className="text-xs text-teal-muted/40 mb-1">Primary impact drivers</div>
-              <div className="text-lg font-bold text-teal">OTIF +3.8% / Forecast Acc +14%</div>
+              <div className="text-xs text-teal-muted/40 mb-1">{META.isDemo ? 'Primary impact drivers' : 'Largest gaps vs reference'}</div>
+              <div className="text-lg font-bold text-teal">{META.impactDrivers}</div>
               <div className="text-xs text-teal-muted/40 mt-1">
-                Plan adherence +16% / Turns +3.3x
+                {META.impactDrivers2}
               </div>
             </div>
           </div>
@@ -494,52 +487,59 @@ export default function KPIsDiagnostic() {
 
         {/* ── KPI PERFORMANCE RADAR CHART ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
-          <div className="text-sm font-semibold text-white mb-1">KPI Performance Radar — Actual vs Benchmark</div>
-          <div className="text-xs text-teal-muted/40 mb-4">8 core metrics: current performance (blue) vs benchmark targets (orange)</div>
-          <ResponsiveContainer width="100%" height={320}>
-            <RadarChart data={RADAR_DATA}>
-              <PolarGrid stroke="#1a3a5c" />
-              <PolarAngleAxis dataKey="kpi" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
-              <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#9fd8d0', fontSize: 10 }} />
-              <Radar name="Actual" dataKey="actual" stroke="#1a9e8f" fill="#1a9e8f" fillOpacity={0.25} />
-              <Radar name="Benchmark" dataKey="benchmark" stroke="#F97316" fill="#F97316" fillOpacity={0.1} />
-              <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
-              <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
-            </RadarChart>
-          </ResponsiveContainer>
+          <div className="text-sm font-semibold text-white mb-1">KPI Performance Radar — Actual vs Reference</div>
+          <div className="text-xs text-teal-muted/40 mb-4">{RADAR_DATA.length} {META.isDemo ? 'core' : 'measured'} metrics: current performance (teal) vs industry reference (orange)</div>
+          {RADAR_DATA.length >= 3 ? (
+            <ResponsiveContainer width="100%" height={320}>
+              <RadarChart data={RADAR_DATA}>
+                <PolarGrid stroke="#1a3a5c" />
+                <PolarAngleAxis dataKey="kpi" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
+                <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#9fd8d0', fontSize: 10 }} />
+                <Radar name="Actual" dataKey="actual" stroke="#1a9e8f" fill="#1a9e8f" fillOpacity={0.25} />
+                <Radar name="Reference" dataKey="benchmark" stroke="#F97316" fill="#F97316" fillOpacity={0.1} />
+                <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
+                <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
+              </RadarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="text-xs text-teal-muted/50 py-8 text-center">Not enough KPIs measured to draw a radar.</div>
+          )}
         </div>
 
-        {/* ── KPI TREND (12M MULTI-LINE) ── */}
+        {/* ── KPI TREND (MULTI-LINE) ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
-          <div className="text-sm font-semibold text-white mb-1">12-Month KPI Trend Analysis</div>
-          <div className="text-xs text-teal-muted/40 mb-4">OTIF flat, forecast accuracy stable, plan adherence drifting</div>
+          <div className="text-sm font-semibold text-white mb-1">{MONTHLY_TREND.length}-Month KPI Trend Analysis</div>
+          <div className="text-xs text-teal-muted/40 mb-4">{META.trendNote}</div>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={MONTHLY_TREND}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
               <XAxis dataKey="month" tick={{ fill: '#9fd8d0', fontSize: 11 }} />
-              <YAxis yAxisId="left" tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'OTIF / Forecast / Plan (%)', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10, offset: 10 }} />
-              <YAxis yAxisId="right" orientation="right" domain={[4, 6]} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Turns (x)', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10, offset: 10 }} />
+              <YAxis yAxisId="left" domain={['auto', 'auto']} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Service / Forecast / Plan (%)', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10, offset: 10 }} />
+              {hasSeries('turns') && (
+                <YAxis yAxisId="right" orientation="right" domain={['auto', 'auto']} tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: 'Turns (x)', angle: 90, position: 'insideRight', fill: '#9fd8d0', fontSize: 10, offset: 10 }} />
+              )}
               <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
               <Legend wrapperStyle={{ fontSize: 11, color: '#9fd8d0' }} />
-              <Line yAxisId="left" type="monotone" dataKey="otif" name="OTIF (%)" stroke="#1a9e8f" strokeWidth={2} dot={{ r: 3 }} />
-              <Line yAxisId="left" type="monotone" dataKey="forecastAcc" name="Forecast Acc (%)" stroke="#4ab8ae" strokeWidth={2} dot={{ r: 3 }} />
-              <Line yAxisId="left" type="monotone" dataKey="planAdhere" name="Plan Adherence (%)" stroke="#EAB308" strokeWidth={2} dot={{ r: 3 }} />
-              <Line yAxisId="right" type="monotone" dataKey="turns" name="Turns (x)" stroke="#F97316" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="5 5" />
+              {hasSeries('otif') && <Line yAxisId="left" type="monotone" dataKey="otif" name="OTIF (%)" stroke="#1a9e8f" strokeWidth={2} dot={{ r: 3 }} connectNulls />}
+              {hasSeries('otd') && <Line yAxisId="left" type="monotone" dataKey="otd" name="OTD (%)" stroke="#0EA5E9" strokeWidth={2} dot={{ r: 3 }} connectNulls />}
+              {hasSeries('forecastAcc') && <Line yAxisId="left" type="monotone" dataKey="forecastAcc" name="Forecast Acc (%)" stroke="#4ab8ae" strokeWidth={2} dot={{ r: 3 }} connectNulls />}
+              {hasSeries('planAdhere') && <Line yAxisId="left" type="monotone" dataKey="planAdhere" name="Plan Adherence (%)" stroke="#EAB308" strokeWidth={2} dot={{ r: 3 }} connectNulls />}
+              {hasSeries('turns') && <Line yAxisId="right" type="monotone" dataKey="turns" name="Turns (x)" stroke="#F97316" strokeWidth={2} dot={{ r: 3 }} strokeDasharray="5 5" connectNulls />}
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* ── GAP ANALYSIS TABLE ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
-          <div className="text-sm font-semibold text-white mb-4">Gap Analysis — All KPIs</div>
+          <div className="text-sm font-semibold text-white mb-4">Gap Analysis — All KPIs vs Reference</div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-navy-mid/40">
                   <th className="text-left text-xs text-teal-muted/50 font-semibold pb-3 px-3">KPI</th>
                   <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Current</th>
-                  <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Target</th>
-                  <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Benchmark</th>
+                  <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Reference</th>
+                  <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Benchmark range</th>
                   <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Gap</th>
                   <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Trend</th>
                   <th className="text-center text-xs text-teal-muted/50 font-semibold pb-3 px-3">Priority</th>
@@ -547,15 +547,17 @@ export default function KPIsDiagnostic() {
               </thead>
               <tbody className="divide-y divide-navy-mid/40">
                 {GAP_ANALYSIS.map((item) => {
-                  const trendIcon = item.trend === 'up' ? <TrendingUp size={12} className="text-red-400" /> : item.trend === 'down' ? <TrendingDown size={12} className="text-red-400" /> : <Activity size={12} className="text-teal-muted/50" />
+                  const na = item.priority === 'N/A'
+                  const trendIcon = na ? <span className="text-teal-muted/30 text-xs">—</span> : item.trend === 'up' ? <TrendingUp size={12} className="text-red-400" /> : item.trend === 'down' ? <TrendingDown size={12} className="text-red-400" /> : <Activity size={12} className="text-teal-muted/50" />
+                  const pc = PRIORITY_COLORS[item.priority] || '#64748B'
                   return (
                     <tr key={item.kpi} className="hover:bg-navy/30 transition-colors">
                       <td className="text-left text-white font-semibold py-3 px-3">{item.kpi}</td>
-                      <td className="text-center text-teal py-3 px-3">{item.current}</td>
+                      <td className={`text-center py-3 px-3 ${na ? 'text-teal-muted/40' : 'text-teal'}`}>{item.current}</td>
                       <td className="text-center text-white py-3 px-3">{item.target}</td>
                       <td className="text-center text-teal-muted/60 py-3 px-3 text-xs">{item.benchmark}</td>
                       <td className="text-center py-3 px-3">
-                        <span className="text-red-400 font-semibold">{item.gap}</span>
+                        <span className={`font-semibold ${na ? 'text-teal-muted/40 text-xs' : item.priority === 'LOW' ? 'text-teal' : 'text-red-400'}`}>{item.gap}</span>
                       </td>
                       <td className="text-center py-3 px-3">
                         <div className="flex items-center justify-center">
@@ -563,8 +565,8 @@ export default function KPIsDiagnostic() {
                         </div>
                       </td>
                       <td className="text-center py-3 px-3">
-                        <span className="px-2 py-1 rounded text-[10px] font-bold uppercase" style={{ backgroundColor: `${PRIORITY_COLORS[item.priority]}20`, color: PRIORITY_COLORS[item.priority] }}>
-                          {item.priority}
+                        <span className="px-2 py-1 rounded text-[10px] font-bold uppercase" style={{ backgroundColor: `${pc}20`, color: pc }}>
+                          {na ? 'n/a' : item.priority}
                         </span>
                       </td>
                     </tr>
@@ -578,7 +580,7 @@ export default function KPIsDiagnostic() {
         {/* ── OPERATIONAL RHYTHM ASSESSMENT ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-4">Operational Rhythm Assessment</div>
-          <div className="text-xs text-teal-muted/40 mb-4">Current vs recommended meeting cadence</div>
+          <div className="text-xs text-teal-muted/40 mb-4">{META.isDemo ? 'Current vs recommended meeting cadence' : 'Recommended meeting cadence, based on what your data shows (current cadence is not in the files)'}</div>
           <div className="space-y-3">
             {OPERATIONAL_RHYTHM.map((item) => (
               <div key={item.meeting} className="p-4 rounded-lg bg-navy/30 border border-navy-mid/40">
@@ -591,7 +593,7 @@ export default function KPIsDiagnostic() {
                   </div>
                 </div>
                 <div className="text-xs text-teal-muted/50 space-y-1">
-                  <div>Gap: {item.gap}</div>
+                  <div>{META.isDemo ? 'Gap' : 'Evidence'}: {item.gap}</div>
                   <div>Impact: {item.impact}</div>
                 </div>
               </div>
@@ -602,16 +604,20 @@ export default function KPIsDiagnostic() {
         {/* ── ROOT CAUSE PARETO ── */}
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-1">Root Cause Pareto — Top Service Failure Drivers</div>
-          <div className="text-xs text-teal-muted/40 mb-4">Top 8 causes contributing to OTIF/OTD shortfalls (% of incidents)</div>
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={ROOT_CAUSES}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
-              <XAxis dataKey="cause" tick={{ fill: '#9fd8d0', fontSize: 10 }} angle={-15} textAnchor="end" height={80} />
-              <YAxis tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: '% of Incidents', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10 }} />
-              <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
-              <Bar dataKey="impact" radius={[4, 4, 0, 0]} fill="#F97316" fillOpacity={0.8} />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="text-xs text-teal-muted/40 mb-4">{META.rootCauseNote}</div>
+          {ROOT_CAUSES.length ? (
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={ROOT_CAUSES}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1a3a5c" />
+                <XAxis dataKey="cause" tick={{ fill: '#9fd8d0', fontSize: 10 }} angle={-15} textAnchor="end" height={80} />
+                <YAxis tick={{ fill: '#9fd8d0', fontSize: 11 }} label={{ value: META.isDemo ? '% of Incidents' : '% of failed lines', angle: -90, position: 'insideLeft', fill: '#9fd8d0', fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }} />
+                <Bar dataKey="impact" radius={[4, 4, 0, 0]} fill="#F97316" fillOpacity={0.8} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="text-xs text-teal-muted/50 py-8 text-center">No OTIF failures in the period — nothing to break down.</div>
+          )}
         </div>
 
         {/* ── RECOMMENDATIONS ── */}
@@ -619,7 +625,9 @@ export default function KPIsDiagnostic() {
           <div className="flex items-center justify-between mb-5">
             <div>
               <div className="text-sm font-semibold text-white">Prioritised Recommendations</div>
-              <div className="text-xs text-teal-muted/40">Ranked by impact — total recoverable: {COMPANY.currency} {fmt(totalRecoverableValue)}</div>
+              <div className="text-xs text-teal-muted/40">
+                {totalRecoverableValue > 0 ? `Ranked by priority — total ${META.isDemo ? 'recoverable' : 'quantified'}: ${money(totalRecoverableValue)}` : 'Ranked by priority — rules applied to your measured KPIs'}
+              </div>
             </div>
           </div>
           <div className="space-y-3">
@@ -630,7 +638,7 @@ export default function KPIsDiagnostic() {
                     <span className="text-lg font-extrabold text-white">#{i + 1}</span>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase" style={{ backgroundColor: `${PRIORITY_COLORS[rec.priority]}20`, color: PRIORITY_COLORS[rec.priority] }}>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase" style={{ backgroundColor: `${PRIORITY_COLORS[rec.priority] || '#64748B'}20`, color: PRIORITY_COLORS[rec.priority] || '#64748B' }}>
                           {rec.priority}
                         </span>
                         <span className="text-[10px] text-teal-muted/30">{rec.effort} effort &middot; {rec.timeline}</span>
@@ -638,10 +646,12 @@ export default function KPIsDiagnostic() {
                       <div className="text-sm font-semibold text-white">{rec.title}</div>
                     </div>
                   </div>
-                  <div className="text-right min-w-[100px]">
-                    <div className="text-xl font-extrabold text-teal">{COMPANY.currency} {rec.impact}</div>
-                    <div className="text-[10px] text-teal-muted/30">estimated impact</div>
-                  </div>
+                  {parseImpact(rec.impact) > 0 && (
+                    <div className="text-right min-w-[100px]">
+                      <div className="text-xl font-extrabold text-teal">{COMPANY.currency ? `${COMPANY.currency} ` : ''}{rec.impact}</div>
+                      <div className="text-[10px] text-teal-muted/30">estimated impact</div>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs text-teal-muted/60 leading-relaxed mb-3">{rec.description}</p>
                 <div className="flex items-center justify-between p-2.5 rounded-lg bg-teal/5 border border-teal/10">
@@ -659,26 +669,7 @@ export default function KPIsDiagnostic() {
         <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
           <div className="text-sm font-semibold text-white mb-4">Recommended 90-Day Roadmap</div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              {
-                phase: 'Week 1-4',
-                title: 'Diagnose & Quick Wins',
-                color: '#22C55E',
-                items: ['Implement weekly demand planning cycle (CHF 380K)', 'Launch forecast bias tracking', 'Establish KPI dashboard with alerts'],
-              },
-              {
-                phase: 'Week 5-8',
-                title: 'Build Foundation',
-                color: '#EAB308',
-                items: ['Implement ABC-based safety stock (CHF 280K)', 'Redesign S&OP (tactical + strategic)', 'Fix KPI definitions & granularity'],
-              },
-              {
-                phase: 'Week 9-12',
-                title: 'Sustain & Scale',
-                color: '#0EA5E9',
-                items: ['Launch supplier collaboration (CHF 100K)', 'Automate exception management', 'Establish continuous improvement rhythms'],
-              },
-            ].map((p) => (
+            {ROADMAP.map((p) => (
               <div key={p.phase} className="p-4 rounded-xl border border-navy-mid/50 bg-navy/20">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: p.color }} />
@@ -698,18 +689,31 @@ export default function KPIsDiagnostic() {
           </div>
         </div>
 
+        {!META.isDemo && META.notes.length > 0 && (
+          <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6 mb-5">
+            <div className="flex items-center gap-2 text-sm font-semibold text-white mb-3"><Info size={14} className="text-teal" /> Method &amp; limitations</div>
+            <ul className="text-xs text-teal-muted/50 leading-relaxed list-disc pl-4 space-y-1">
+              {META.notes.map((n, i) => <li key={i}>{n}</li>)}
+            </ul>
+          </div>
+        )}
+
         {/* ── CTA ── */}
         <div className="rounded-2xl border border-teal/20 bg-gradient-to-br from-teal/10 to-navy-mid/20 p-8 text-center mb-5">
           <div className="text-2xl font-bold text-white mb-2">
-            {COMPANY.currency} {fmt(totalRecoverableValue)} in KPI improvement value identified
+            {totalRecoverableValue > 0
+              ? `${money(totalRecoverableValue)} in KPI improvement value identified`
+              : `${RECOMMENDATIONS.length} KPI improvement opportunities identified`}
           </div>
           <p className="text-sm text-teal-muted leading-relaxed mb-2 max-w-xl mx-auto">
             This diagnostic identified {RECOMMENDATIONS.length} improvement opportunities across planning, demand, inventory, and supply execution. A structured 90-day engagement would implement these recommendations and establish sustainable performance management cadences.
           </p>
-          <p className="text-xs text-teal-muted/40 mb-6">
-            Investment: CHF 14-18K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 16000)}x
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          {META.showInvestment && totalRecoverableValue > 0 && (
+            <p className="text-xs text-teal-muted/40 mb-6">
+              Investment: {COMPANY.currency} 14-18K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 16000)}x
+            </p>
+          )}
+          <div className={`flex flex-col sm:flex-row gap-3 justify-center ${META.showInvestment ? '' : 'mt-6'}`}>
             <a
               href="https://calendly.com/caio-opsflow-advisory/30min"
               target="_blank"
@@ -718,7 +722,7 @@ export default function KPIsDiagnostic() {
             >
               Discuss Implementation Plan
             </a>
-            <button className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
+            <button onClick={() => window.print()} className="px-8 py-3.5 rounded-lg border border-teal/30 text-teal text-sm font-semibold hover:bg-teal/10 transition-colors">
               Download Executive Report
             </button>
           </div>

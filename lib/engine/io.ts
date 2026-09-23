@@ -14,7 +14,19 @@ export async function readFiles(files: File[]): Promise<Table[]> {
   const out: Table[] = []
   for (const f of files) {
     const buf = await f.arrayBuffer()
-    const wb = XLSX.read(buf, { type: 'array', cellDates: true })
+    let wb: XLSX.WorkBook
+    if (/\.(csv|txt)$/i.test(f.name)) {
+      // CSV: decode ourselves (UTF-8, fallback Windows-1252) and keep cells as text so that
+      // decimal commas ("12,34") and ';' separators are handled by num()/monthKey().
+      let text = new TextDecoder('utf-8').decode(buf)
+      if (text.includes('\uFFFD')) text = new TextDecoder('windows-1252').decode(buf)
+      text = text.replace(/^\uFEFF/, '')
+      const first = text.split(/\r?\n/, 1)[0] || ''
+      const FS = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : (first.match(/\t/g) || []).length > (first.match(/,/g) || []).length ? '\t' : ','
+      wb = XLSX.read(text, { type: 'string', raw: true, FS } as any)
+    } else {
+      wb = XLSX.read(buf, { type: 'array', cellDates: true })
+    }
     for (const sheet of wb.SheetNames) {
       const raw = XLSX.utils.sheet_to_json<Row>(wb.Sheets[sheet], { defval: null, raw: true })
       if (!raw.length) continue
