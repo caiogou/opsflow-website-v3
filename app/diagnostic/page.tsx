@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { captureLead, isEmail } from '@/lib/engine/io'
-import { useCurrency, SYMBOL } from '@/lib/currency'
+import { useCurrency, SYMBOL, convertChfText } from '@/lib/currency'
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell
@@ -929,7 +929,7 @@ export default function DiagnosticPage() {
                       <div className="text-[10px] text-teal-muted/40 uppercase tracking-wider">Recommended</div>
                       <div className="text-xs text-teal font-semibold">{dim.service}</div>
                     </div>
-                    <span className="text-xs text-teal-muted/40">{L(dim.price)}</span>
+                    <span className="text-xs text-teal-muted/40">{convertChfText(dim.price, ccy)}</span>
                   </div>
                 </div>
               ))}

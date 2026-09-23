@@ -50,3 +50,18 @@ export function localizeDemo<T>(obj: T, ccy: Ccy): T {
   }
   return walk(obj)
 }
+
+/** Convert price text like "CHF 22–32K" or "CHF 8,500" into the visitor currency (rounded). */
+export function convertChfText(text: string, ccy: Ccy): string {
+  if (ccy === 'CHF') return text
+  const unit = (u?: string) => (u === 'M' ? 1e6 : u === 'K' ? 1e3 : 1)
+  const parse = (n: string) => parseFloat(n.replace(/[’',\s]/g, ''))
+  return text.replace(/CHF\s?([\d’',.]+)\s?(K|M)?(?:\s?[–-]\s?([\d’',.]+)\s?(K|M)?)?/g, (_m, a, ua, b, ub) => {
+    const u2 = ub || ua
+    const fa = convertChf(parse(a) * unit(ua || (b ? u2 : undefined)), ccy)
+    const fmt = (v: number, u?: string) => (u === 'M' ? `${+(v / 1e6).toFixed(2)}M` : u === 'K' ? `${Math.round(v / 1e3)}K` : v.toLocaleString('en-US'))
+    if (!b) return `${SYMBOL[ccy]}${fmt(fa, ua)}`
+    const fb = convertChf(parse(b) * unit(u2), ccy)
+    return `${SYMBOL[ccy]}${fmt(fa, u2)}–${fmt(fb, u2)}`
+  })
+}
