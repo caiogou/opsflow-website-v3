@@ -6,7 +6,8 @@ import { Services } from '@/components/Services'
 import { HowItWorks } from '@/components/HowItWorks'
 import { AcademyBridge } from '@/components/AcademyBridge'
 import { Credentials } from '@/components/Credentials'
-import { Testimonials } from '@/components/Testimonials'
+import { Approach } from '@/components/Approach'
+import { Team } from '@/components/Team'
 import { CTA, Footer } from '@/components/CTAFooter'
 
 export const metadata: Metadata = {
@@ -26,11 +27,12 @@ export default function Page() {
       <Navbar lang="de" />
       <Hero lang="de" />
       <Stats lang="de" />
+      <Approach lang="de" />
       <Services lang="de" />
       <HowItWorks lang="de" />
       <AcademyBridge lang="de" />
       <Credentials lang="de" />
-      <Testimonials lang="de" />
+      <Team lang="de" />
       <CTA lang="de" />
       <Footer lang="de" />
     </main>

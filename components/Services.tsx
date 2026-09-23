@@ -3,7 +3,7 @@ type Card = { title: string; desc: string; tags: string[] }
 
 const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string; cards: Card[] }> = {
   fr: {
-    rubric: 'Ce que nous faisons', h2a: 'Quatre domaines.', h2b: 'Un objectif : la marge.',
+    rubric: 'Ce que nous faisons', h2a: 'Là où nous intervenons.', h2b: 'Un objectif : la marge.',
     intro: 'Nous intervenons là où se trouvent les vraies opportunités de résultat — pas là où il y a du bruit.',
     cards: [
       { title: 'Excellence de planification', desc: 'Conception S&OP et IBP, intégration de la demande et de l’offre, gouvernance et cadence. Nous construisons des processus de planification qui produisent des décisions — pas seulement des rapports. Gestion des exceptions et des priorités incluse.', tags: ['S&OP', 'IBP', 'Prévision de la demande', 'Gestion des exceptions'] },
@@ -13,7 +13,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     ],
   },
   de: {
-    rubric: 'Was wir tun', h2a: 'Vier Handlungsfelder.', h2b: 'Ein Ziel: die Marge.',
+    rubric: 'Was wir tun', h2a: 'Wo wir ansetzen.', h2b: 'Ein Ziel: die Marge.',
     intro: 'Wir setzen dort an, wo die echten Ergebnischancen liegen — nicht dort, wo es am lautesten ist.',
     cards: [
       { title: 'Planungsexzellenz', desc: 'Aufbau von S&OP und IBP, Zusammenführung von Nachfrage und Angebot, Governance und Taktung. Wir bauen Planungsprozesse, die Entscheidungen hervorbringen — nicht bloss Berichte. Ausnahme- und Prioritätensteuerung inbegriffen.', tags: ['S&OP', 'IBP', 'Nachfrageprognose', 'Ausnahmesteuerung'] },
@@ -23,7 +23,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     ],
   },
   en: {
-    rubric: 'What we do', h2a: 'Four practice areas.', h2b: 'One goal: margin impact.',
+    rubric: 'What we do', h2a: 'Where we work.', h2b: 'One goal: margin impact.',
     intro: 'We work where the biggest P&L opportunities are — not where the noise is.',
     cards: [
       { title: 'Planning Excellence', desc: 'S&OP and IBP design, demand and supply integration, governance and drumbeat. We build planning processes that generate decisions — not just reports. Exception and priority management included.', tags: ['S&OP', 'IBP', 'Demand Planning', 'Exception Management'] },

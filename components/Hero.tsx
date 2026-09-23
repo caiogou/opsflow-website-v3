@@ -1,3 +1,4 @@
+import { HeroDiagram } from './HeroDiagram'
 type Lang = 'fr' | 'de' | 'en'
 const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
 
@@ -6,28 +7,28 @@ const C: Record<Lang, {
   diag: { top: string; right1: string; right2: string; bottom: string; left1: string; left2: string };
 }> = {
   fr: {
-    kicker: 'Conseil supply chain augmenté par l’IA · Suisse & EMEA',
-    h1a: 'Des supply chains plus intelligentes.',
-    h1b: 'Portées par l’humain. Augmentées par l’IA.',
-    lead: 'Nous combinons plus de 20 ans d’expérience terrain en EMEA avec des moteurs de décision IA pour libérer de la marge, réduire le gaspillage de stock et bâtir des opérations résilientes — en quelques semaines, pas en quelques mois.',
+    kicker: 'Stratégie supply chain · suivi par un expert senior',
+    h1a: 'Nous construisons votre stratégie supply chain.',
+    h1b: 'Un expert senior la garde sur les rails.',
+    lead: 'Nous définissons avec vous la stratégie — S&OP, stocks, risques et distribution. Puis un professionnel senior suit le plan : des appels réguliers avec vos équipes, le suivi des résultats et les ajustements nécessaires pour rester sur la trajectoire. Sans équipe à demeure, sans rapport générique.',
     cta1: 'Réserver une session gratuite',
     cta2: 'Faire le diagnostic S&OP',
     diag: { top: 'Excellence de planification', right1: 'Optimisation', right2: 'des stocks', bottom: 'Gestion des risques', left1: 'Distribution', left2: '& transport' },
   },
   de: {
-    kicker: 'Supply-Chain-Beratung, verstärkt durch KI · Schweiz & EMEA',
-    h1a: 'Klügere Supply Chains.',
-    h1b: 'Vom Menschen geführt. Durch KI verstärkt.',
-    lead: 'Wir verbinden über 20 Jahre Praxiserfahrung in EMEA mit KI-gestützten Entscheidungsmodellen, um Marge freizusetzen, Bestandsverschwendung zu senken und widerstandsfähige Abläufe aufzubauen — in Wochen, nicht in Monaten.',
+    kicker: 'Supply-Chain-Strategie · begleitet von einer Senior-Fachperson',
+    h1a: 'Wir entwickeln Ihre Supply-Chain-Strategie.',
+    h1b: 'Eine Senior-Fachperson hält sie auf Kurs.',
+    lead: 'Wir definieren mit Ihnen die Strategie — S&OP, Bestände, Risiken und Distribution. Danach begleitet eine erfahrene Fachperson den Plan: regelmässige Calls mit Ihrem Team, Nachverfolgung der Ergebnisse und Anpassungen, damit alles auf Kurs bleibt. Ohne Team vor Ort, ohne generische Berichte.',
     cta1: 'Kostenlose Session buchen',
     cta2: 'S&OP-Standortbestimmung starten',
     diag: { top: 'Planungsexzellenz', right1: 'Bestands-', right2: 'optimierung', bottom: 'Risikomanagement', left1: 'Distribution', left2: '& Transport' },
   },
   en: {
-    kicker: 'AI-powered supply chain advisory · Switzerland & EMEA',
-    h1a: 'Smarter supply chains.',
-    h1b: 'Built by people. Powered by AI.',
-    lead: 'We combine 20+ years of hands-on EMEA experience with AI decision engines to unlock margin, cut inventory waste, and build resilient operations — in weeks, not months.',
+    kicker: 'Supply chain strategy · senior follow-through',
+    h1a: 'We build your supply chain strategy.',
+    h1b: 'A senior expert keeps it on track.',
+    lead: 'We define the strategy with you — S&OP, inventory, risk and distribution. Then a senior professional follows the plan: regular calls with your team, tracking results and adjusting the plan to keep it on track. No embedded team, no generic reports.',
     cta1: 'Book a free session',
     cta2: 'Take the S&OP Health Check',
     diag: { top: 'Planning Excellence', right1: 'Inventory', right2: 'Optimisation', bottom: 'Risk & Resilience', left1: 'Distribution', left2: '& Shipping' },
@@ -53,27 +54,7 @@ export function Hero({ lang = 'fr' }: { lang?: Lang }) {
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">
-          <svg width="400" height="380" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="170" cy="160" r="130" fill="none" stroke="#1a3a5c" strokeWidth="1" />
-            <circle cx="170" cy="160" r="88" fill="none" stroke="#1a3a5c" strokeWidth="1" />
-            <circle cx="170" cy="160" r="48" fill="#1a9e8f" />
-            <text x="170" y="155" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Supply</text>
-            <text x="170" y="172" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Chain</text>
-            <rect x="86" y="14" width="168" height="36" rx="18" fill="#1a3a5c" stroke="#1a9e8f" strokeWidth="1" />
-            <text x="170" y="37" textAnchor="middle" fill="#9fd8d0" fontSize="11">{t.diag.top}</text>
-            <rect x="240" y="120" width="96" height="36" rx="18" fill="#1a3a5c" stroke="#1a9e8f" strokeWidth="1" />
-            <text x="288" y="138" textAnchor="middle" fill="#9fd8d0" fontSize="10">{t.diag.right1}</text>
-            <text x="288" y="151" textAnchor="middle" fill="#9fd8d0" fontSize="10">{t.diag.right2}</text>
-            <rect x="94" y="270" width="152" height="36" rx="18" fill="#1a3a5c" stroke="#1a9e8f" strokeWidth="1" />
-            <text x="170" y="293" textAnchor="middle" fill="#9fd8d0" fontSize="11">{t.diag.bottom}</text>
-            <rect x="4" y="120" width="96" height="36" rx="18" fill="#1a3a5c" stroke="#1a9e8f" strokeWidth="1" />
-            <text x="52" y="135" textAnchor="middle" fill="#9fd8d0" fontSize="10">{t.diag.left1}</text>
-            <text x="52" y="149" textAnchor="middle" fill="#9fd8d0" fontSize="10">{t.diag.left2}</text>
-            <line x1="170" y1="50" x2="170" y2="112" stroke="#1a9e8f" strokeWidth="1.5" />
-            <line x1="244" y1="138" x2="218" y2="150" stroke="#1a9e8f" strokeWidth="1.5" />
-            <line x1="170" y1="208" x2="170" y2="270" stroke="#1a9e8f" strokeWidth="1.5" />
-            <line x1="96" y1="138" x2="122" y2="150" stroke="#1a9e8f" strokeWidth="1.5" />
-          </svg>
+          <HeroDiagram lang={lang} labels={t.diag} />
         </div>
       </div>
     </section>

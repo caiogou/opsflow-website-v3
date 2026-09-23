@@ -1,5 +1,6 @@
 'use client'
 
+import { localizeDemo, readCcy } from '@/lib/currency'
 import { useState, type ComponentType } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -295,7 +296,7 @@ export default function KPIsDiagnostic() {
         title="Upload your order lines and planning data"
         intro="We compute OTIF, OTD and fill rate from your order lines (ideally 12 months), and forecast accuracy, plan adherence, inventory turns and SC cost % from an optional monthly plan-vs-actual file. KPIs we cannot compute are shown as n/a — nothing is estimated."
         templates={KPI_TEMPLATES.map((t, i) => ({ ...t, icon: (i === 0 ? Activity : BarChart3) as ComponentType<any> }))}
-        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onDemo={() => { setDs(localizeDemo(DEMO, readCcy())); setScreen('health') }}
         onAnalyze={(tables) => {
           const d = analyzeKpis(tables)
           setDs(d)

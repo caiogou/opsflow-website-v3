@@ -1,5 +1,6 @@
 'use client'
 
+import { localizeDemo, readCcy } from '@/lib/currency'
 import { useState, type ComponentType } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -238,7 +239,7 @@ export default function DemandForecastDiagnostic() {
         title="Upload your demand data"
         intro="Upload your monthly demand history (and, if you have it, the forecast you used each month). An SKU master is optional. Files are processed in your browser — headers are mapped automatically (English, French, German, Portuguese)."
         templates={DEMAND_TEMPLATES.map((t, i) => ({ ...t, icon: (i === 0 ? TrendingUp : FileSpreadsheet) as ComponentType<any> }))}
-        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onDemo={() => { setDs(localizeDemo(DEMO, readCcy())); setScreen('health') }}
         onAnalyze={(tables) => {
           const d = analyzeDemand(tables)
           setDs(d)

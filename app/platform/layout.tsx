@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Plateforme de diagnostic — OpsFlow Advisory',
-  description: 'Diagnostics supply chain pilotés par les données : stocks, demande & prévision, risques d’approvisionnement et KPIs de planification. Importez vos données, obtenez des recommandations concrètes.',
+  title: 'Supply chain diagnostic platform — OpsFlow Advisory',
+  description: 'Free data-driven supply chain diagnostics: inventory, demand & forecast, supply risk and planning KPIs. Upload your Excel exports and get prioritised recommendations.',
 }
 
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {

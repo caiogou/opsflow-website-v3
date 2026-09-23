@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { captureLead, isEmail } from '@/lib/engine/io'
+import { useCurrency, SYMBOL } from '@/lib/currency'
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell
@@ -456,6 +457,23 @@ export default function DiagnosticPage() {
   const [industry, setIndustry] = useState('')
   const [revenue, setRevenue] = useState('')
   const [sending, setSending] = useState(false)
+  const [isSample, setIsSample] = useState(false)
+  const ccy = useCurrency()
+  const L = (x: string) => x.replace(/CHF\s?/g, ccy === 'CHF' ? 'CHF ' : SYMBOL[ccy])
+  // "Random / sample report" (Caio 23/set/2026): fills the 32 answers with a plausible random profile
+  // and opens the full report immediately — marked as SAMPLE, no e-mail gate, no lead recorded.
+  const runSample = () => {
+    const bias = 1.5 + Math.random() * 2.5 // company "maturity" 1.5–4.0
+    const a: Record<string, number> = {}
+    DIMENSIONS.forEach((d) => d.questions.forEach((_, qi) => {
+      const v = Math.round(bias + (Math.random() - 0.5) * 2.2)
+      a[`${d.id}_${qi}`] = Math.min(5, Math.max(1, v))
+    }))
+    setAnswers(a)
+    if (!companyName) setCompanyName('Sample company')
+    setIsSample(true)
+    setScreen('results')
+  }
   const [gateError, setGateError] = useState<string | null>(null)
 
   const totalQuestions = DIMENSIONS.reduce((s, d) => s + d.questions.length, 0)
@@ -570,11 +588,11 @@ export default function DiagnosticPage() {
                 className="w-full px-4 py-3 rounded-lg border border-navy-mid bg-navy/60 text-white text-sm focus:border-teal focus:outline-none"
               >
                 <option value="">Annual revenue</option>
-                <option value="<5M">Below CHF 5M</option>
-                <option value="5-20M">CHF 5M – 20M</option>
-                <option value="20-50M">CHF 20M – 50M</option>
-                <option value="50-200M">CHF 50M – 200M</option>
-                <option value=">200M">Above CHF 200M</option>
+                <option value="<5M">{L('Below CHF 5M')}</option>
+                <option value="5-20M">{L('CHF 5M – 20M')}</option>
+                <option value="20-50M">{L('CHF 20M – 50M')}</option>
+                <option value="50-200M">{L('CHF 50M – 200M')}</option>
+                <option value=">200M">{L('Above CHF 200M')}</option>
               </select>
             </div>
           </div>
@@ -585,6 +603,13 @@ export default function DiagnosticPage() {
             className="mt-8 w-full py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors disabled:opacity-30 disabled:cursor-default flex items-center justify-center gap-2"
           >
             Start Assessment <ChevronRight size={18} />
+          </button>
+          <button
+            type="button"
+            onClick={runSample}
+            className="mt-3 w-full py-3 rounded-lg bg-teal/10 text-teal text-sm font-semibold hover:bg-teal/20 transition-colors border border-teal/30"
+          >
+            See a sample report (random answers)
           </button>
 
           <div className="mt-6 flex flex-wrap gap-2 justify-center">
@@ -814,6 +839,13 @@ export default function DiagnosticPage() {
             </div>
           </div>
 
+          {isSample && (
+            <div className="mb-6 rounded-xl border border-yellow-500/40 bg-yellow-500/10 px-5 py-3 text-sm text-yellow-200 flex flex-wrap items-center justify-between gap-3 no-print">
+              <span>Sample report generated from random answers — take the assessment to get your own profile.</span>
+              <button onClick={() => { setAnswers({}); setIsSample(false); setCurrentDim(0); setCurrentQ(0); setScreen('welcome') }} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold">Take the real assessment</button>
+            </div>
+          )}
+
           {/* Overall */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-8 flex flex-col md:flex-row items-center gap-8 mb-6">
             <div className="text-center min-w-[140px]">
@@ -897,7 +929,7 @@ export default function DiagnosticPage() {
                       <div className="text-[10px] text-teal-muted/40 uppercase tracking-wider">Recommended</div>
                       <div className="text-xs text-teal font-semibold">{dim.service}</div>
                     </div>
-                    <span className="text-xs text-teal-muted/40">{dim.price}</span>
+                    <span className="text-xs text-teal-muted/40">{L(dim.price)}</span>
                   </div>
                 </div>
               ))}
@@ -931,7 +963,7 @@ export default function DiagnosticPage() {
                   Book a free 90-minute Problem Session with our team. We will dive deeper into your priority areas and map out a concrete improvement plan.
                 </p>
                 <div className="text-[11px] text-teal-muted/40 mb-4">
-                  Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)
+                  {L('Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)')}
                 </div>
                 <a
                   href="https://calendly.com/caio-opsflow-advisory/30min"

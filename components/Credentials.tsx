@@ -6,7 +6,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     rubric: 'Pourquoi OpsFlow', h2a: 'Une expertise senior.', h2b: 'Pas de juniors. Pas de faux-semblant.',
     intro: 'Ce que vous voyez est ce que vous obtenez — la personne qui diagnostique votre problème pilote la solution.',
     creds: [
-      { title: 'Certifié MIT · 20+ ans EMEA & LATAM', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Directions senior en EMEA et LATAM dans l’agrochimie, les sciences du végétal et l’industrie de spécialité. Environnements réels, contraintes réelles, résultats réels.' },
+      { title: 'Certifié MIT · direction supply chain senior', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Directions senior de supply chain dans des multinationales de l’agrochimie, des sciences du végétal et de l’industrie de spécialité. Environnements réels, contraintes réelles, résultats réels.' },
       { title: 'Plus rapide et plus léger que les grands cabinets', desc: '6 semaines, pas 6 mois. Accès direct à un praticien senior dès le premier jour. Un coût plus bas à qualité stratégique égale. Aucun slide recyclé — tout est construit pour votre contexte.' },
       { title: 'Une exécution native IA', desc: 'Nos moteurs de décision IA alimentent chaque mission — de l’intelligence de la demande à l’analytique prédictive, du scoring de risque automatisé à l’optimisation dynamique des stocks. L’IA n’est pas une option ; c’est notre façon de livrer plus vite et plus juste.' },
     ],
@@ -15,7 +15,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     rubric: 'Warum OpsFlow', h2a: 'Seniorität und Erfahrung.', h2b: 'Keine Junioren. Kein Schein.',
     intro: 'Was Sie sehen, ist, was Sie bekommen — die Person, die Ihr Problem diagnostiziert, führt die Lösung.',
     creds: [
-      { title: 'MIT-zertifiziert · 20+ Jahre EMEA & LATAM', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Senior-Führungsrollen in EMEA und LATAM in Agrochemie, Pflanzenwissenschaften und Spezialindustrie. Reale Umgebungen, reale Zwänge, reale Ergebnisse.' },
+      { title: 'MIT-zertifiziert · Senior-Supply-Chain-Führung', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Senior-Führungsrollen in der Supply Chain internationaler Konzerne der Agrochemie, Pflanzenwissenschaften und Spezialindustrie. Reale Umgebungen, reale Zwänge, reale Ergebnisse.' },
       { title: 'Schneller und schlanker als grosse Beratungshäuser', desc: '6 Wochen statt 6 Monate. Direkter Zugang zu einer erfahrenen Fachperson ab dem ersten Tag. Geringere Kosten bei gleicher strategischer Qualität. Keine wiederverwendeten Folien — alles auf Ihren Kontext gebaut.' },
       { title: 'KI-native Umsetzung', desc: 'Unsere KI-Entscheidungsmodelle unterstützen jedes Mandat — von der Nachfrageintelligenz bis zur prädiktiven Analytik, vom automatisierten Risiko-Scoring bis zur dynamischen Bestandsoptimierung. KI ist keine Option; sie ist unsere Art, schneller und treffsicherer zu liefern.' },
     ],
@@ -24,7 +24,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     rubric: 'Why OpsFlow', h2a: 'Senior expertise.', h2b: 'No junior consultants. No bait-and-switch.',
     intro: 'What you see is what you get — the same person who diagnoses your problem leads the solution.',
     creds: [
-      { title: 'MIT-certified · 20+ years EMEA & LATAM', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Senior leadership across EMEA and LATAM in agrochemical, crop science, and specialty manufacturing. Real environments, real constraints, real results.' },
+      { title: 'MIT-certified · senior supply chain leadership', desc: 'MIT Graduate Certificate in Supply Chain & Logistics. Senior supply chain leadership in multinational agrochemical, crop science and specialty manufacturing. Real environments, real constraints, real results.' },
       { title: 'Faster and leaner than big firms', desc: '6 weeks, not 6 months. Direct access to a senior practitioner from day one. Lower cost at the same strategic quality. No recycled slide decks — everything built for your context.' },
       { title: 'AI-native delivery', desc: 'Our AI decision engines power every engagement — from demand intelligence and predictive analytics to automated risk scoring and dynamic inventory optimisation. AI is not an add-on; it is how we deliver faster, sharper results.' },
     ],

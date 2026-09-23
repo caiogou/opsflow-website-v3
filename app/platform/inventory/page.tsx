@@ -1,5 +1,6 @@
 'use client'
 
+import { localizeDemo, readCcy } from '@/lib/currency'
 import { useState, useMemo, type ComponentType } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -271,7 +272,7 @@ export default function InventoryDiagnostic() {
           const h = res.HEALTH_METRICS
           return { summary: { skus: res.COMPANY.skuCount, inventory_value: h.totalInventoryValue, excess_value: h.excessInventoryValue, obsolete_value: h.obsoleteRisk, turns: h.inventoryTurns, data_health: res.DATA_HEALTH.overall } }
         }}
-        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onDemo={() => { setDs(localizeDemo(DEMO, readCcy())); setScreen('health') }}
       />
     )
   }
@@ -690,7 +691,7 @@ export default function InventoryDiagnostic() {
           </p>
           {CTA.showInvestment ? (
             <p className="text-xs text-teal-muted/40 mb-6">
-              Investment: CHF 22-32K &middot; Duration: 4-6 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
+              Investment: {COMPANY.currency} 22-32K &middot; Duration: 4-6 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
             </p>
           ) : <div className="mb-6" />}
           <div className="flex flex-col sm:flex-row gap-3 justify-center no-print">

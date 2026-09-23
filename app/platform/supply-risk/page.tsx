@@ -1,5 +1,6 @@
 'use client'
 
+import { localizeDemo, readCcy } from '@/lib/currency'
 import { useState, useMemo } from 'react'
 import {
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell,
@@ -266,7 +267,7 @@ export default function SupplyRiskDiagnostic() {
           { ...SUPPLY_RISK_TEMPLATES[0], icon: (p: { size?: number; className?: string }) => <Package {...p} /> },
           { ...SUPPLY_RISK_TEMPLATES[1], icon: (p: { size?: number; className?: string }) => <AlertTriangle {...p} /> },
         ]}
-        onDemo={() => { setDs(DEMO); setScreen('health') }}
+        onDemo={() => { setDs(localizeDemo(DEMO, readCcy())); setScreen('health') }}
         onAnalyze={(tables) => {
           const res = analyzeSupplyRisk(tables)
           setDs(res)
