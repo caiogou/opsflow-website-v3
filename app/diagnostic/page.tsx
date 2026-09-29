@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { captureLead, isEmail } from '@/lib/engine/io'
-import { useCurrency, SYMBOL, convertChfText } from '@/lib/currency'
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell
@@ -456,25 +454,6 @@ export default function DiagnosticPage() {
   const [email, setEmail] = useState('')
   const [industry, setIndustry] = useState('')
   const [revenue, setRevenue] = useState('')
-  const [sending, setSending] = useState(false)
-  const [isSample, setIsSample] = useState(false)
-  const ccy = useCurrency()
-  const L = (x: string) => x.replace(/CHF\s?/g, ccy === 'CHF' ? 'CHF ' : SYMBOL[ccy])
-  // "Random / sample report" (Caio 23/set/2026): fills the 32 answers with a plausible random profile
-  // and opens the full report immediately — marked as SAMPLE, no e-mail gate, no lead recorded.
-  const runSample = () => {
-    const bias = 1.5 + Math.random() * 2.5 // company "maturity" 1.5–4.0
-    const a: Record<string, number> = {}
-    DIMENSIONS.forEach((d) => d.questions.forEach((_, qi) => {
-      const v = Math.round(bias + (Math.random() - 0.5) * 2.2)
-      a[`${d.id}_${qi}`] = Math.min(5, Math.max(1, v))
-    }))
-    setAnswers(a)
-    if (!companyName) setCompanyName('Sample company')
-    setIsSample(true)
-    setScreen('results')
-  }
-  const [gateError, setGateError] = useState<string | null>(null)
 
   const totalQuestions = DIMENSIONS.reduce((s, d) => s + d.questions.length, 0)
   const answeredCount = Object.keys(answers).length
@@ -588,11 +567,11 @@ export default function DiagnosticPage() {
                 className="w-full px-4 py-3 rounded-lg border border-navy-mid bg-navy/60 text-white text-sm focus:border-teal focus:outline-none"
               >
                 <option value="">Annual revenue</option>
-                <option value="<5M">{L('Below CHF 5M')}</option>
-                <option value="5-20M">{L('CHF 5M – 20M')}</option>
-                <option value="20-50M">{L('CHF 20M – 50M')}</option>
-                <option value="50-200M">{L('CHF 50M – 200M')}</option>
-                <option value=">200M">{L('Above CHF 200M')}</option>
+                <option value="<5M">Below CHF 5M</option>
+                <option value="5-20M">CHF 5M – 20M</option>
+                <option value="20-50M">CHF 20M – 50M</option>
+                <option value="50-200M">CHF 50M – 200M</option>
+                <option value=">200M">Above CHF 200M</option>
               </select>
             </div>
           </div>
@@ -603,13 +582,6 @@ export default function DiagnosticPage() {
             className="mt-8 w-full py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors disabled:opacity-30 disabled:cursor-default flex items-center justify-center gap-2"
           >
             Start Assessment <ChevronRight size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={runSample}
-            className="mt-3 w-full py-3 rounded-lg bg-teal/10 text-teal text-sm font-semibold hover:bg-teal/20 transition-colors border border-teal/30"
-          >
-            See a sample report (random answers)
           </button>
 
           <div className="mt-6 flex flex-wrap gap-2 justify-center">
@@ -766,27 +738,13 @@ export default function DiagnosticPage() {
           </div>
 
           <button
-            onClick={async () => {
-              setGateError(null)
-              if (!isEmail(email)) { setGateError('Please enter a valid work e-mail.'); return }
-              setSending(true)
-              const r = await captureLead({
-                origem: 'diagnostic', email, nome: respondentName, empresa: companyName, cargo: respondentRole,
-                setor: industry, faturamento: revenue, score: overallScore,
-                nivel: MATURITY_LABELS[Math.round(overallScore)] || '',
-                respostas: { answers, dimensions: scores.map((d) => ({ id: d.id, score: d.score })) },
-              })
-              setSending(false)
-              if (!r.ok && r.erro === 'email_invalido') { setGateError('Please enter a valid work e-mail.'); return }
-              setScreen('results')
-            }}
-            disabled={!email || sending}
+            onClick={() => { if (email) setScreen('results') }}
+            disabled={!email}
             className="w-full py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors disabled:opacity-30 disabled:cursor-default flex items-center justify-center gap-2"
           >
             Unlock Full Report <ArrowRight size={16} />
           </button>
 
-          {gateError && <p className="text-red-300 text-xs mt-3">{gateError}</p>}
           <p className="text-teal-muted/30 text-[11px] mt-4">No spam. We may reach out with relevant insights.</p>
         </div>
       </div>
@@ -823,28 +781,13 @@ export default function DiagnosticPage() {
                 <div className="text-xs text-teal-muted/50">{companyName} &middot; {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
               </div>
             </div>
-            <div className="flex gap-2 no-print">
-              <button
-                onClick={() => { setScreen('assessment'); setCurrentDim(0); setCurrentQ(0) }}
-                className="px-4 py-2 rounded-lg border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors"
-              >
-                Edit Answers
-              </button>
-              <button
-                onClick={() => window.print()}
-                className="px-4 py-2 rounded-lg bg-teal text-white text-xs font-semibold hover:bg-teal-light transition-colors"
-              >
-                Download PDF
-              </button>
-            </div>
+            <button
+              onClick={() => { setScreen('assessment'); setCurrentDim(0); setCurrentQ(0) }}
+              className="px-4 py-2 rounded-lg border border-navy-mid text-teal-muted text-xs hover:border-teal transition-colors"
+            >
+              Edit Answers
+            </button>
           </div>
-
-          {isSample && (
-            <div className="mb-6 rounded-xl border border-yellow-500/40 bg-yellow-500/10 px-5 py-3 text-sm text-yellow-200 flex flex-wrap items-center justify-between gap-3 no-print">
-              <span>Sample report generated from random answers — take the assessment to get your own profile.</span>
-              <button onClick={() => { setAnswers({}); setIsSample(false); setCurrentDim(0); setCurrentQ(0); setScreen('welcome') }} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold">Take the real assessment</button>
-            </div>
-          )}
 
           {/* Overall */}
           <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-8 flex flex-col md:flex-row items-center gap-8 mb-6">
@@ -929,7 +872,7 @@ export default function DiagnosticPage() {
                       <div className="text-[10px] text-teal-muted/40 uppercase tracking-wider">Recommended</div>
                       <div className="text-xs text-teal font-semibold">{dim.service}</div>
                     </div>
-                    <span className="text-xs text-teal-muted/40">{convertChfText(dim.price, ccy)}</span>
+                    <span className="text-xs text-teal-muted/40">{dim.price}</span>
                   </div>
                 </div>
               ))}
@@ -963,7 +906,7 @@ export default function DiagnosticPage() {
                   Book a free 90-minute Problem Session with our team. We will dive deeper into your priority areas and map out a concrete improvement plan.
                 </p>
                 <div className="text-[11px] text-teal-muted/40 mb-4">
-                  {L('Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)')}
+                  Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)
                 </div>
                 <a
                   href="https://calendly.com/caio-opsflow-advisory/30min"
