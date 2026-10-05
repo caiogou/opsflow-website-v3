@@ -11,20 +11,14 @@ const BASE = 'https://www.opsflow-advisory.ch'
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   const core: MetadataRoute.Sitemap = [
-    { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
-    { url: `${BASE}/academy`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/en`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
+    { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/diagnostic`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE}/platform`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/platform/demand`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/platform/inventory`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/platform/kpis`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${BASE}/platform/supply-risk`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE}/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/de`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/de/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/de/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${BASE}/en`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/en/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/en/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ]

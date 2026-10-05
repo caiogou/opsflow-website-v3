@@ -4,13 +4,15 @@ import { Hero } from '@/components/Hero'
 import { Stats } from '@/components/Stats'
 import { Services } from '@/components/Services'
 import { HowItWorks } from '@/components/HowItWorks'
-import { AcademyBridge } from '@/components/AcademyBridge'
 import { Credentials } from '@/components/Credentials'
 import { Approach } from '@/components/Approach'
 import { Team } from '@/components/Team'
 import { CTA, Footer } from '@/components/CTAFooter'
 
 export const metadata: Metadata = {
+  title: 'OpsFlow Advisory — Stratégie supply chain avec leadership senior intégré',
+  description:
+    'Nous construisons votre stratégie supply chain — S&OP/IBP, planification des approvisionnements, gestion des commandes et logistique — et un leader senior reste avec votre équipe pour la faire vivre. Analyses assistées par l’IA, jugement senior. Session diagnostic gratuite.',
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/',
     languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/en' },
@@ -26,7 +28,6 @@ export default function Page() {
       <Approach />
       <Services />
       <HowItWorks />
-      <AcademyBridge />
       <Credentials />
       <Team />
       <CTA />
