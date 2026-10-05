@@ -8,19 +8,19 @@ const C: Record<Lang, { id: string; num: ReactNode; label: string }[]> = {
   fr: [
     { id: 'senior', num: 'Senior', label: 'Chaque appel mené par un expert senior' },
     { id: 'follow', num: 'Suivi', label: 'Nous suivons le plan jusqu’aux résultats' },
-    { id: 'diag', num: '5', label: 'Diagnostics gratuits sur vos propres données' },
+    { id: 'diag', num: '12 min', label: 'Diagnostic S&OP gratuit, en ligne' },
     { id: 'zero', num: <Money chf={0} />, label: 'Pour commencer — session gratuite' },
   ],
   de: [
     { id: 'senior', num: 'Senior', label: 'Jedes Gespräch von einer erfahrenen Fachperson geführt' },
     { id: 'follow', num: 'Umsetzung', label: 'Wir begleiten den Plan bis zum Ergebnis' },
-    { id: 'diag', num: '5', label: 'Kostenlose Diagnosen mit Ihren eigenen Daten' },
+    { id: 'diag', num: '12 Min.', label: 'Kostenlose S&OP-Standortbestimmung online' },
     { id: 'zero', num: <Money chf={0} />, label: 'Für den Anfang — kostenlose Session' },
   ],
   en: [
     { id: 'senior', num: 'Senior', label: 'Every call led by a senior practitioner' },
     { id: 'follow', num: 'On track', label: 'We follow the plan until results land' },
-    { id: 'diag', num: '5', label: 'Free diagnostics on your own data' },
+    { id: 'diag', num: '12 min', label: 'Free online S&OP Health Check' },
     { id: 'zero', num: <Money chf={0} />, label: 'To start — free session' },
   ],
 }

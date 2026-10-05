@@ -7,31 +7,31 @@ const C: Record<Lang, {
   diag: { top: string; right1: string; right2: string; bottom: string; left1: string; left2: string };
 }> = {
   fr: {
-    kicker: 'Stratégie supply chain · suivi par un expert senior',
+    kicker: 'Stratégie supply chain · leadership senior intégré',
     h1a: 'Nous construisons votre stratégie supply chain.',
-    h1b: 'Un expert senior la garde sur les rails.',
-    lead: 'Nous définissons avec vous la stratégie — S&OP, stocks, risques et distribution. Puis un professionnel senior suit le plan : des appels réguliers avec vos équipes, le suivi des résultats et les ajustements nécessaires pour rester sur la trajectoire. Sans équipe à demeure, sans rapport générique.',
+    h1b: 'Un leader senior reste pour la faire vivre.',
+    lead: 'Nous définissons avec vous la stratégie — S&OP/IBP, planification des approvisionnements, gestion des commandes et logistique. Puis un leader senior reste avec votre équipe : sessions de travail régulières, suivi des indicateurs et décisions sur la table, pendant que votre équipe continue de piloter le processus. Analyses assistées par l’IA ; le jugement reste senior. Un leadership intégré, pas une équipe à demeure.',
     cta1: 'Réserver une session gratuite',
     cta2: 'Faire le diagnostic S&OP',
-    diag: { top: 'Excellence de planification', right1: 'Optimisation', right2: 'des stocks', bottom: 'Gestion des risques', left1: 'Distribution', left2: '& transport' },
+    diag: { top: 'S&OP / IBP', right1: 'Planification des', right2: 'approvisionnements', bottom: 'Gestion des commandes', left1: 'Logistique', left2: '& distribution' },
   },
   de: {
-    kicker: 'Supply-Chain-Strategie · begleitet von einer Senior-Fachperson',
+    kicker: 'Supply-Chain-Strategie · eingebettete Senior-Führung',
     h1a: 'Wir entwickeln Ihre Supply-Chain-Strategie.',
-    h1b: 'Eine Senior-Fachperson hält sie auf Kurs.',
-    lead: 'Wir definieren mit Ihnen die Strategie — S&OP, Bestände, Risiken und Distribution. Danach begleitet eine erfahrene Fachperson den Plan: regelmässige Calls mit Ihrem Team, Nachverfolgung der Ergebnisse und Anpassungen, damit alles auf Kurs bleibt. Ohne Team vor Ort, ohne generische Berichte.',
+    h1b: 'Eine Senior-Führungskraft bleibt und setzt sie um.',
+    lead: 'Wir definieren mit Ihnen die Strategie — S&OP/IBP, Supply Planning, Order Management und Logistik. Danach bleibt eine Senior-Führungskraft bei Ihrem Team: regelmässige Arbeitssitzungen, KPI-Verfolgung und Entscheidungen auf dem Tisch, während Ihr Team den Prozess weiterführt. KI-gestützte Analysen; das Urteil bleibt senior. Eingebettete Führung, kein eingebettetes Team.',
     cta1: 'Kostenlose Session buchen',
     cta2: 'S&OP-Standortbestimmung starten',
-    diag: { top: 'Planungsexzellenz', right1: 'Bestands-', right2: 'optimierung', bottom: 'Risikomanagement', left1: 'Distribution', left2: '& Transport' },
+    diag: { top: 'S&OP / IBP', right1: 'Supply', right2: 'Planning', bottom: 'Order Management', left1: 'Logistik', left2: '& Distribution' },
   },
   en: {
-    kicker: 'Supply chain strategy · senior follow-through',
+    kicker: 'Supply chain strategy · embedded senior leadership',
     h1a: 'We build your supply chain strategy.',
-    h1b: 'A senior expert keeps it on track.',
-    lead: 'We define the strategy with you — S&OP, inventory, risk and distribution. Then a senior professional follows the plan: regular calls with your team, tracking results and adjusting the plan to keep it on track. No embedded team, no generic reports.',
+    h1b: 'A senior leader stays to make it happen.',
+    lead: 'We define the strategy with you — S&OP/IBP, supply planning, order management and logistics. Then a senior leader stays with your team: regular working sessions, KPI tracking and decisions on the table, while your team keeps running the process. AI-assisted analysis; senior judgement on every call. Embedded leadership, not an embedded team.',
     cta1: 'Book a free session',
     cta2: 'Take the S&OP Health Check',
-    diag: { top: 'Planning Excellence', right1: 'Inventory', right2: 'Optimisation', bottom: 'Risk & Resilience', left1: 'Distribution', left2: '& Shipping' },
+    diag: { top: 'S&OP / IBP', right1: 'Supply', right2: 'Planning', bottom: 'Order Management', left1: 'Logistics', left2: '& Distribution' },
   },
 }
 

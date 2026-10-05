@@ -8,22 +8,22 @@ type Info = { title: string; text: string; link: string; cta: string }
 // Interactive practice-area diagram (23/set/2026 · Caio: "make it interactive on hover").
 const INFO: Record<Lang, Record<NodeKey, Info>> = {
   en: {
-    top: { title: 'Planning Excellence', text: 'S&OP / IBP design, demand–supply balance and a monthly cycle that produces decisions — we run it with you and keep it on track.', link: '/en/services/s-op-consulting', cta: 'S&OP consulting' },
-    right: { title: 'Inventory Optimisation', text: 'ABC/XYZ segmentation, safety stock and reorder policy, excess and obsolete stock — release working capital without hurting service.', link: '/platform/inventory', cta: 'Run the inventory diagnostic' },
-    bottom: { title: 'Risk & Resilience', text: 'Single-source exposure, supplier concentration and geographic risk, with a 90-day mitigation and dual-sourcing roadmap.', link: '/platform/supply-risk', cta: 'Run the supply-risk diagnostic' },
-    left: { title: 'Distribution & Shipping', text: 'Cost-to-serve, network scenarios and shipment optimisation — a distribution network that fits today and scales tomorrow.', link: '/en/services/distribution-planning', cta: 'Distribution planning' },
+    top: { title: 'S&OP / IBP', text: 'S&OP / IBP design, demand–supply balance and a monthly cycle that produces decisions — we run it with you and keep it alive.', link: '/en/services/s-op-consulting', cta: 'S&OP consulting' },
+    right: { title: 'Supply Planning', text: 'Supply plans, inventory policy (safety stock, reorder rules, ABC/XYZ) and replenishment — the right stock, in the right place, without tying up working capital.', link: '/en/services/inventory-optimization', cta: 'Supply planning & inventory' },
+    bottom: { title: 'Order Management', text: 'Order-to-delivery flow, allocation rules, backlog and promise dates — fewer firefights, more orders shipped on time and in full.', link: '/en/services/supply-chain-audit', cta: 'Start with an audit' },
+    left: { title: 'Logistics & Distribution', text: 'Cost-to-serve, network scenarios and transport — a distribution set-up that fits today and scales tomorrow.', link: '/en/services/distribution-planning', cta: 'Distribution planning' },
   },
   fr: {
-    top: { title: 'Excellence de planification', text: 'Conception S&OP / IBP, équilibre demande–offre et un cycle mensuel qui produit des décisions — nous le pilotons avec vous et le gardons sur les rails.', link: '/services/conseil-sop', cta: 'Conseil S&OP' },
-    right: { title: 'Optimisation des stocks', text: 'Segmentation ABC/XYZ, stock de sécurité et point de commande, surstocks et obsolètes — libérez du fonds de roulement sans dégrader le service.', link: '/platform/inventory', cta: 'Lancer le diagnostic stocks' },
-    bottom: { title: 'Gestion des risques', text: 'Exposition mono-source, concentration fournisseurs et risque géographique, avec une feuille de route de mitigation sur 90 jours.', link: '/platform/supply-risk', cta: 'Lancer le diagnostic risques' },
-    left: { title: 'Distribution & transport', text: 'Coût de service, scénarios de réseau et optimisation du transport — un réseau adapté à aujourd’hui, prêt pour demain.', link: '/services/planification-distribution', cta: 'Planification de la distribution' },
+    top: { title: 'S&OP / IBP', text: 'Conception S&OP / IBP, équilibre demande–offre et un cycle mensuel qui produit des décisions — nous le pilotons avec vous et le gardons vivant.', link: '/services/conseil-sop', cta: 'Conseil S&OP' },
+    right: { title: 'Planification des approvisionnements', text: 'Plans d’approvisionnement, politique de stocks (stock de sécurité, règles de réapprovisionnement, ABC/XYZ) — le bon stock, au bon endroit, sans immobiliser le fonds de roulement.', link: '/services/optimisation-des-stocks', cta: 'Approvisionnements & stocks' },
+    bottom: { title: 'Gestion des commandes', text: 'Flux de la commande à la livraison, règles d’allocation, carnet et dates promises — moins d’urgences, plus de commandes livrées à temps et complètes.', link: '/services/rapid-assessment', cta: 'Commencer par un audit' },
+    left: { title: 'Logistique & distribution', text: 'Coût de service, scénarios de réseau et transport — une distribution adaptée à aujourd’hui, prête pour demain.', link: '/services/planification-distribution', cta: 'Planification de la distribution' },
   },
   de: {
-    top: { title: 'Planungsexzellenz', text: 'S&OP-/IBP-Aufbau, Ausgleich von Nachfrage und Angebot und ein Monatszyklus, der Entscheidungen hervorbringt — wir führen ihn mit Ihnen und halten ihn auf Kurs.', link: '/de/services/sop-beratung', cta: 'S&OP-Beratung' },
-    right: { title: 'Bestandsoptimierung', text: 'ABC/XYZ-Segmentierung, Sicherheitsbestand und Bestellpunkt, Über- und Altbestände — Betriebskapital freisetzen, ohne den Service zu schwächen.', link: '/platform/inventory', cta: 'Bestandsdiagnose starten' },
-    bottom: { title: 'Risikomanagement', text: 'Single-Source-Risiken, Lieferantenkonzentration und geografische Risiken, mit einem 90-Tage-Mitigationsplan.', link: '/platform/supply-risk', cta: 'Risikodiagnose starten' },
-    left: { title: 'Distribution & Transport', text: 'Servicekosten, Netzwerkszenarien und Transportoptimierung — ein Netz, das heute passt und morgen mitwächst.', link: '/de/services/distributionsplanung', cta: 'Distributionsplanung' },
+    top: { title: 'S&OP / IBP', text: 'S&OP-/IBP-Aufbau, Ausgleich von Nachfrage und Angebot und ein Monatszyklus, der Entscheidungen hervorbringt — wir führen ihn mit Ihnen und halten ihn lebendig.', link: '/de/services/sop-beratung', cta: 'S&OP-Beratung' },
+    right: { title: 'Supply Planning', text: 'Versorgungspläne, Bestandspolitik (Sicherheitsbestand, Nachschubregeln, ABC/XYZ) und Nachschub — der richtige Bestand am richtigen Ort, ohne Betriebskapital zu binden.', link: '/de/services/bestandsoptimierung', cta: 'Supply Planning & Bestände' },
+    bottom: { title: 'Order Management', text: 'Ablauf von der Bestellung bis zur Lieferung, Zuteilungsregeln, Auftragsbestand und Liefertermine — weniger Feuerwehr, mehr pünktlich und vollständig gelieferte Aufträge.', link: '/de/services/rapid-assessment', cta: 'Mit einem Audit beginnen' },
+    left: { title: 'Logistik & Distribution', text: 'Servicekosten, Netzwerkszenarien und Transport — eine Distribution, die heute passt und morgen mitwächst.', link: '/de/services/distributionsplanung', cta: 'Distributionsplanung' },
   },
 }
 
