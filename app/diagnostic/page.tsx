@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { captureLead, isEmail } from '@/lib/engine/io'
+import { captureLead, isEmail } from '@/lib/lead'
 import { useCurrency, SYMBOL, convertChfText } from '@/lib/currency'
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
@@ -1023,7 +1023,7 @@ export default function DiagnosticPage() {
 
           {/* Footer */}
           <div className="text-center pt-5 border-t border-navy-mid/40">
-            <div className="text-xs text-teal-muted/40">OpsFlow Advisory — Smarter supply chains. Built by people. Powered by AI.</div>
+            <div className="text-xs text-teal-muted/40">OpsFlow Advisory — Supply chain strategy with embedded senior leadership. AI-assisted, senior-led.</div>
             <div className="text-[10px] text-teal-muted/20 mt-1">opsflow-advisory.ch &middot; Nyon, Canton Vaud, Switzerland</div>
           </div>
         </div>
