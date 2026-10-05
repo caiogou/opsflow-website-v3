@@ -23,23 +23,29 @@ function withCcy(req: NextRequest, res: NextResponse) {
 export function middleware(req: NextRequest) {
   if (req.nextUrl.pathname !== '/') return withCcy(req, NextResponse.next())
 
+  // 05/oct/2026 (Caio alignment): English is the DEFAULT language for everyone. "/" goes to /en unless the visitor
+  // explicitly chose French (?lang=fr from the language switcher, remembered in the cookie). German keeps /de.
+  const asked = req.nextUrl.searchParams.get('lang')
   const cookie = req.cookies.get(COOKIE)?.value
-  let target = cookie
-  if (!target) {
-    const al = (req.headers.get('accept-language') || '').split(',')[0].split('-')[0].toLowerCase()
-    // 23/set/2026: English is the lead language (international positioning). FR only for French browsers.
-    target = al === 'de' ? 'de' : al === 'fr' ? 'fr' : 'en'
-  }
+  const target = asked === 'fr' ? 'fr' : asked === 'de' ? 'de' : asked === 'en' ? 'en' : cookie === 'fr' ? 'fr' : cookie === 'de' ? 'de' : 'en'
 
   if (target === 'de' || target === 'en') {
     const url = req.nextUrl.clone()
     url.pathname = `/${target}`
-    const res = NextResponse.redirect(url)
+    url.searchParams.delete('lang')
+    const res = NextResponse.redirect(url, 308)
     res.cookies.set(COOKIE, target, { path: '/', maxAge: 60 * 60 * 24 * 365 })
     return withCcy(req, res)
   }
+  if (asked === 'fr') {
+    // Serve the French home at "/" without the query string in the address bar.
+    const url = req.nextUrl.clone()
+    url.searchParams.delete('lang')
+    const res = NextResponse.redirect(url, 307)
+    res.cookies.set(COOKIE, 'fr', { path: '/', maxAge: 60 * 60 * 24 * 365 })
+    return withCcy(req, res)
+  }
   const res = NextResponse.next()
-  if (!cookie) res.cookies.set(COOKIE, 'fr', { path: '/', maxAge: 60 * 60 * 24 * 365 })
   return withCcy(req, res)
 }
 
