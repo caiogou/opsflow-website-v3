@@ -1,16 +1,18 @@
 # OpsFlow Advisory
 
-> Supply chain advisory for companies across EMEA, based in Switzerland.
-> Services: Planning Excellence, S&OP (Sales & Operations Planning),
-> Inventory Optimisation, Supply Risk Management, Distribution Planning.
-> MIT-certified consultants. 17+ years of experience across EMEA & LATAM.
+> Supply chain advisory based in Nyon, Switzerland, working with manufacturers and distributors across Europe.
+> We build the supply chain strategy with the client and a senior leader stays with the team to make it happen.
+> Scope: S&OP / IBP, supply planning, order management and logistics.
+> AI-assisted analysis; the judgement and the recommendations stay with senior people.
+> Embedded leadership, not an embedded team.
 
 ## Pages
 
-- [Home](https://www.opsflow-advisory.ch/): Advisory services overview, engagement model and pricing
-- [OpsFlow Academy](https://www.opsflow-advisory.ch/academy): Process & Capability Sprint — process improvement + team training for Swiss SMEs (FR/EN/DE)
-- [S&OP Health Check](https://www.opsflow-advisory.ch/diagnostic): Free 12-minute S&OP maturity assessment (32 questions, 8 dimensions)
-- [Diagnostic Platform](https://www.opsflow-advisory.ch/platform): Data-driven supply chain diagnostics — inventory, demand & forecast, supply risk, planning KPIs
+- [Home (EN)](https://www.opsflow-advisory.ch/en): Positioning, services, how we engage
+- [Services (EN)](https://www.opsflow-advisory.ch/en/services): S&OP consulting, supply planning & inventory, distribution planning, supply chain audit
+- [S&OP Health Check](https://www.opsflow-advisory.ch/diagnostic): Free S&OP maturity assessment
+- [Accueil (FR)](https://www.opsflow-advisory.ch/): Version française
+- [Startseite (DE)](https://www.opsflow-advisory.ch/de): Deutsche Version
 
 ## Contact
 
