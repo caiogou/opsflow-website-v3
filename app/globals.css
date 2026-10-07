@@ -5,3 +5,12 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* ── Print / "Export PDF" (window.print) · 23/set/2026 ── */
+@media print {
+  @page { size: A4; margin: 10mm; }
+  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .no-print, nav, header nav, button { display: none !important; }
+  .recharts-responsive-container { break-inside: avoid; }
+  section, .rounded-xl, .rounded-2xl { break-inside: avoid; }
+}

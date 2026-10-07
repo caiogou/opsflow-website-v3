@@ -1,12 +1,20 @@
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { Stats } from '@/components/Stats'
 import { Services } from '@/components/Services'
 import { HowItWorks } from '@/components/HowItWorks'
 import { Credentials } from '@/components/Credentials'
-import { Testimonials } from '@/components/Testimonials'
+import { Approach } from '@/components/Approach'
+import { Team } from '@/components/Team'
 import { CTA, Footer } from '@/components/CTAFooter'
-import { DashboardShowcase } from '@/components/DashboardShowcase'
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://www.opsflow-advisory.ch/',
+    languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/en' },
+  },
+}
 
 export default function Page() {
   return (
@@ -14,11 +22,11 @@ export default function Page() {
       <Navbar />
       <Hero />
       <Stats />
+      <Approach />
       <Services />
-      <DashboardShowcase />
       <HowItWorks />
       <Credentials />
-      <Testimonials />
+      <Team />
       <CTA />
       <Footer />
     </main>
