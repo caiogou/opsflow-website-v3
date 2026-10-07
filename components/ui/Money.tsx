@@ -11,5 +11,5 @@ export function MoneyRange({ from, to, compact = true, suffix = '' }: { from: nu
   const ccy = useCurrency()
   const a = fmtMoney(from, ccy, { compact }); const b = fmtMoney(to, ccy, { compact })
   const sym = a.match(/^[^\d]+/)?.[0] || ''
-  return <>{a}–{b.slice(sym.length)}{suffix}</>
+  return <>{a}-{b.slice(sym.length)}{suffix}</>
 }

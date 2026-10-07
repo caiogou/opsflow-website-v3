@@ -1,4 +1,5 @@
 'use client'
+import { CALENDLY } from '@/lib/booking'
 
 import { useState, useMemo } from 'react'
 import { captureLead, isEmail } from '@/lib/engine/io'
@@ -966,7 +967,7 @@ export default function DiagnosticPage() {
                   {L('Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)')}
                 </div>
                 <a
-                  href="https://calendly.com/caio-opsflow-advisory/30min"
+                  href={CALENDLY}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full py-3 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors text-center no-underline"
@@ -974,7 +975,7 @@ export default function DiagnosticPage() {
                   Book Free Problem Session
                 </a>
                 <div className="text-center mt-2 text-[10px] text-teal-muted/30">
-                  opsflow-advisory.ch &middot; 90 minutes &middot; No commitment
+                  opsflow-advisory.ch &middot; 45 minutes &middot; No commitment
                 </div>
               </div>
 

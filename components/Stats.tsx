@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { Money } from '@/components/ui/Money'
 
 type Lang = 'fr' | 'de' | 'en'
 
@@ -9,19 +8,19 @@ const C: Record<Lang, { id: string; num: ReactNode; label: string }[]> = {
     { id: 'senior', num: 'Senior', label: 'Chaque appel mené par un expert senior' },
     { id: 'follow', num: 'Suivi', label: 'Nous suivons le plan jusqu’aux résultats' },
     { id: 'diag', num: '5', label: 'Diagnostics gratuits sur vos propres données' },
-    { id: 'zero', num: <Money chf={0} />, label: 'Pour commencer — session gratuite' },
+    { id: 'zero', num: 'Gratuit', label: 'Première session, sans engagement' },
   ],
   de: [
     { id: 'senior', num: 'Senior', label: 'Jedes Gespräch von einer erfahrenen Fachperson geführt' },
     { id: 'follow', num: 'Umsetzung', label: 'Wir begleiten den Plan bis zum Ergebnis' },
     { id: 'diag', num: '5', label: 'Kostenlose Diagnosen mit Ihren eigenen Daten' },
-    { id: 'zero', num: <Money chf={0} />, label: 'Für den Anfang — kostenlose Session' },
+    { id: 'zero', num: 'Kostenlos', label: 'Erste Session, unverbindlich' },
   ],
   en: [
     { id: 'senior', num: 'Senior', label: 'Every call led by a senior practitioner' },
-    { id: 'follow', num: 'On track', label: 'We follow the plan until results land' },
+    { id: 'follow', num: 'On track', label: 'We stay until results land' },
     { id: 'diag', num: '5', label: 'Free diagnostics on your own data' },
-    { id: 'zero', num: <Money chf={0} />, label: 'To start — free session' },
+    { id: 'zero', num: 'Free', label: 'First session, no commitment' },
   ],
 }
 

@@ -1,4 +1,5 @@
 'use client'
+import { CALENDLY } from '@/lib/booking'
 
 import { LogoIcon } from '@/components/LogoIcon'
 import { Package, TrendingUp, Shield, BarChart3, ArrowRight, Target } from 'lucide-react'
@@ -162,7 +163,7 @@ export default function PlatformIndex() {
         {/* CTA */}
         <div className="text-center">
           <a
-            href="https://calendly.com/caio-opsflow-advisory/30min"
+            href={CALENDLY}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors no-underline"

@@ -24,11 +24,11 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
   },
   en: {
     rubric: 'How it works', h2a: 'From first conversation', h2b: 'to measurable results.',
-    intro: 'Three steps. Fixed timelines. No open-ended engagements.',
+    intro: 'Three steps. Clear scope at each one. No open-ended engagements.',
     steps: [
-      { num: '1', title: 'Free diagnostic session', desc: 'A structured conversation about your supply chain reality. You walk away with clarity on your top priorities whether we work together or not.', price: 'Free — no commitment' },
-      { num: '2', title: 'Rapid Assessment', desc: '2-week structured diagnostic. Your top 3 priorities ranked by P&L impact. A 90-day action plan ready to execute. Executive summary for your leadership team.', price: <>Starting at <Money chf={8500} /> — fixed price</> },
-      { num: '3', title: 'Strategy + senior follow-through', desc: 'We build the strategy and the plan with you. A senior professional then follows the execution: regular calls with your team, tracking the KPIs and adjusting the plan to keep it on track. No embedded team.', price: <><MoneyRange from={22000} to={80000} /> depending on scope</> },
+      { num: '1', title: 'Free diagnostic session', desc: 'A structured 45-minute conversation about your supply chain reality. You walk away with clarity on your top priorities whether we work together or not.', price: 'Free, no commitment' },
+      { num: '2', title: 'Rapid Assessment', desc: 'Two-week structured diagnostic. Your top 3 priorities ranked by P&L impact. A 90-day action plan ready to execute. Executive summary for your leadership team.', price: <>Starting at <Money chf={8500} />, fixed price</> },
+      { num: '3', title: 'Strategy + senior follow-through', desc: 'We build the strategy and the plan with you. A senior practitioner then oversees execution: regular calls with your team, tracking the KPIs and adjusting the plan to keep it on track. No embedded team.', price: <><MoneyRange from={22000} to={80000} /> depending on scope</> },
     ],
   },
 }

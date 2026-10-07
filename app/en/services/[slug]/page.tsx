@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar'
 import { servicesEn, getServiceEn } from '@/lib/services_en'
 
 const BASE = 'https://www.opsflow-advisory.ch'
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 export function generateStaticParams() {
   return servicesEn.map((r) => ({ slug: r.slug }))
@@ -51,7 +51,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             {others.map((o) => (
               <li key={o.slug}><a href={`/en/services/${o.slug}`} className="text-navy hover:text-teal no-underline">{o.h1}</a></li>
             ))}
-            <li className="pt-2"><a href="/en/ressources" className="text-teal no-underline text-sm font-semibold">→ Our resources</a></li>
+            <li className="pt-2"><a href="/en/insights" className="text-teal no-underline text-sm font-semibold">Our insights</a></li>
           </ul>
         </section>
       </main>

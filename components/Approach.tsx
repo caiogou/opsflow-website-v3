@@ -6,10 +6,10 @@ type Col = { tag: string; title: string; points: string[] }
 const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string; cols: Col[]; vs: string[] }> = {
   en: {
     rubric: 'How we engage', h2a: 'Strategy and follow-through.', h2b: 'One team, from plan to results.',
-    intro: 'Most firms either hand over a strategy deck, or place a team inside your company. We do both halves of the job — without taking over your operations.',
+    intro: 'Most firms either hand over a strategy deck or place a team inside your company. We build the strategy with you and stay to see it through, without taking over your operations.',
     cols: [
       { tag: '01 · Strategy', title: 'We design the supply chain strategy', points: ['Diagnose with your own data', 'Set priorities by P&L impact', 'Design the S&OP cycle, inventory policy and risk plan', 'A 90-day plan your team can execute'] },
-      { tag: '02 · Senior follow-through', title: 'A senior professional keeps it on track', points: ['Regular calls with your planning team', 'Supervises your planning cycle — you keep running it', 'Tracks the KPIs and the plan every month', 'Adjusts the plan when reality changes'] },
+      { tag: '02 · Senior follow-through', title: 'A senior professional keeps it on track', points: ['Regular calls with your planning team', 'Oversees your planning cycle while you keep running it', 'Tracks the KPIs and the plan every month', 'Adjusts the plan when reality changes'] },
     ],
     vs: ['Not an embedded team billing full-time', 'Not a generic report left on a shelf', 'Senior people on every call'],
   },

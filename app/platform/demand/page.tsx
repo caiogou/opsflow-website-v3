@@ -1,4 +1,5 @@
 'use client'
+import { CALENDLY } from '@/lib/booking'
 
 import { localizeDemo, readCcy } from '@/lib/currency'
 import { useState, type ComponentType } from 'react'
@@ -640,7 +641,7 @@ export default function DemandForecastDiagnostic() {
           ) : <div className="mb-6" />}
           <div className="flex flex-col sm:flex-row gap-3 justify-center no-print">
             <a
-              href="https://calendly.com/caio-opsflow-advisory/30min"
+              href={CALENDLY}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3.5 rounded-lg bg-teal text-white text-sm font-semibold hover:bg-teal-light transition-colors no-underline"

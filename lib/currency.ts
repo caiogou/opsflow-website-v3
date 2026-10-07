@@ -62,6 +62,6 @@ export function convertChfText(text: string, ccy: Ccy): string {
     const fmt = (v: number, u?: string) => (u === 'M' ? `${+(v / 1e6).toFixed(2)}M` : u === 'K' ? `${Math.round(v / 1e3)}K` : v.toLocaleString('en-US'))
     if (!b) return `${SYMBOL[ccy]}${fmt(fa, ua)}`
     const fb = convertChf(parse(b) * unit(u2), ccy)
-    return `${SYMBOL[ccy]}${fmt(fa, u2)}–${fmt(fb, u2)}`
+    return `${SYMBOL[ccy]}${fmt(fa, u2)}-${fmt(fb, u2)}`
   })
 }

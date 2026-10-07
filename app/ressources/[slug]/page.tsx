@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar'
 import { ressources, getRessource } from '@/lib/ressources'
 
 const BASE = 'https://www.opsflow-advisory.ch'
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 export function generateStaticParams() {
   return ressources.map((r) => ({ slug: r.slug }))

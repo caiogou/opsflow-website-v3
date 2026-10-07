@@ -4,7 +4,7 @@ import { Navbar } from '@/components/Navbar'
 import { ressourcesEn, getRessourceEn } from '@/lib/ressources_en'
 
 const BASE = 'https://www.opsflow-advisory.ch'
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 export function generateStaticParams() {
   return ressourcesEn.map((r) => ({ slug: r.slug }))
@@ -13,14 +13,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const r = getRessourceEn(params.slug)
   if (!r) return {}
-  const url = `${BASE}/en/ressources/${r.slug}`
+  const url = `${BASE}/en/insights/${r.slug}`
   return { title: r.title, description: r.description, alternates: { canonical: url }, openGraph: { title: r.title, description: r.description, url, type: 'website' } }
 }
 
 export default function Page({ params }: { params: { slug: string } }) {
   const r = getRessourceEn(params.slug)
   if (!r) notFound()
-  const url = `${BASE}/en/ressources/${r.slug}`
+  const url = `${BASE}/en/insights/${r.slug}`
   const others = ressourcesEn.filter((x) => x.slug !== r.slug)
   const main = { '@context': 'https://schema.org', '@type': 'Article', headline: r.h1, description: r.description, inLanguage: 'en', mainEntityOfPage: url, url }
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: r.faq.map((f) => ({ '@type':'Question', name: f.q, acceptedAnswer: { '@type':'Answer', text: f.a } })) }
@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         .ressource-body a{color:#1a9e8f;text-decoration:underline}
 `}</style>
       <main className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase mb-6"><a href="/en/ressources" className="no-underline text-teal">Resources</a></p>
+        <p className="text-xs font-bold tracking-widest uppercase mb-6"><a href="/en/insights" className="no-underline text-teal">Insights</a></p>
         <article className="ressource-body" dangerouslySetInnerHTML={{ __html: r.bodyHtml }} />
         <div className="mt-10 flex flex-wrap items-center gap-5">
           <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book a session</a>
@@ -49,7 +49,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Also worth reading</p>
           <ul className="space-y-2 list-none pl-0">
             {others.map((o) => (
-              <li key={o.slug}><a href={`/en/ressources/${o.slug}`} className="text-navy hover:text-teal no-underline">{o.h1}</a></li>
+              <li key={o.slug}><a href={`/en/insights/${o.slug}`} className="text-navy hover:text-teal no-underline">{o.h1}</a></li>
             ))}
             <li className="pt-2"><a href="/en/services" className="text-teal no-underline text-sm font-semibold">→ Our services</a></li>
           </ul>

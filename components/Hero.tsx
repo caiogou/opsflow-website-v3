@@ -1,6 +1,6 @@
 import { HeroDiagram } from './HeroDiagram'
 type Lang = 'fr' | 'de' | 'en'
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 const C: Record<Lang, {
   kicker: string; h1a: string; h1b: string; lead: string; cta1: string; cta2: string;
@@ -28,10 +28,10 @@ const C: Record<Lang, {
     kicker: 'Supply chain strategy · embedded leadership',
     h1a: 'We build your supply chain strategy.',
     h1b: 'A senior expert keeps it on track.',
-    lead: 'We define the strategy with you — S&OP/IBP, supply planning, order management and logistics. Then a senior leader follows the plan with your team: regular calls, tracking results and adjusting the plan to keep it on track. Embedded leadership, not an embedded team.',
+    lead: 'We define the strategy with you: S&OP/IBP, supply planning, order management and logistics. Then a senior leader stays with your team to see the plan through, with regular calls, results tracking and adjustments when reality changes. Embedded leadership, not an embedded team.',
     cta1: 'Book a free session',
     cta2: 'Take the S&OP Health Check',
-    diag: { top: 'Planning Excellence', right1: 'Inventory', right2: 'Optimisation', bottom: 'Risk & Resilience', left1: 'Distribution', left2: '& Shipping' },
+    diag: { top: 'Planning Excellence', right1: 'Inventory', right2: 'Optimization', bottom: 'Risk & Resilience', left1: 'Distribution', left2: '& Shipping' },
   },
 }
 

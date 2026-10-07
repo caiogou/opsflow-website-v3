@@ -22,11 +22,11 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
   },
   en: {
     rubric: 'Why OpsFlow', h2a: 'Senior expertise.', h2b: 'No junior consultants. No bait-and-switch.',
-    intro: 'What you see is what you get — the same person who diagnoses your problem leads the solution.',
+    intro: 'What you see is what you get: the same person who diagnoses your problem leads the solution.',
     creds: [
       { title: 'Embedded leadership, not an embedded team', desc: 'A senior supply chain leader steers your planning cycle with your team: regular calls, KPI tracking, decisions on the table. Your team keeps running it; we keep it on track.' },
-      { title: 'Faster and leaner than big firms', desc: '6 weeks, not 6 months. Direct access to a senior practitioner from day one. Lower cost at the same strategic quality. No recycled slide decks — everything built for your context.' },
-      { title: 'AI-assisted, senior-decided', desc: 'We use AI tools to speed up the analysis: reading your data, diagnostics, scenarios. The judgement and the recommendations stay with senior people.' },
+      { title: 'Faster and leaner than big firms', desc: 'Weeks, not months. Direct access to a senior practitioner from day one. No recycled slide decks: everything is built for your context.' },
+      { title: 'AI-assisted, senior-decided', desc: 'We use AI tools to speed up the analysis: reading your data, diagnostics, scenarios. Judgment and recommendations stay with senior people.' },
     ],
   },
 }

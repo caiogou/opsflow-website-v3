@@ -3,7 +3,7 @@ import { Navbar } from '@/components/Navbar'
 import { servicesEn } from '@/lib/services_en'
 
 export const metadata: Metadata = {
-  title: 'Services — Supply Chain Consulting & S&OP for SMEs',
+  title: 'Services: Supply Chain Consulting and S&OP for SMEs',
   description: 'Our consulting engagements: S&OP consulting, inventory optimization, supply chain risk management, distribution planning and a Rapid Assessment audit.',
   alternates: { canonical: 'https://www.opsflow-advisory.ch/en/services' },
 }

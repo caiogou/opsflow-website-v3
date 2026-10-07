@@ -10,9 +10,9 @@ import { Team } from '@/components/Team'
 import { CTA, Footer } from '@/components/CTAFooter'
 
 export const metadata: Metadata = {
-  title: 'OpsFlow Advisory — Supply Chain Strategy with Senior Follow-Through',
+  title: 'OpsFlow Advisory: Supply Chain Strategy, Senior Follow-Through',
   description:
-    'We build your supply chain strategy — S&OP/IBP, supply planning, order management and logistics — and a senior leader follows the plan with your team until results land. Free diagnostic session.',
+    'Swiss supply chain advisory in Nyon. S&OP/IBP, supply planning, order management and logistics for European SMEs. Free 45-minute session.',
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/en',
     languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/en' },

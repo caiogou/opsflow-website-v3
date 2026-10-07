@@ -24,12 +24,12 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
   },
   en: {
     rubric: 'What we do', h2a: 'Where we work.', h2b: 'One goal: margin impact.',
-    intro: 'We work where the biggest P&L opportunities are — not where the noise is.',
+    intro: 'We work where the biggest P&L opportunities are, not where the noise is.',
     cards: [
-      { title: 'Planning Excellence', desc: 'S&OP and IBP design, demand and supply integration, governance and drumbeat. We build planning processes that generate decisions — not just reports. Exception and priority management included.', tags: ['S&OP', 'IBP', 'Demand Planning', 'Exception Management'] },
-      { title: 'Inventory Optimisation', desc: 'SKU segmentation (ABC/XYZ), safety stock redesign, replenishment logic and DRP. Free up working capital without degrading service levels — with measurable P&L impact.', tags: ['ABC/XYZ', 'Safety Stock', 'Working Capital', 'DRP'] },
+      { title: 'Planning Excellence', desc: 'S&OP and IBP design, demand and supply integration, governance and drumbeat. We build planning processes that generate decisions, not just reports. Exception and priority management included.', tags: ['S&OP', 'IBP', 'Demand Planning', 'Exception Management'] },
+      { title: 'Inventory Optimization', desc: 'SKU segmentation (ABC/XYZ), safety stock redesign, replenishment logic and DRP. Free up working capital without degrading service levels, with measurable P&L impact.', tags: ['ABC/XYZ', 'Safety Stock', 'Working Capital', 'DRP'] },
       { title: 'Risk & Resilience', desc: 'Tier 1 and 2 risk mapping, criticality scoring, dual-sourcing strategy and a 90-day mitigation roadmap. Know your risks before they become disruptions.', tags: ['Risk Mapping', 'Dual Sourcing', 'Mitigation Plan'] },
-      { title: 'Distribution & Shipping', desc: 'Cost-to-serve modelling, network scenario analysis and shipment optimisation. Build a distribution network that fits your business today — and scales with it tomorrow.', tags: ['Network Design', 'Cost-to-serve', 'Shipment Optimisation'] },
+      { title: 'Distribution & Shipping', desc: 'Cost-to-serve modeling, network scenario analysis and shipment optimization. Build a distribution network that fits your business today and scales with it tomorrow.', tags: ['Network Design', 'Cost-to-serve', 'Shipment Optimization'] },
     ],
   },
 }

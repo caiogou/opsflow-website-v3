@@ -3,9 +3,9 @@ import './globals.css'
 import { headers } from 'next/headers'
 
 export const metadata: Metadata = {
-  title: 'OpsFlow Advisory — Supply chain strategy & S&OP advisory',
+  title: 'OpsFlow Advisory: Supply Chain Strategy and S&OP Advisory',
   description:
-    'Senior supply chain advisory plus a lean planning team: S&OP/IBP, supply planning, order management and logistics — embedded leadership, not an embedded team. Free diagnostic session.',
+    'Senior supply chain advisory for SMEs: S&OP/IBP, supply planning, order management and logistics. Embedded leadership, not an embedded team. Free 45-minute session.',
   metadataBase: new URL('https://www.opsflow-advisory.ch'),
   openGraph: {
     title: 'OpsFlow Advisory',
@@ -23,7 +23,7 @@ const orgSchema = {
   url: 'https://www.opsflow-advisory.ch',
   email: 'caio@opsflow-advisory.ch',
   description:
-    'Supply chain advisory: senior strategic direction plus a planning team that runs and supervises the client’s S&OP cycle — S&OP/IBP, inventory optimisation, supply risk and distribution planning.',
+    'Supply chain advisory based in Nyon, Switzerland: senior strategic direction and follow-through on S&OP/IBP, supply planning, order management and logistics. Embedded leadership, not an embedded team.',
   areaServed: [
     { '@type': 'Place', name: 'Europe' },
     { '@type': 'Place', name: 'Worldwide' },

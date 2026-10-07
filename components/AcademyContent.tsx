@@ -1,4 +1,5 @@
 'use client'
+import { CALENDLY } from '@/lib/booking'
 
 import { useState } from 'react'
 import { LogoIcon } from './LogoIcon'
@@ -213,7 +214,7 @@ const DICT: Record<Lang, Record<string, string>> = {
 }
 
 // TODO: remplacer par le lien Calendly « Diagnostic 45 min » lorsqu'il sera créé.
-const BOOK_HREF = 'https://calendly.com/caio-opsflow-advisory/30min'
+const BOOK_HREF = CALENDLY
 
 const LANGS: Lang[] = ['fr', 'en', 'de']
 

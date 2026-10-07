@@ -6,6 +6,9 @@ const nextConfig = {
       { source: `/${l}/platform`, destination: '/platform', permanent: true },
       { source: `/${l}/platform/:path*`, destination: '/platform/:path*', permanent: true },
       { source: `/${l}/diagnostic`, destination: '/diagnostic', permanent: true },
+    ]).concat([
+      { source: '/en/ressources', destination: '/en/insights', permanent: true },
+      { source: '/en/ressources/:slug*', destination: '/en/insights/:slug*', permanent: true },
     ])
   },
 }

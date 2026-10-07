@@ -2,14 +2,14 @@
 
 import { LogoIcon } from './LogoIcon'
 
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 type Lang = 'fr' | 'de' | 'en'
 
 const LABELS: Record<Lang, { services: string; how: string; academy: string; platform: string; ressources: string; diagnostic: string; cta: string; ctaShort: string }> = {
   fr: { services: 'Services', how: 'Notre approche', academy: 'Academy', platform: 'Plateforme', ressources: 'Ressources', diagnostic: 'Diagnostic', cta: 'Réserver un échange', ctaShort: 'Échange' },
   de: { services: 'Leistungen', how: 'Unser Ansatz', academy: 'Academy', platform: 'Plattform', ressources: 'Ressourcen', diagnostic: 'Diagnostik', cta: 'Termin buchen', ctaShort: 'Termin' },
-  en: { services: 'Services', how: 'How it works', academy: 'Academy', platform: 'Platform', ressources: 'Resources', diagnostic: 'Diagnostic', cta: 'Book a session', ctaShort: 'Book' },
+  en: { services: 'Services', how: 'How it works', academy: 'Academy', platform: 'Platform', ressources: 'Insights', diagnostic: 'Diagnostic', cta: 'Book a session', ctaShort: 'Book' },
 }
 
 export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
@@ -18,7 +18,7 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
   const links = [
     { label: t.services, href: `${base}/services` },
     { label: t.how, href: `${base}/#how` },
-    { label: t.ressources, href: `${base}/ressources` },
+    { label: t.ressources, href: lang === 'en' ? '/en/insights' : `${base}/ressources` },
     { label: t.diagnostic, href: `/diagnostic` },
   ]
   return (

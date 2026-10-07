@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/de/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${BASE}/en`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/en/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE}/en/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/en/insights`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
   ]
   const fr: MetadataRoute.Sitemap = [
     ...services.map((r) => ({ url: `${BASE}/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
@@ -32,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
   const en: MetadataRoute.Sitemap = [
     ...servicesEn.map((r) => ({ url: `${BASE}/en/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),
-    ...ressourcesEn.map((r) => ({ url: `${BASE}/en/ressources/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 })),
+    ...ressourcesEn.map((r) => ({ url: `${BASE}/en/insights/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.7 })),
   ]
   return [...core, ...fr, ...de, ...en]
 }

@@ -1,5 +1,5 @@
 type Lang = 'fr' | 'de' | 'en'
-const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+import { CALENDLY } from '@/lib/booking'
 
 const C: Record<Lang, {
   ctaH2: string; ctaText: string; cta1: string; cta2: string;
@@ -23,7 +23,7 @@ const C: Record<Lang, {
     ctaH2: 'Start with a free conversation.',
     ctaText: 'Structured thinking about your supply chain challenges. Honest perspectives on where the real value is.',
     cta1: 'Book a free session', cta2: 'Take the S&OP Health Check',
-    fServices: 'Services', fHow: 'How it works', fRessources: 'Resources', fContact: 'Contact',
+    fServices: 'Services', fHow: 'How it works', fRessources: 'Insights', fContact: 'Contact',
     fLine: '2026 OpsFlow Advisory · Nyon, Switzerland',
   },
 }
@@ -54,7 +54,7 @@ export function Footer({ lang = 'fr' }: { lang?: Lang }) {
         <div className="flex flex-wrap justify-center gap-5 md:gap-7">
           <a href={`${base}/#services`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fServices}</a>
           <a href={`${base}/#how`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fHow}</a>
-          <a href={`${base}/ressources`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fRessources}</a>
+          <a href={lang === 'en' ? '/en/insights' : `${base}/ressources`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fRessources}</a>
           <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fContact}</a>
         </div>
         <span className="text-xs text-slate-500 text-center">{t.fLine}</span>
