@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
+import { Band } from '@/components/dark/Band'
+import { CTA, Footer } from '@/components/CTAFooter'
 import { ressourcesDe } from '@/lib/ressources_de'
 
 export const metadata: Metadata = {
@@ -11,21 +12,28 @@ export const metadata: Metadata = {
 export default function Hub() {
   return (
     <>
-      <Navbar lang="de" />
-      <main className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-        <h1 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4">Ressourcen</h1>
-        <p className="text-lg text-gray-600 leading-relaxed mb-10">Kurze, konkrete Merkblätter zu S&OP, Prozessen und Supply Chain — für KMU gedacht.</p>
-        <ul className="space-y-5 list-none pl-0">
-          {ressourcesDe.map((r) => (
-            <li key={r.slug} className="border-b border-gray-100 pb-5">
-              <a href={`/de/ressources/${r.slug}`} className="no-underline block">
-                <h2 className="text-xl font-bold text-navy hover:text-teal">{r.h1}</h2>
-                <p className="text-sm text-gray-500 mt-1">{r.description}</p>
+      <Band bg="insights"
+        lang="de"
+        crumbs={[{ label: 'Start', href: '/de' }, { label: 'Ressourcen' }]}
+        kick="Ressourcen"
+        title="Ressourcen"
+        lead="Kurze, konkrete Merkblätter zu S&OP, Prozessen und Supply Chain — für KMU gedacht."
+      />
+      <main id="main">
+        <section className="wrap sec" style={{ paddingTop: 32 }}>
+          <div className="cgrid g3">
+            {ressourcesDe.map((r) => (
+              <a key={r.slug} className="card" href={`/de/ressources/${r.slug}`}>
+                <h2 style={{ fontSize: 19, lineHeight: 1.3, fontWeight: 700, marginTop: 0, letterSpacing: '-.01em' }}>{r.h1}</h2>
+                <p>{r.description}</p>
+                <span className="more">Weiterlesen <span aria-hidden="true">→</span></span>
               </a>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        </section>
+        <CTA lang="de" />
       </main>
+      <Footer lang="de" />
     </>
   )
 }

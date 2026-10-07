@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
+import { Article } from '@/components/dark/Article'
 import { ressourcesDe, getRessourceDe } from '@/lib/ressources_de'
 
+
 const BASE = 'https://www.opsflow-advisory.ch'
-import { CALENDLY } from '@/lib/booking'
 
 export function generateStaticParams() {
   return ressourcesDe.map((r) => ({ slug: r.slug }))
@@ -26,35 +26,24 @@ export default function Page({ params }: { params: { slug: string } }) {
   const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: r.faq.map((f) => ({ '@type':'Question', name: f.q, acceptedAnswer: { '@type':'Answer', text: f.a } })) }
   return (
     <>
-      <Navbar lang="de" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(main) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
-      <style>{`
-        .ressource-body h1{font-size:2rem;line-height:1.2;font-weight:600;color:#0f2a4a;margin:0 0 1.25rem}
-        .ressource-body h2{font-size:1.4rem;font-weight:700;color:#0f2a4a;margin:2rem 0 .75rem}
-        .ressource-body h3{font-size:1.05rem;font-weight:700;color:#1a9e8f;margin:1.25rem 0 .35rem}
-        .ressource-body p{color:#374151;line-height:1.75;margin:0 0 1rem}
-        .ressource-body ul{margin:0 0 1rem 1.25rem;list-style:disc}
-        .ressource-body li{color:#374151;line-height:1.7;margin:.25rem 0}
-        .ressource-body a{color:#1a9e8f;text-decoration:underline}
-`}</style>
-      <main className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase mb-6"><a href="/de/ressources" className="no-underline text-teal">Ressourcen</a></p>
-        <article className="ressource-body" dangerouslySetInnerHTML={{ __html: r.bodyHtml }} />
-        <div className="mt-10 flex flex-wrap items-center gap-5">
-          <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Termin buchen</a>
-          <a href="/diagnostic" className="text-sm font-semibold text-navy underline">Kostenlose Diagnostik</a>
-        </div>
-        <section className="mt-14 border-t border-gray-200 pt-8">
-          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Auch lesenswert</p>
-          <ul className="space-y-2 list-none pl-0">
-            {others.map((o) => (
-              <li key={o.slug}><a href={`/de/ressources/${o.slug}`} className="text-navy hover:text-teal no-underline">{o.h1}</a></li>
-            ))}
-            <li className="pt-2"><a href="/de/services" className="text-teal no-underline text-sm font-semibold">→ Unsere Leistungen</a></li>
-          </ul>
-        </section>
-      </main>
+      <Article bg={"insights"}
+        lang="de"
+        crumbs={[{ label: 'Start', href: '/de' }, { label: 'Ressourcen', href: '/de/ressources' }, { label: r.h1 }]}
+        kick="Ressourcen"
+        title={r.h1}
+        lead={r.description}
+        html={r.bodyHtml}
+        faq={r.faq}
+        aside={
+          <div className="pn others">
+            <h5>Auch lesenswert</h5>
+            {others.slice(0, 6).map((o) => <a key={o.slug} href={`/de/ressources/${o.slug}`}>{o.h1} <span aria-hidden="true">›</span></a>)}
+            <a href="/de/services">Unsere Leistungen <span aria-hidden="true">›</span></a>
+          </div>
+        }
+      />
     </>
   )
 }

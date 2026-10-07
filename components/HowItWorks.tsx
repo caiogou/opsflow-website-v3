@@ -36,27 +36,27 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
 export function HowItWorks({ lang = 'fr' }: { lang?: Lang }) {
   const t = C[lang]
   return (
-    <section id="how" className="py-16 px-6 md:py-24 md:px-8 bg-teal-pale/30">
+    <section id="how" className="py-16 px-6 md:py-24 md:px-8 bg-dk-bg2">
       <div className="max-w-6xl mx-auto">
-        <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{t.rubric}</p>
-        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
+        <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-4">{t.rubric}</p>
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-dk-ink mb-4 leading-tight">
           {t.h2a}<br />{t.h2b}
         </h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
+        <p className="text-base text-dk-body leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           {t.steps.map((s, i) => (
             <div key={s.num} className="relative">
               {i < t.steps.length - 1 && (
-                <div className="absolute top-7 left-full w-12 flex items-center justify-center text-teal text-2xl -translate-x-6">
+                <div className="absolute top-7 left-full w-12 flex items-center justify-center text-dk-teal text-2xl -translate-x-6">
                   →
                 </div>
               )}
-              <div className="w-14 h-14 rounded-full bg-teal flex items-center justify-center text-white text-2xl font-serif mb-6">
+              <div className="w-14 h-14 rounded-full bg-dk-teal flex items-center justify-center text-dk-on text-2xl font-extrabold mb-6">
                 {s.num}
               </div>
-              <h3 className="text-lg font-bold text-navy mb-3">{s.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
-              <p className="text-xs text-teal font-semibold mt-4">{s.price}</p>
+              <h3 className="text-lg font-bold text-dk-ink mb-3">{s.title}</h3>
+              <p className="text-sm text-dk-body leading-relaxed">{s.desc}</p>
+              <p className="text-xs text-dk-teal font-semibold mt-4">{s.price}</p>
             </div>
           ))}
         </div>

@@ -39,18 +39,18 @@ export function Hero({ lang = 'fr' }: { lang?: Lang }) {
   const t = C[lang]
   const base = lang === 'fr' ? '' : `/${lang}`
   return (
-    <section className="bg-navy py-20 px-6 md:py-32 md:px-8">
+    <section className="bg-dk-bg py-20 px-6 md:py-32 md:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-24 items-center">
         <div>
-          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-5">{t.kicker}</p>
-          <h1 className="font-serif text-4xl md:text-6xl font-normal text-white leading-tight mb-6">
+          <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-5">{t.kicker}</p>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-dk-ink leading-tight mb-6">
             {t.h1a}<br />
-            <em className="text-teal not-italic">{t.h1b}</em>
+            <em className="text-dk-teal not-italic">{t.h1b}</em>
           </h1>
-          <p className="text-lg text-teal-muted leading-relaxed mb-10 max-w-lg">{t.lead}</p>
+          <p className="text-lg text-dk-body leading-relaxed mb-10 max-w-lg">{t.lead}</p>
           <div className="flex gap-4 flex-wrap">
-            <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="bg-teal text-white px-9 py-4 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">{t.cta1}</a>
-            <a href="/diagnostic" className="text-white border border-teal px-7 py-4 rounded text-sm font-semibold hover:bg-teal/10 transition-colors no-underline">{t.cta2}</a>
+            <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="bg-dk-teal text-dk-on px-9 py-4 rounded text-sm font-semibold hover:bg-dk-teal2 transition-colors no-underline">{t.cta1}</a>
+            <a href="/diagnostic" className="text-dk-ink border border-dk-teal px-7 py-4 rounded text-sm font-semibold hover:bg-dk-teal/10 transition-colors no-underline">{t.cta2}</a>
           </div>
         </div>
         <div className="hidden md:flex items-center justify-center">

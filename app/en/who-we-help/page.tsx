@@ -1,64 +1,84 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
 import { CTA, Footer } from '@/components/CTAFooter'
-import { WHO_WE_HELP as T, PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
+import { Band, Arrow } from '@/components/dark/Band'
+import { CALENDLY } from '@/lib/booking'
+import { PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
 
 const META = PAGE_META.whoWeHelp
 export const metadata: Metadata = pageMetadata(META)
 
+const SIGNALS = [
+  { h: 'Forecasting gets harder', p: 'More products, channels and customers make demand harder to read, and forecasts in one place no longer match operations plans in another.' },
+  { h: 'Inventory grows, service does not', p: 'Stock keeps rising, yet stockouts continue: overall overstock alongside local stockouts, because stock is allocated out of habit.' },
+  { h: 'Planning is reactive', p: 'The same crisis meeting, month after month. Decisions are made under pressure instead of prepared in advance.' },
+  { h: 'Data is fragmented', p: 'Planners spend their time reconciling reports and spreadsheets instead of managing the exceptions that matter.' },
+  { h: 'More suppliers and markets', p: 'The chain has grown more complex or more international, and risk management and distribution rules have not kept pace.' },
+  { h: 'Costs rise faster than the business', p: 'Logistics and cost-to-serve climb with no clear explanation, as the sum of many uncoordinated local trade-offs.' },
+]
+
 export default function Page() {
   return (
     <>
-      <Navbar lang="en" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd(META)) }} />
-      <main>
-        <section className="py-14 px-6 md:py-20 md:px-8">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{T.rubric}</p>
-            <h1 className="font-serif text-3xl md:text-5xl font-normal text-navy mb-5 leading-tight max-w-3xl">{T.h1}</h1>
-            {/* TODO Caio/Behrad: "[confirm with partners: revenue range and key industries]" */}
-            <p className="text-xl text-navy font-semibold mb-4">{T.profile}</p>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">{T.intro}</p>
+      <Band bg="who"
+        crumbs={[{ label: 'Home', href: '/en' }, { label: 'Who we help' }]}
+        kick="Who we help"
+        title={<>Built for companies where supply chain complexity is <em>catching up with growth.</em></>}
+        lead="Growing manufacturing and distribution SMEs across Europe, at the point where informal planning stops working."
+        actions={<>
+          <a className="btn" href="/en/services/supply-chain-audit">Start with a Health Check <Arrow /></a>
+          <a className="btn2" href={CALENDLY} target="_blank" rel="noopener">Or book a free session ›</a>
+        </>}
+        aside={
+          <div className="pn" aria-label="Quick check">
+            <h4>A quick check</h4>
+            <ul className="plist">
+              <li><b>?</b><div>Do sales promise lead times that operations discover after the fact?</div></li>
+              <li><b>?</b><div>Is stock growing while service stays the same?</div></li>
+              <li><b>?</b><div>Does your team spend more time reconciling data than deciding?</div></li>
+            </ul>
+            <p className="note">TWO OR MORE YES: <a href="/diagnostic" style={{ color: 'var(--teal)' }}>TAKE THE FREE S&amp;OP SELF-ASSESSMENT ›</a></p>
           </div>
+        }
+      />
+      <main id="main">
+        <section className="wrap sec">
+          <div className="kick">Signals</div>
+          <h2>You may recognize <em>some of these.</em></h2>
+          <p className="intro">These are the signals that come up most often when growth outpaces the way supply chain decisions are made.</p>
+          <ul className="signals">
+            {SIGNALS.map((s, i) => (
+              <li key={s.h}><i aria-hidden="true">{i + 1}</i><div><h3>{s.h}</h3><p>{s.p}</p></div></li>
+            ))}
+          </ul>
         </section>
-
-        <section className="py-14 px-6 md:py-16 md:px-8 bg-teal-pale/30">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+        <section className="wrap sec" id="profile">
+          <div className="kick">Typical profile</div>
+          <h2>Who we usually <em>work with.</em></h2>
+          <div className="split" style={{ marginTop: 24 }}>
             <div>
-              <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-6">{T.signalsH2}</h2>
-              <ul className="space-y-3 list-none pl-0">
-                {T.signals.map((s) => (
-                  <li key={s} className="flex gap-3 text-base text-gray-700 leading-relaxed">
-                    <span className="text-teal font-bold" aria-hidden="true">✓</span><span>{s}</span>
-                  </li>
-                ))}
+              <p>We work with growing manufacturing and distribution SMEs across Europe, where sales and production decisions are made by different people and coordination has become too complex to stay informal.</p>
+              <p>You do not need to be a large company. What matters is that supply chain complexity is catching up with growth, and that leadership wants to decide on a shared plan rather than react.</p>
+            </div>
+            {/* Revenue range and key industries: hidden until confirmed by the partners (no placeholders on the live site). */}
+            <div className="pn">
+              <h4>Profile details</h4>
+              <ul className="ticks" style={{ marginTop: 14 }}>
+                <li>Manufacturing and distribution companies</li>
+                <li>Growing SMEs across Europe</li>
+                <li>Work in English, French and German</li>
               </ul>
             </div>
-            <div>
-              <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-6">{T.rolesH2}</h2>
-              <ul className="space-y-3 list-disc pl-5">
-                {T.roles.map((r) => <li key={r} className="text-base text-gray-700 leading-relaxed">{r}</li>)}
-              </ul>
-            </div>
           </div>
         </section>
-
-        <section className="py-14 px-6 md:py-16 md:px-8">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-8">{T.areasH2}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {T.areas.map((a) => (
-                <a key={a.title} href={a.href} className="block rounded-lg border border-gray-200 p-6 no-underline hover:border-teal transition-colors">
-                  <h3 className="text-lg font-bold text-navy mb-2">{a.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{a.desc}</p>
-                </a>
-              ))}
-            </div>
-            <p className="mt-8"><a href="/en/services" className="text-sm font-semibold text-teal no-underline hover:underline">All solutions →</a></p>
-          </div>
-        </section>
+        <CTA
+          lang="en"
+          h2="Start with a Supply Chain Health Check."
+          text="Two weeks, fixed price, from CHF 8,500. Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary. Not ready yet? Start with a free 45-minute session."
+          primary={{ label: 'About the Health Check', href: '/en/services/supply-chain-audit' }}
+          secondary={{ label: 'Book a free 45-minute session', href: CALENDLY }}
+        />
       </main>
-      <CTA lang="en" />
       <Footer lang="en" />
     </>
   )

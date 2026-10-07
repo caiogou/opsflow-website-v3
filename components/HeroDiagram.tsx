@@ -40,50 +40,50 @@ export function HeroDiagram({ lang, labels }: { lang: Lang; labels: { top: strin
     style: { cursor: 'pointer', outline: 'none' } as React.CSSProperties,
   })
   const on = (k: NodeKey) => active === k
-  const fill = (k: NodeKey) => (on(k) ? '#1a9e8f' : '#1a3a5c')
-  const txt = (k: NodeKey) => (on(k) ? '#ffffff' : '#9fd8d0')
+  const fill = (k: NodeKey) => (on(k) ? '#2fd3bd' : '#06162a')
+  const txt = (k: NodeKey) => (on(k) ? '#032a26' : '#c6d5de')
   const line = (k: NodeKey) => (on(k) ? 3 : 1.5)
 
   return (
     <div className="flex flex-col items-center" onMouseLeave={() => setActive(null)}>
       <svg width="400" height="380" viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="170" cy="160" r="130" fill="none" stroke="#1a3a5c" strokeWidth="1" />
-        <circle cx="170" cy="160" r="88" fill="none" stroke="#1a3a5c" strokeWidth="1" className={active ? 'animate-pulse' : ''} />
-        <line x1="170" y1="50" x2="170" y2="112" stroke="#1a9e8f" strokeWidth={line('top')} />
-        <line x1="244" y1="138" x2="218" y2="150" stroke="#1a9e8f" strokeWidth={line('right')} />
-        <line x1="170" y1="208" x2="170" y2="270" stroke="#1a9e8f" strokeWidth={line('bottom')} />
-        <line x1="96" y1="138" x2="122" y2="150" stroke="#1a9e8f" strokeWidth={line('left')} />
-        <circle cx="170" cy="160" r={active ? 52 : 48} fill="#1a9e8f" style={{ transition: 'r 200ms' }} />
-        <text x="170" y="155" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Supply</text>
-        <text x="170" y="172" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Chain</text>
+        <circle cx="170" cy="160" r="130" fill="none" stroke="rgba(127,245,223,.18)" strokeWidth="1" />
+        <circle cx="170" cy="160" r="88" fill="none" stroke="rgba(127,245,223,.18)" strokeWidth="1" className={active ? 'animate-pulse' : ''} />
+        <line x1="170" y1="50" x2="170" y2="112" stroke="#2fd3bd" strokeWidth={line('top')} />
+        <line x1="244" y1="138" x2="218" y2="150" stroke="#2fd3bd" strokeWidth={line('right')} />
+        <line x1="170" y1="208" x2="170" y2="270" stroke="#2fd3bd" strokeWidth={line('bottom')} />
+        <line x1="96" y1="138" x2="122" y2="150" stroke="#2fd3bd" strokeWidth={line('left')} />
+        <circle cx="170" cy="160" r={active ? 52 : 48} fill="#2fd3bd" style={{ transition: 'r 200ms' }} />
+        <text x="170" y="155" textAnchor="middle" fill="#032a26" fontSize="13" fontWeight="700">Supply</text>
+        <text x="170" y="172" textAnchor="middle" fill="#032a26" fontSize="13" fontWeight="700">Chain</text>
         <g {...node('top')}>
-          <rect x="86" y="14" width="168" height="36" rx="18" fill={fill('top')} stroke="#1a9e8f" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
+          <rect x="86" y="14" width="168" height="36" rx="18" fill={fill('top')} stroke="#2fd3bd" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
           <text x="170" y="37" textAnchor="middle" fill={txt('top')} fontSize="11">{labels.top}</text>
         </g>
         <g {...node('right')}>
-          <rect x="240" y="120" width="96" height="36" rx="18" fill={fill('right')} stroke="#1a9e8f" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
+          <rect x="240" y="120" width="96" height="36" rx="18" fill={fill('right')} stroke="#2fd3bd" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
           <text x="288" y="138" textAnchor="middle" fill={txt('right')} fontSize="10">{labels.right1}</text>
           <text x="288" y="151" textAnchor="middle" fill={txt('right')} fontSize="10">{labels.right2}</text>
         </g>
         <g {...node('bottom')}>
-          <rect x="94" y="270" width="152" height="36" rx="18" fill={fill('bottom')} stroke="#1a9e8f" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
+          <rect x="94" y="270" width="152" height="36" rx="18" fill={fill('bottom')} stroke="#2fd3bd" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
           <text x="170" y="293" textAnchor="middle" fill={txt('bottom')} fontSize="11">{labels.bottom}</text>
         </g>
         <g {...node('left')}>
-          <rect x="4" y="120" width="96" height="36" rx="18" fill={fill('left')} stroke="#1a9e8f" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
+          <rect x="4" y="120" width="96" height="36" rx="18" fill={fill('left')} stroke="#2fd3bd" strokeWidth="1" style={{ transition: 'fill 150ms' }} />
           <text x="52" y="135" textAnchor="middle" fill={txt('left')} fontSize="10">{labels.left1}</text>
           <text x="52" y="149" textAnchor="middle" fill={txt('left')} fontSize="10">{labels.left2}</text>
         </g>
       </svg>
       <div className="w-full max-w-sm min-h-[128px] mt-2">
         {info ? (
-          <div className="rounded-xl border border-teal/40 bg-navy-deep/80 p-4">
-            <div className="text-sm font-bold text-white mb-1">{info.title}</div>
-            <p className="text-xs text-teal-muted leading-relaxed mb-3">{info.text}</p>
-            <a href={info.link} className="text-xs font-semibold text-teal no-underline hover:text-white">{info.cta} →</a>
+          <div className="rounded-xl border border-dk-line2 bg-dk-bg2 p-4">
+            <div className="text-sm font-bold text-dk-ink mb-1">{info.title}</div>
+            <p className="text-xs text-dk-body leading-relaxed mb-3">{info.text}</p>
+            <a href={info.link} className="text-xs font-semibold text-dk-teal no-underline hover:text-dk-ink">{info.cta} →</a>
           </div>
         ) : (
-          <p className="text-xs text-teal-muted/50 text-center pt-10">
+          <p className="text-xs text-dk-mute text-center pt-10">
             {lang === 'fr' ? 'Survolez un domaine pour en savoir plus' : lang === 'de' ? 'Bewegen Sie die Maus über ein Handlungsfeld' : 'Hover over an area to explore'}
           </p>
         )}

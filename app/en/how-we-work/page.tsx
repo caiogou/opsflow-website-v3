@@ -1,82 +1,107 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
 import { CTA, Footer } from '@/components/CTAFooter'
+import { Band, Arrow } from '@/components/dark/Band'
+import { Faqs } from '@/components/dark/Faqs'
 import { CALENDLY } from '@/lib/booking'
-import { HOW_WE_WORK as T, OFFER_STEPS, PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
+import { PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
 
 const META = PAGE_META.howWeWork
 export const metadata: Metadata = pageMetadata(META)
+
+const STEPS = [
+  { n: '1', title: 'Free 45-minute session', price: 'Free, no commitment', what: 'A structured conversation with a senior practitioner about your supply chain reality. Bring your recent figures.', get: 'Your top priorities clear, and a plain answer on whether going further is worth it now.', dur: '45 minutes' },
+  { n: '2', title: 'Supply Chain Health Check', price: 'From CHF 8,500, fixed price', what: 'We assess your planning, inventory and operational setup, from forecast to delivery, using your data and interviews with your teams.', get: 'Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary.', dur: 'Two weeks' },
+  { n: '3', title: 'Strategy and senior follow-through', price: 'CHF 22,000 to 80,000 depending on scope', what: 'We build the plan with you. A senior practitioner then oversees execution with your team, month by month.', get: 'A plan your team executes, with senior oversight until the results show.', dur: 'Month by month, sized to the scope agreed' },
+]
+
+const FAQ = [
+  { q: 'What does the first session cost?', a: 'Nothing. The 45-minute session is free, with no commitment. You leave with your top priorities clear, whether we work together or not.' },
+  { q: 'What is the Supply Chain Health Check?', a: 'A two-week, fixed-price engagement, from CHF 8,500. You get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.' },
+  { q: 'Do you place a team inside our company?', a: 'No. Embedded leadership, not an embedded team: a senior practitioner oversees execution month by month, and your own team runs it.' },
+  { q: 'How do you use AI?', a: 'AI speeds up data analysis, diagnostics and scenario modeling. Judgment and decisions stay with senior people: AI-assisted, senior-decided.' },
+]
 
 export default function Page() {
   const faqLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: T.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    mainEntity: FAQ.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   }
   return (
     <>
-      <Navbar lang="en" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd(META)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <main>
-        <section className="py-14 px-6 md:py-20 md:px-8">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{T.rubric}</p>
-            <h1 className="font-serif text-3xl md:text-5xl font-normal text-navy mb-5 leading-tight max-w-3xl">{T.h1}</h1>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-2xl mb-12">{T.intro}</p>
-            <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 list-none pl-0">
-              {OFFER_STEPS.map((s) => (
-                <li key={s.num} className="rounded-lg border border-gray-200 p-7 flex flex-col">
-                  <div className="w-12 h-12 rounded-full bg-teal flex items-center justify-center text-white text-xl font-serif mb-5">{s.num}</div>
-                  <h2 className="text-lg font-bold text-navy mb-2">{s.title}</h2>
-                  <p className="text-sm text-teal font-semibold mb-3">{s.price}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed flex-1">{s.desc}</p>
-                  {s.href && <a href={s.href} className="text-sm font-semibold text-teal no-underline hover:underline mt-4">{s.linkLabel} →</a>}
-                </li>
-              ))}
-            </ol>
-            <div className="mt-10">
-              <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="inline-block bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book a free 45-minute session</a>
-            </div>
+      <Band bg="how"
+        crumbs={[{ label: 'Home', href: '/en' }, { label: 'How we work' }]}
+        kick="How we work"
+        title={<>From first conversation <em>to measurable results.</em></>}
+        lead="Three clear steps, fixed prices, and a senior practitioner at every one of them. Your team stays in charge of the work."
+        actions={<>
+          <a className="btn" href={CALENDLY} target="_blank" rel="noopener">Book a free 45-minute session <Arrow /></a>
+          <a className="btn2" href="#steps">See the three steps ›</a>
+        </>}
+        aside={
+          <div className="pn" aria-label="The three steps at a glance">
+            <h4>The three steps at a glance</h4>
+            <ul className="plist">
+              <li><b>1</b><div><strong>Free 45-minute session</strong>Free, no commitment</div></li>
+              <li><b>2</b><div><strong>Supply Chain Health Check</strong>Two weeks, from CHF 8,500</div></li>
+              <li><b>3</b><div><strong>Strategy and senior follow-through</strong>CHF 22,000 to 80,000 depending on scope</div></li>
+            </ul>
           </div>
-        </section>
-
-        <section className="py-14 px-6 md:py-20 md:px-8 bg-teal-pale/30">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-5">{T.followThrough.h2}</h2>
-              {T.followThrough.paragraphs.map((p) => <p key={p} className="text-base text-gray-600 leading-relaxed mb-4">{p}</p>)}
-              <ul className="mt-4 space-y-2 list-disc pl-5">
-                {T.followThrough.points.map((p) => <li key={p} className="text-sm text-gray-600 leading-relaxed">{p}</li>)}
-              </ul>
-            </div>
-            <div>
-              <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-5">{T.ai.h2}</h2>
-              {T.ai.paragraphs.map((p) => <p key={p} className="text-base text-gray-600 leading-relaxed mb-4">{p}</p>)}
-              <div className="mt-8 rounded-lg border border-teal/30 bg-white p-6">
-                <h3 className="text-base font-bold text-navy mb-2">{T.selfAssessment.h2}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">{T.selfAssessment.text}</p>
-                <a href="/diagnostic" className="text-sm font-semibold text-teal no-underline hover:underline">{T.selfAssessment.cta} →</a>
+        }
+      />
+      <main id="main">
+        <section className="wrap sec" id="steps">
+          <div className="kick">The three steps</div>
+          <h2>Start small. <em>Go further only when it pays.</em></h2>
+          <p className="intro">Each step stands on its own. You decide at the end of each one whether to continue.</p>
+          <div className="steps">
+            {STEPS.map((s) => (
+              <div key={s.n} className="pn step">
+                <div className="n">{s.n}</div>
+                <h3>{s.title}</h3>
+                <div className="price">{s.price}</div>
+                <dl>
+                  <div><dt>What happens</dt><dd>{s.what}</dd></div>
+                  <div><dt>What you get</dt><dd>{s.get}</dd></div>
+                  <div><dt>Duration</dt><dd>{s.dur}</dd></div>
+                </dl>
+                {s.n === '2' && <a className="btn2" style={{ alignSelf: 'flex-start' }} href="/en/services/supply-chain-audit">About the Supply Chain Health Check ›</a>}
               </div>
+            ))}
+          </div>
+        </section>
+        <section className="wrap sec" id="leadership">
+          <div className="kick">Follow-through</div>
+          <h2>Embedded leadership, <em>not an embedded team.</em></h2>
+          <div className="split" style={{ marginTop: 24 }}>
+            <div>
+              <p>Most plans fail in execution, not on paper. That is why our work does not stop at a report.</p>
+              <p>In the follow-through step, a senior practitioner stays involved month by month: reviewing progress, unblocking decisions and keeping the plan on course. Your team runs the work. You build capability in-house instead of renting it.</p>
+            </div>
+            <div className="model" aria-label="Who does what">
+              <div><b>Senior practitioner</b><span>Oversees execution, month by month, and keeps decisions moving.</span></div>
+              <div><b>Your team</b><span>Runs the processes day to day and owns them after we step back.</span></div>
             </div>
           </div>
         </section>
-
-        <section className="py-14 px-6 md:py-20 md:px-8">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl font-normal text-navy mb-8">Frequently asked questions</h2>
-            <dl className="space-y-6">
-              {T.faq.map((f) => (
-                <div key={f.q} className="border-b border-gray-100 pb-5">
-                  <dt className="text-base font-bold text-navy mb-2">{f.q}</dt>
-                  <dd className="text-sm text-gray-600 leading-relaxed ml-0">{f.a}</dd>
-                </div>
-              ))}
-            </dl>
+        <section className="wrap sec" id="ai">
+          <div className="kick">How we use AI</div>
+          <h2>AI-assisted, <em>senior-decided.</em></h2>
+          <div className="cgrid g3">
+            <div className="card"><span className="tag">Faster analysis</span><h3>Data analysis</h3><p>AI speeds up the work of cleaning, combining and reading your planning, inventory and supply data.</p></div>
+            <div className="card"><span className="tag">Faster diagnosis</span><h3>Diagnostics and scenarios</h3><p>AI helps us test diagnostics and model scenarios quickly, so more time goes into the decisions.</p></div>
+            <div className="card"><span className="tag">Human judgment</span><h3>Senior decisions</h3><p>Judgment stays with senior people. Every recommendation is made and owned by an experienced practitioner.</p></div>
           </div>
         </section>
+        <section className="wrap sec" id="faq">
+          <div className="kick">FAQ</div>
+          <h2>Questions we hear before the first session.</h2>
+          <Faqs items={FAQ} />
+        </section>
+        <CTA lang="en" />
       </main>
-      <CTA lang="en" />
       <Footer lang="en" />
     </>
   )

@@ -1,6 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { headers } from 'next/headers'
+import { Inter } from 'next/font/google'
+
+// Inter, only the weights the dark visual uses (07/10/2026).
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], display: 'swap', variable: '--font-inter' })
 
 export const metadata: Metadata = {
   title: 'OpsFlow Advisory: Supply Chain Strategy and S&OP Advisory',
@@ -50,8 +54,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang={headers().get('x-lang') || 'en'}>
-      <body className="bg-white text-navy antialiased">
+    <html lang={headers().get('x-lang') || 'en'} className={inter.variable}>
+      <body className="bg-dk-bg text-dk-ink font-sans antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}

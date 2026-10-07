@@ -34,18 +34,18 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
 export function Credentials({ lang = 'fr' }: { lang?: Lang }) {
   const t = C[lang]
   return (
-    <section id="why" className="py-16 px-6 md:py-24 md:px-8 bg-navy">
+    <section id="why" className="py-16 px-6 md:py-24 md:px-8 bg-dk-bg">
       <div className="max-w-6xl mx-auto">
-        <p className="text-xs font-bold tracking-widest text-teal-light uppercase mb-4">{t.rubric}</p>
-        <h2 className="font-serif text-3xl md:text-4xl font-normal text-white mb-4 leading-tight">
+        <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-4">{t.rubric}</p>
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-dk-ink mb-4 leading-tight">
           {t.h2a}<br />{t.h2b}
         </h2>
-        <p className="text-base text-teal-muted leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
+        <p className="text-base text-dk-body leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {t.creds.map((c) => (
-            <div key={c.title} className="bg-navy-mid rounded-lg p-9 border-t-4 border-teal">
-              <h3 className="text-base font-bold text-white mb-3">{c.title}</h3>
-              <p className="text-sm text-teal-muted leading-relaxed">{c.desc}</p>
+            <div key={c.title} className="bg-dk-bg2 border border-dk-line rounded-lg p-9 border-t-4 border-dk-teal">
+              <h3 className="text-base font-bold text-dk-ink mb-3">{c.title}</h3>
+              <p className="text-sm text-dk-body leading-relaxed">{c.desc}</p>
             </div>
           ))}
         </div>

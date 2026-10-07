@@ -27,12 +27,12 @@ const C: Record<Lang, { id: string; num: ReactNode; label: string }[]> = {
 export function Stats({ lang = 'fr' }: { lang?: Lang }) {
   const stats = C[lang]
   return (
-    <div className="bg-navy-deep border-t border-navy-mid py-8 px-6 md:py-10 md:px-8">
+    <div className="bg-dk-bg2 border-t border-dk-line py-8 px-6 md:py-10 md:px-8">
       <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
         {stats.map((s) => (
           <div key={s.id} className="text-center">
-            <div className="font-serif text-4xl text-teal">{s.num}</div>
-            <div className="text-xs text-teal-muted mt-2 leading-snug">{s.label}</div>
+            <div className="text-4xl font-extrabold text-dk-teal">{s.num}</div>
+            <div className="text-xs text-dk-body mt-2 leading-snug">{s.label}</div>
           </div>
         ))}
       </div>

@@ -1,13 +1,5 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
-import { Hero } from '@/components/Hero'
-import { Stats } from '@/components/Stats'
-import { Services } from '@/components/Services'
-import { HowItWorks } from '@/components/HowItWorks'
-import { Credentials } from '@/components/Credentials'
-import { Approach } from '@/components/Approach'
-import { Team } from '@/components/Team'
-import { CTA, Footer } from '@/components/CTAFooter'
+import HomeFlowLink from '@/components/flowlink/HomeFlowLink'
 
 export const metadata: Metadata = {
   title: 'OpsFlow Advisory: Supply Chain Strategy and Follow-Through',
@@ -20,19 +12,23 @@ export const metadata: Metadata = {
   openGraph: { title: 'OpsFlow Advisory', description: 'Supply chain strategy with senior follow-through.', url: 'https://www.opsflow-advisory.ch/en', type: 'website' },
 }
 
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'OpsFlow Advisory',
+  url: 'https://www.opsflow-advisory.ch/en',
+  email: 'caio@opsflow-advisory.ch',
+  description: 'Swiss supply chain advisory in Nyon. S&OP/IBP, supply planning, order management and logistics for European SMEs.',
+  address: { '@type': 'PostalAddress', addressLocality: 'Nyon', addressCountry: 'CH' },
+  areaServed: { '@type': 'Place', name: 'Europe' },
+  knowsLanguage: ['en', 'fr', 'de'],
+}
+
 export default function Page() {
   return (
     <main>
-      <Navbar lang="en" />
-      <Hero lang="en" />
-      <Stats lang="en" />
-      <Approach lang="en" />
-      <Services lang="en" />
-      <HowItWorks lang="en" />
-      <Credentials lang="en" />
-      <Team lang="en" />
-      <CTA lang="en" />
-      <Footer lang="en" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homeSchema) }} />
+      <HomeFlowLink />
     </main>
   )
 }

@@ -39,19 +39,19 @@ export function Services({ lang = 'fr' }: { lang?: Lang }) {
   return (
     <section id="services" className="py-16 px-6 md:py-24 md:px-8">
       <div className="max-w-6xl mx-auto">
-        <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{t.rubric}</p>
-        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">
+        <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-4">{t.rubric}</p>
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-dk-ink mb-4 leading-tight">
           {t.h2a}<br />{t.h2b}
         </h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
+        <p className="text-base text-dk-body leading-relaxed max-w-xl mb-10 md:mb-14">{t.intro}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {t.cards.map((s) => (
-            <div key={s.title} className="border border-gray-200 rounded-lg p-9 hover:border-teal transition-colors">
-              <h3 className="text-lg font-bold text-navy mb-3">{s.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+            <div key={s.title} className="border border-dk-line rounded-lg p-9 hover:border-dk-teal transition-colors">
+              <h3 className="text-lg font-bold text-dk-ink mb-3">{s.title}</h3>
+              <p className="text-sm text-dk-body leading-relaxed">{s.desc}</p>
               <div className="flex flex-wrap gap-2 mt-5">
                 {s.tags.map((tag) => (
-                  <span key={tag} className="bg-teal-pale text-emerald-800 text-xs px-3 py-1 rounded-full font-medium">{tag}</span>
+                  <span key={tag} className="bg-dk-teal/10 text-dk-teal2 border border-dk-line2 text-xs px-3 py-1 rounded-full font-medium">{tag}</span>
                 ))}
               </div>
             </div>
