@@ -1,4 +1,4 @@
 // Single source for the booking link (free 45-minute session, decided by Cassio on 07/10/2026).
-// TODO Caio: replace with the current public Calendly link of the 45-minute event.
-// The old address https://calendly.com/caio-opsflow-advisory/30min returns "page not found" (checked 07/10).
-export const CALENDLY = 'https://calendly.com/caio-opsflow-advisory/30min'
+// Event checked 07/10/2026: page responds 200. Event title/description still in French (Academy era): update in Calendly.
+// Old address https://calendly.com/caio-opsflow-advisory/30min returns 404.
+export const CALENDLY = 'https://calendly.com/opsflow-advisory/diagnostic-45min'
