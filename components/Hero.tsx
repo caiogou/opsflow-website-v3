@@ -30,7 +30,7 @@ const C: Record<Lang, {
     h1b: 'A senior expert keeps it on track.',
     lead: 'We define the strategy with you: S&OP/IBP, supply planning, order management and logistics. Then a senior leader stays with your team to see the plan through, with regular calls, results tracking and adjustments when reality changes. Embedded leadership, not an embedded team.',
     cta1: 'Book a free session',
-    cta2: 'Take the S&OP Health Check',
+    cta2: 'Take the free S&OP Self-Assessment',
     diag: { top: 'Planning Excellence', right1: 'Inventory', right2: 'Optimization', bottom: 'Risk & Resilience', left1: 'Distribution', left2: '& Shipping' },
   },
 }

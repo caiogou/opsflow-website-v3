@@ -10,7 +10,7 @@ import { Team } from '@/components/Team'
 import { CTA, Footer } from '@/components/CTAFooter'
 
 export const metadata: Metadata = {
-  title: 'OpsFlow Advisory: Supply Chain Strategy, Senior Follow-Through',
+  title: 'OpsFlow Advisory: Supply Chain Strategy and Follow-Through',
   description:
     'Swiss supply chain advisory in Nyon. S&OP/IBP, supply planning, order management and logistics for European SMEs. Free 45-minute session.',
   alternates: {

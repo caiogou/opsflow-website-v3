@@ -5,7 +5,7 @@ import { services } from '@/lib/services'
 export const metadata: Metadata = {
   title: 'Services — conseil supply chain & S&OP pour PME',
   description:
-    'Nos missions de conseil en supply chain pour PME et entreprises : S&OP, optimisation des stocks, gestion des risques, distribution et Rapid Assessment.',
+    'Nos missions de conseil en supply chain pour PME et entreprises : S&OP, optimisation des stocks, gestion des risques, distribution et Supply Chain Health Check.',
   alternates: { canonical: 'https://www.opsflow-advisory.ch/services' },
 }
 

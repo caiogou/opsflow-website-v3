@@ -43,7 +43,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         <article className="ressource-body" dangerouslySetInnerHTML={{ __html: r.bodyHtml }} />
         <div className="mt-10 flex flex-wrap items-center gap-5">
           <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book a session</a>
-          <a href="/diagnostic" className="text-sm font-semibold text-navy underline">Free diagnostic</a>
+          <a href="/diagnostic" className="text-sm font-semibold text-navy underline">Free S&OP Self-Assessment</a>
         </div>
         <section className="mt-14 border-t border-gray-200 pt-8">
           <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">More services</p>

@@ -22,15 +22,15 @@ const DIMENSIONS = [
     id: 'sop_governance',
     name: 'S&OP Process & Governance',
     shortName: 'S&OP',
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Practice 1: Planning Excellence',
     service: 'IBP / S&OP Diagnostic & Redesign',
-    price: 'CHF 28–42K',
+    price: 'CHF 28K to 42K',
     description: 'Evaluates formality, cadence, cross-functional participation, and decision-making authority of S&OP/IBP.',
     questions: [
       {
         q: 'How would you describe your S&OP / IBP process today?',
         options: [
-          { text: 'No formal process — decisions are ad hoc', score: 1 },
+          { text: 'No formal process: decisions are ad hoc', score: 1 },
           { text: 'Basic monthly meeting exists but attendance and agenda vary', score: 2 },
           { text: 'Defined cadence with regular attendees, but limited decision authority', score: 3 },
           { text: 'Structured drumbeat with clear forums, decision rights, and escalation path', score: 4 },
@@ -40,7 +40,7 @@ const DIMENSIONS = [
       {
         q: 'Who owns the S&OP process?',
         options: [
-          { text: 'No one — or unclear ownership', score: 1 },
+          { text: 'No one: or unclear ownership', score: 1 },
           { text: 'Supply Chain / Operations manager runs it informally', score: 2 },
           { text: 'Dedicated planner or coordinator with limited authority', score: 3 },
           { text: 'Senior leader (VP/Director) with cross-functional mandate', score: 4 },
@@ -50,7 +50,7 @@ const DIMENSIONS = [
       {
         q: 'How are demand-supply trade-off decisions made?',
         options: [
-          { text: 'Whoever shouts loudest — no structured process', score: 1 },
+          { text: 'Whoever shouts loudest: no structured process', score: 1 },
           { text: 'Sales and Operations negotiate bilaterally', score: 2 },
           { text: 'Monthly meeting reviews gaps but decisions often deferred', score: 3 },
           { text: 'Defined decision forums with pre-work, options, and clear owners', score: 4 },
@@ -60,11 +60,11 @@ const DIMENSIONS = [
       {
         q: 'How far out does your planning horizon extend?',
         options: [
-          { text: 'Days to 1 week — reactive firefighting', score: 1 },
-          { text: '1–3 months — near-term only', score: 2 },
-          { text: '3–6 months — some forward visibility', score: 3 },
-          { text: '6–18 months — rolling plan with strategic component', score: 4 },
-          { text: '18–36 months — integrated with business planning cycle', score: 5 },
+          { text: 'Days to 1 week: reactive firefighting', score: 1 },
+          { text: '1 to 3 months: near-term only', score: 2 },
+          { text: '3 to 6 months: some forward visibility', score: 3 },
+          { text: '6 to 18 months: rolling plan with strategic component', score: 4 },
+          { text: '18 to 36 months: integrated with business planning cycle', score: 5 },
         ],
       },
     ],
@@ -73,15 +73,15 @@ const DIMENSIONS = [
     id: 'demand_planning',
     name: 'Demand Planning',
     shortName: 'Demand',
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Practice 1: Planning Excellence',
     service: 'Inventory & Demand Optimization',
-    price: 'CHF 22–32K',
+    price: 'CHF 22K to 32K',
     description: 'Assesses demand forecasting methodology, accuracy tracking, and collaboration with commercial teams.',
     questions: [
       {
         q: 'How do you generate your demand forecast?',
         options: [
-          { text: 'No formal forecast — production reacts to orders', score: 1 },
+          { text: 'No formal forecast: production reacts to orders', score: 1 },
           { text: 'Sales team provides estimates, often subjective', score: 2 },
           { text: 'Statistical baseline exists but is rarely challenged or enriched', score: 3 },
           { text: 'Statistical + market intelligence with structured consensus process', score: 4 },
@@ -91,17 +91,17 @@ const DIMENSIONS = [
       {
         q: 'Do you measure forecast accuracy?',
         options: [
-          { text: "No — we don't track it", score: 1 },
+          { text: "No, we don't track it", score: 1 },
           { text: "We know it's bad but don't measure formally", score: 2 },
           { text: 'Measured monthly at aggregate level', score: 3 },
           { text: 'Measured by SKU/family with bias and error decomposition', score: 4 },
-          { text: 'Accuracy drives accountability — root causes are acted upon weekly', score: 5 },
+          { text: 'Accuracy drives accountability: root causes are acted upon weekly', score: 5 },
         ],
       },
       {
         q: 'How is demand segmented (e.g., ABC/XYZ)?',
         options: [
-          { text: 'No segmentation — all SKUs treated equally', score: 1 },
+          { text: 'No segmentation: all SKUs treated equally', score: 1 },
           { text: 'Basic Pareto / ABC by revenue', score: 2 },
           { text: 'ABC/XYZ matrix exists but not used to differentiate planning approach', score: 3 },
           { text: 'Segmentation drives differentiated service levels, safety stock, and review frequency', score: 4 },
@@ -111,7 +111,7 @@ const DIMENSIONS = [
       {
         q: 'How do commercial teams contribute to demand planning?',
         options: [
-          { text: 'They don\'t — planning and sales work in silos', score: 1 },
+          { text: 'They don\'t: planning and sales work in silos', score: 1 },
           { text: 'Sales provides ad hoc input when asked', score: 2 },
           { text: 'Monthly demand review meeting exists but commercial input is unreliable', score: 3 },
           { text: 'Structured Demand Review with documented assumptions and commercial sign-off', score: 4 },
@@ -124,9 +124,9 @@ const DIMENSIONS = [
     id: 'supply_planning',
     name: 'Supply Planning & Execution',
     shortName: 'Supply',
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Practice 1: Planning Excellence',
     service: 'APS Health Check & Rescue',
-    price: 'CHF 18–26K',
+    price: 'CHF 18K to 26K',
     description: 'Evaluates supply planning tools, constraint management, and the link between planning and execution.',
     questions: [
       {
@@ -136,23 +136,23 @@ const DIMENSIONS = [
           { text: 'Basic MRP in ERP but heavily overridden manually', score: 2 },
           { text: 'MRP runs with some parameter governance, occasional manual adjustments', score: 3 },
           { text: 'APS/IBP system with configured constraints and regular master data review', score: 4 },
-          { text: 'Integrated APS with two-layer design — system team maintains, business decides', score: 5 },
+          { text: 'Integrated APS with two-layer design: system team maintains, business decides', score: 5 },
         ],
       },
       {
         q: 'How do you handle planning constraints (capacity, materials, lead times)?',
         options: [
-          { text: "No formal constraint modelling — planners manage in their heads", score: 1 },
-          { text: 'Key constraints known but not modelled — addressed when problems occur', score: 2 },
-          { text: 'Main constraints modelled in system but rarely updated or challenged', score: 3 },
-          { text: 'Constraints actively maintained and simplified — only those that drive decisions are kept', score: 4 },
-          { text: 'Continuous constraint review with clear ownership — complexity reduced systematically', score: 5 },
+          { text: "No formal constraint modeling: planners manage in their heads", score: 1 },
+          { text: 'Key constraints known but not modeled: addressed when problems occur', score: 2 },
+          { text: 'Main constraints modeled in system but rarely updated or challenged', score: 3 },
+          { text: 'Constraints actively maintained and simplified: only those that drive decisions are kept', score: 4 },
+          { text: 'Continuous constraint review with clear ownership: complexity reduced systematically', score: 5 },
         ],
       },
       {
         q: 'How well does planning translate into execution?',
         options: [
-          { text: 'Plan and execution are disconnected — shop floor does its own thing', score: 1 },
+          { text: 'Plan and execution are disconnected: shop floor does its own thing', score: 1 },
           { text: 'Plan exists but is often overridden by urgent orders or production preferences', score: 2 },
           { text: 'Plan adherence is tracked but root causes of deviations are not addressed', score: 3 },
           { text: 'Schedule adherence >85% with structured exception management', score: 4 },
@@ -162,11 +162,11 @@ const DIMENSIONS = [
       {
         q: 'Do your planners trust the system-generated plan?',
         options: [
-          { text: 'No — they override nearly everything', score: 1 },
-          { text: 'Partially — they use it as a starting point but rebuild most of it', score: 2 },
-          { text: 'Mostly — but key product families still require heavy manual adjustment', score: 3 },
-          { text: 'Yes — exceptions are limited to genuinely unusual situations', score: 4 },
-          { text: 'High trust — planners focus on exceptions and decisions, not recalculating the plan', score: 5 },
+          { text: 'No, they override nearly everything', score: 1 },
+          { text: 'Partially, they use it as a starting point but rebuild most of it', score: 2 },
+          { text: 'Mostly, but key product families still require heavy manual adjustment', score: 3 },
+          { text: 'Yes, exceptions are limited to genuinely unusual situations', score: 4 },
+          { text: 'High trust, planners focus on exceptions and decisions, not recalculating the plan', score: 5 },
         ],
       },
     ],
@@ -175,15 +175,15 @@ const DIMENSIONS = [
     id: 'inventory',
     name: 'Inventory & Working Capital',
     shortName: 'Inventory',
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Practice 1: Planning Excellence',
     service: 'Inventory & Demand Optimization',
-    price: 'CHF 22–32K',
+    price: 'CHF 22K to 32K',
     description: 'Assesses inventory strategy, safety stock logic, and working capital visibility.',
     questions: [
       {
         q: 'How is your safety stock determined?',
         options: [
-          { text: "No formal safety stock — we stock what we can or what fits", score: 1 },
+          { text: "No formal safety stock: we stock what we can or what fits", score: 1 },
           { text: 'Fixed quantities based on historical guesses or rules of thumb', score: 2 },
           { text: 'Calculated but not differentiated by SKU segment or service level target', score: 3 },
           { text: 'Statistically calculated by segment with defined service level targets', score: 4 },
@@ -193,31 +193,31 @@ const DIMENSIONS = [
       {
         q: 'Do you experience simultaneous stockouts AND excess inventory?',
         options: [
-          { text: "Yes, constantly — it's our biggest frustration", score: 1 },
-          { text: 'Frequently — different product families, same warehouse', score: 2 },
-          { text: "Sometimes — we're aware of it but haven't fixed the root cause", score: 3 },
-          { text: "Occasionally — we've addressed the worst cases through segmentation", score: 4 },
-          { text: 'Rarely — our inventory policy is well-calibrated and reviewed regularly', score: 5 },
+          { text: "Yes, constantly: it's our biggest frustration", score: 1 },
+          { text: 'Frequently, different product families, same warehouse', score: 2 },
+          { text: "Sometimes, we're aware of it but haven't fixed the root cause", score: 3 },
+          { text: "Occasionally, we've addressed the worst cases through segmentation", score: 4 },
+          { text: 'Rarely, our inventory policy is well-calibrated and reviewed regularly', score: 5 },
         ],
       },
       {
         q: 'How visible is inventory performance to your CFO / Finance?',
         options: [
-          { text: "Not visible — finance doesn't track inventory at SKU level", score: 1 },
+          { text: "Not visible: finance doesn't track inventory at SKU level", score: 1 },
           { text: 'Monthly inventory value reported but no root cause analysis', score: 2 },
           { text: 'Days of supply and turns reported but not linked to planning decisions', score: 3 },
           { text: 'Working capital reviews include inventory segmentation and targets', score: 4 },
-          { text: 'Inventory is a strategic KPI — CFO and COO jointly review performance monthly', score: 5 },
+          { text: 'Inventory is a strategic KPI: CFO and COO jointly review performance monthly', score: 5 },
         ],
       },
       {
         q: 'Do you have a formal slow-mover / obsolescence management process?',
         options: [
-          { text: 'No — we discover obsolete stock during physical counts', score: 1 },
+          { text: 'No, we discover obsolete stock during physical counts', score: 1 },
           { text: "We know what's aging but don't have a structured disposition process", score: 2 },
           { text: 'Quarterly review exists but write-offs are reactive', score: 3 },
           { text: 'Proactive identification with defined triggers and disposition paths', score: 4 },
-          { text: 'Integrated into S&OP — slow movers flagged early, NPI/EOL managed through lifecycle planning', score: 5 },
+          { text: 'Integrated into S&OP: slow movers flagged early, NPI/EOL managed through lifecycle planning', score: 5 },
         ],
       },
     ],
@@ -226,19 +226,19 @@ const DIMENSIONS = [
     id: 'kpis',
     name: 'KPIs & Performance',
     shortName: 'KPIs',
-    practice: 'Practice 1 — Planning Excellence',
+    practice: 'Practice 1: Planning Excellence',
     service: 'Planning KPI Dashboard',
-    price: 'CHF 14–18K',
+    price: 'CHF 14K to 18K',
     description: 'Evaluates SC performance measurement maturity, operational rhythm, and root cause discipline.',
     questions: [
       {
         q: 'Do you have a supply chain KPI scorecard?',
         options: [
-          { text: 'No — we track issues reactively when they become visible', score: 1 },
+          { text: 'No, we track issues reactively when they become visible', score: 1 },
           { text: 'A few metrics exist (e.g., OTD) but not in a structured scorecard', score: 2 },
           { text: 'Scorecard exists but is reviewed inconsistently and not acted upon', score: 3 },
           { text: 'Balanced scorecard with service, cost, inventory, and planning KPIs reviewed weekly/monthly', score: 4 },
-          { text: 'KPIs drive actions — root causes are identified, owners assigned, and improvements tracked', score: 5 },
+          { text: 'KPIs drive actions: root causes are identified, owners assigned, and improvements tracked', score: 5 },
         ],
       },
       {
@@ -254,7 +254,7 @@ const DIMENSIONS = [
       {
         q: 'Do you have an operational rhythm (weekly/monthly review cadence)?',
         options: [
-          { text: 'No structured cadence — meetings happen when problems arise', score: 1 },
+          { text: 'No structured cadence: meetings happen when problems arise', score: 1 },
           { text: 'Weekly production meetings exist but focus on firefighting', score: 2 },
           { text: 'Weekly ops review + monthly S&OP but not well connected', score: 3 },
           { text: 'Integrated cadence: daily/weekly execution → monthly S&OP → quarterly business review', score: 4 },
@@ -264,11 +264,11 @@ const DIMENSIONS = [
       {
         q: 'How mature is your root cause analysis discipline?',
         options: [
-          { text: "We don't do root cause analysis — problems recur", score: 1 },
-          { text: 'Informal — someone investigates when there is a major issue', score: 2 },
+          { text: "We don't do root cause analysis: problems recur", score: 1 },
+          { text: 'Informal, someone investigates when there is a major issue', score: 2 },
           { text: 'Some structured analysis but findings are not systematically tracked or closed', score: 3 },
           { text: 'Formal RCA process for top issues with corrective actions and follow-up', score: 4 },
-          { text: 'Continuous improvement culture — RCA embedded in ops rhythm, Pareto-driven, actions closed within cycle', score: 5 },
+          { text: 'Continuous improvement culture: RCA embedded in ops rhythm, Pareto-driven, actions closed within cycle', score: 5 },
         ],
       },
     ],
@@ -277,15 +277,15 @@ const DIMENSIONS = [
     id: 'supply_risk',
     name: 'Supply Risk & Resilience',
     shortName: 'Risk',
-    practice: 'Practice 2 — Supply Resilience',
+    practice: 'Practice 2: Supply Resilience',
     service: 'Supply Risk Assessment & Roadmap',
-    price: 'CHF 22–30K',
+    price: 'CHF 22K to 30K',
     description: 'Evaluates supply base visibility, risk identification, and mitigation strategies.',
     questions: [
       {
         q: 'Do you know which of your suppliers are single-source?',
         options: [
-          { text: "No — we haven't mapped it", score: 1 },
+          { text: "No, we haven't mapped it", score: 1 },
           { text: "We know the obvious ones but haven't done a systematic review", score: 2 },
           { text: 'Mapped for direct materials but not for Tier 2 or critical components', score: 3 },
           { text: 'Full single-source mapping with criticality scoring and dual-source roadmap', score: 4 },
@@ -295,17 +295,17 @@ const DIMENSIONS = [
       {
         q: 'Have you experienced a significant supply disruption in the last 12 months?',
         options: [
-          { text: 'Yes, and we had no contingency — significant revenue impact', score: 1 },
-          { text: 'Yes, and we managed reactively — it was painful and costly', score: 2 },
+          { text: 'Yes, and we had no contingency: significant revenue impact', score: 1 },
+          { text: 'Yes, and we managed reactively: it was painful and costly', score: 2 },
           { text: 'Yes, but we had partial mitigation in place (buffer stock, alternative source)', score: 3 },
-          { text: 'Minor disruptions only — our mitigation plans worked as designed', score: 4 },
+          { text: 'Minor disruptions only: our mitigation plans worked as designed', score: 4 },
           { text: 'We stress-test our supply base regularly and disruptions are managed within tolerance', score: 5 },
         ],
       },
       {
         q: 'How do you assess and monitor supplier risk?',
         options: [
-          { text: "We don't — we react when problems happen", score: 1 },
+          { text: "We don't: we react when problems happen", score: 1 },
           { text: "Informal knowledge in procurement team's heads", score: 2 },
           { text: 'Annual supplier reviews but focused on cost, not risk', score: 3 },
           { text: 'Structured risk scoring (financial, operational, geopolitical) with periodic review', score: 4 },
@@ -315,7 +315,7 @@ const DIMENSIONS = [
       {
         q: 'Do you have a formal dual-sourcing or diversification strategy?',
         options: [
-          { text: 'No — we typically buy from whoever is cheapest', score: 1 },
+          { text: 'No, we typically buy from whoever is cheapest', score: 1 },
           { text: "We've discussed it but haven't acted", score: 2 },
           { text: 'Some categories have backup suppliers but not formally managed', score: 3 },
           { text: 'Dual-sourcing strategy for critical categories with defined split ratios', score: 4 },
@@ -328,15 +328,15 @@ const DIMENSIONS = [
     id: 'network',
     name: 'Network & Footprint',
     shortName: 'Network',
-    practice: 'Practice 3 — Network & Footprint',
+    practice: 'Practice 3: Network & Footprint',
     service: 'SC Network Design & Optimization',
-    price: 'CHF 45–80K',
+    price: 'CHF 45K to 80K',
     description: 'Evaluates network complexity awareness, cost-to-serve visibility, and footprint strategy.',
     questions: [
       {
         q: 'How well do you understand your end-to-end cost-to-serve?',
         options: [
-          { text: "We don't have visibility — costs are allocated at aggregate level", score: 1 },
+          { text: "We don't have visibility: costs are allocated at aggregate level", score: 1 },
           { text: 'We know production costs but logistics and warehousing are unclear', score: 2 },
           { text: 'Cost-to-serve estimated by region/channel but based on allocations, not activity-based', score: 3 },
           { text: 'Activity-based cost-to-serve by product family and customer segment', score: 4 },
@@ -346,27 +346,27 @@ const DIMENSIONS = [
       {
         q: 'When was the last time you reviewed your manufacturing/warehouse footprint?',
         options: [
-          { text: 'Never — it evolved organically or through M&A', score: 1 },
+          { text: 'Never, it evolved organically or through M&A', score: 1 },
           { text: 'More than 5 years ago', score: 2 },
-          { text: '3–5 years ago with limited scope', score: 3 },
+          { text: '3 to 5 years ago with limited scope', score: 3 },
           { text: 'Within last 2 years with scenario analysis', score: 4 },
-          { text: 'Continuous — network optimization is part of strategic planning cycle', score: 5 },
+          { text: 'Continuous, network optimization is part of strategic planning cycle', score: 5 },
         ],
       },
       {
         q: 'How complex is your supply chain network?',
         options: [
-          { text: 'Single site, simple — but growing and unsure how to scale', score: 2 },
-          { text: '2–3 sites, some cross-shipments, complexity emerging', score: 3 },
+          { text: 'Single site, simple, but growing and unsure how to scale', score: 2 },
+          { text: '2 to 3 sites, some cross-shipments, complexity emerging', score: 3 },
           { text: 'Multi-site, multi-country with significant cross-border flows', score: 4 },
-          { text: 'Highly complex — post-M&A, overlapping footprints, redundant capacity', score: 4 },
-          { text: 'Complex but well-understood — network decisions are data-driven and scenario-tested', score: 5 },
+          { text: 'Highly complex: post-M&A, overlapping footprints, redundant capacity', score: 4 },
+          { text: 'Complex but well-understood: network decisions are data-driven and scenario-tested', score: 5 },
         ],
       },
       {
         q: 'Have you evaluated make-vs-buy or insource-vs-outsource for key products?',
         options: [
-          { text: "No — we do what we've always done", score: 1 },
+          { text: "No, we do what we've always done", score: 1 },
           { text: 'Discussed informally but no structured analysis', score: 2 },
           { text: 'Done for a few items but not with a total cost model', score: 3 },
           { text: 'Structured make-vs-buy analysis for key categories with total cost and risk factors', score: 4 },
@@ -381,8 +381,8 @@ const DIMENSIONS = [
     shortName: 'Technology',
     practice: 'Cross-cutting',
     service: 'APS Health Check & Rescue',
-    price: 'CHF 18–26K',
-    description: 'Assesses the IT/data infrastructure supporting planning — ERP, APS, data quality, and analytics.',
+    price: 'CHF 18K to 26K',
+    description: 'Assesses the IT/data infrastructure supporting planning: ERP, APS, data quality, and analytics.',
     questions: [
       {
         q: 'What is your primary planning system?',
@@ -391,35 +391,35 @@ const DIMENSIONS = [
           { text: 'Basic ERP with MRP but no APS', score: 2 },
           { text: 'ERP + bolt-on planning tool or partially implemented APS', score: 3 },
           { text: 'Fully implemented APS (SAP IBP, Kinaxis, o9, etc.) with trained users', score: 4 },
-          { text: 'Integrated digital planning platform with analytics, scenario modelling, and control tower', score: 5 },
+          { text: 'Integrated digital planning platform with analytics, scenario modeling, and control tower', score: 5 },
         ],
       },
       {
         q: 'How would you rate your master data quality?',
         options: [
-          { text: 'Poor — BOMs, lead times, and parameters are unreliable', score: 1 },
-          { text: 'Inconsistent — some product families are clean, others are a mess', score: 2 },
-          { text: 'Adequate — periodic clean-ups happen but no ongoing governance', score: 3 },
-          { text: 'Good — data stewards assigned, regular audits, KPIs on data quality', score: 4 },
-          { text: 'Excellent — automated validation, continuous monitoring, master data treated as strategic asset', score: 5 },
+          { text: 'Poor, BOMs, lead times, and parameters are unreliable', score: 1 },
+          { text: 'Inconsistent, some product families are clean, others are a mess', score: 2 },
+          { text: 'Adequate, periodic clean-ups happen but no ongoing governance', score: 3 },
+          { text: 'Good, data stewards assigned, regular audits, KPIs on data quality', score: 4 },
+          { text: 'Excellent, automated validation, continuous monitoring, master data treated as strategic asset', score: 5 },
         ],
       },
       {
         q: 'How accessible is supply chain data for analysis and decision-making?',
         options: [
-          { text: 'Data is locked in ERP — extracting insights requires IT involvement every time', score: 1 },
+          { text: 'Data is locked in ERP: extracting insights requires IT involvement every time', score: 1 },
           { text: 'Some reports exist but they are static and often outdated', score: 2 },
           { text: 'BI/reporting layer exists but SC team uses it inconsistently', score: 3 },
           { text: 'Self-service analytics with live dashboards for key SC metrics', score: 4 },
-          { text: 'Advanced analytics with predictive capabilities — data drives proactive decisions', score: 5 },
+          { text: 'Advanced analytics with predictive capabilities: data drives proactive decisions', score: 5 },
         ],
       },
       {
         q: "Is there a clear separation between 'business planning' and 'system/technical planning' roles?",
         options: [
-          { text: 'No — planners do everything: data maintenance, system config, and business planning', score: 1 },
+          { text: 'No, planners do everything: data maintenance, system config, and business planning', score: 1 },
           { text: 'Planners are mostly stuck maintaining the system rather than making business decisions', score: 2 },
-          { text: 'Some separation exists but boundaries are unclear — planners still fix data issues daily', score: 3 },
+          { text: 'Some separation exists but boundaries are unclear: planners still fix data issues daily', score: 3 },
           { text: 'Clear two-layer design: business planners decide, technical team maintains system and data', score: 4 },
           { text: 'Mature operating model: Layer 1 (business decisions) fully separated from Layer 2 (system execution)', score: 5 },
         ],
@@ -462,9 +462,9 @@ export default function DiagnosticPage() {
   const ccy = useCurrency()
   const L = (x: string) => x.replace(/CHF\s?/g, ccy === 'CHF' ? 'CHF ' : SYMBOL[ccy])
   // "Random / sample report" (Caio 23/set/2026): fills the 32 answers with a plausible random profile
-  // and opens the full report immediately — marked as SAMPLE, no e-mail gate, no lead recorded.
+  // and opens the full report immediately: marked as SAMPLE, no e-mail gate, no lead recorded.
   const runSample = () => {
-    const bias = 1.5 + Math.random() * 2.5 // company "maturity" 1.5–4.0
+    const bias = 1.5 + Math.random() * 2.5 // company "maturity" 1.5 to 4.0
     const a: Record<string, number> = {}
     DIMENSIONS.forEach((d) => d.questions.forEach((_, qi) => {
       const v = Math.round(bias + (Math.random() - 0.5) * 2.2)
@@ -535,14 +535,14 @@ export default function DiagnosticPage() {
               <LogoIcon size={38} />
               <div className="text-left">
                 <div className="text-lg font-bold text-white tracking-tight">OpsFlow Advisory</div>
-                <div className="text-[11px] text-teal-muted tracking-widest uppercase">S&OP Health Check</div>
+                <div className="text-[11px] text-teal-muted tracking-widest uppercase">Free S&OP Self-Assessment</div>
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl font-serif text-white leading-tight">
               How mature is your <em className="text-teal not-italic">S&OP process</em>?
             </h1>
             <p className="text-teal-muted mt-3 text-sm leading-relaxed max-w-md mx-auto">
-              32 questions across 8 dimensions. Takes around 12 minutes. Get a personalised maturity profile with actionable recommendations.
+              32 questions across 8 dimensions. Takes around 12 minutes. Get a personalized maturity profile with actionable recommendations.
             </p>
           </div>
 
@@ -590,9 +590,9 @@ export default function DiagnosticPage() {
               >
                 <option value="">Annual revenue</option>
                 <option value="<5M">{L('Below CHF 5M')}</option>
-                <option value="5-20M">{L('CHF 5M – 20M')}</option>
-                <option value="20-50M">{L('CHF 20M – 50M')}</option>
-                <option value="50-200M">{L('CHF 50M – 200M')}</option>
+                <option value="5-20M">{L('CHF 5M to 20M')}</option>
+                <option value="20-50M">{L('CHF 20M to 50M')}</option>
+                <option value="50-200M">{L('CHF 50M to 200M')}</option>
                 <option value=">200M">{L('Above CHF 200M')}</option>
               </select>
             </div>
@@ -637,7 +637,7 @@ export default function DiagnosticPage() {
         <div className="px-6 border-b border-navy-mid flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
             <LogoIcon size={28} />
-            <span className="text-teal-muted text-xs hidden sm:inline">OpsFlow S&OP Health Check</span>
+            <span className="text-teal-muted text-xs hidden sm:inline">OpsFlow S&OP Self-Assessment</span>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-teal-muted/50 text-xs">{answeredCount}/{totalQuestions}</span>
@@ -752,7 +752,7 @@ export default function DiagnosticPage() {
           </div>
 
           <p className="text-teal-muted text-sm leading-relaxed mb-6">
-            Enter your email to unlock the full dashboard with your personalised radar chart, detailed dimension analysis, priority gaps, and tailored recommendations.
+            Enter your email to unlock the full dashboard with your personalized radar chart, detailed dimension analysis, priority gaps, and tailored recommendations.
           </p>
 
           <div className="relative mb-4">
@@ -769,7 +769,7 @@ export default function DiagnosticPage() {
           <button
             onClick={async () => {
               setGateError(null)
-              if (!isEmail(email)) { setGateError('Please enter a valid work e-mail.'); return }
+              if (!isEmail(email)) { setGateError('Please enter a valid work email.'); return }
               setSending(true)
               const r = await captureLead({
                 origem: 'diagnostic', email, nome: respondentName, empresa: companyName, cargo: respondentRole,
@@ -778,7 +778,7 @@ export default function DiagnosticPage() {
                 respostas: { answers, dimensions: scores.map((d) => ({ id: d.id, score: d.score })) },
               })
               setSending(false)
-              if (!r.ok && r.erro === 'email_invalido') { setGateError('Please enter a valid work e-mail.'); return }
+              if (!r.ok && r.erro === 'email_invalido') { setGateError('Please enter a valid work email.'); return }
               setScreen('results')
             }}
             disabled={!email || sending}
@@ -820,7 +820,7 @@ export default function DiagnosticPage() {
             <div className="flex items-center gap-3">
               <LogoIcon size={32} />
               <div>
-                <div className="text-sm font-bold text-white">S&OP Health Check Results</div>
+                <div className="text-sm font-bold text-white">S&OP Self-Assessment Results</div>
                 <div className="text-xs text-teal-muted/50">{companyName} &middot; {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
               </div>
             </div>
@@ -842,7 +842,7 @@ export default function DiagnosticPage() {
 
           {isSample && (
             <div className="mb-6 rounded-xl border border-yellow-500/40 bg-yellow-500/10 px-5 py-3 text-sm text-yellow-200 flex flex-wrap items-center justify-between gap-3 no-print">
-              <span>Sample report generated from random answers — take the assessment to get your own profile.</span>
+              <span>Sample report generated from random answers: take the assessment to get your own profile.</span>
               <button onClick={() => { setAnswers({}); setIsSample(false); setCurrentDim(0); setCurrentQ(0); setScreen('welcome') }} className="px-3 py-1.5 rounded bg-teal text-white text-xs font-semibold">Take the real assessment</button>
             </div>
           )}
@@ -864,7 +864,7 @@ export default function DiagnosticPage() {
               {overallScore > 3 && overallScore <= 4 &&
                 `${companyName} has a solid S&OP foundation with good practices across several dimensions. Focus areas are advancing to best-in-class in your weakest dimensions and building a closed-loop continuous improvement system.`}
               {overallScore > 4 &&
-                `${companyName} demonstrates advanced S&OP maturity. Refinement opportunities remain in specific areas — consider advanced analytics, scenario planning, and extending IBP integration with financial planning.`}
+                `${companyName} demonstrates advanced S&OP maturity. Refinement opportunities remain in specific areas: consider advanced analytics, scenario planning, and extending IBP integration with financial planning.`}
             </p>
           </div>
 
@@ -891,7 +891,7 @@ export default function DiagnosticPage() {
                   <Tooltip
                     contentStyle={{ background: '#0a1f38', border: '1px solid #1a3a5c', borderRadius: 8, color: '#fff' }}
                     formatter={(value: any, _: any, props: any) => [
-                      `${value} / 5.0 — ${MATURITY_LABELS[Math.round(Number(value))]}`,
+                      `${value} / 5.0: ${MATURITY_LABELS[Math.round(Number(value))]}`,
                       props.payload.fullName,
                     ]}
                   />
@@ -907,7 +907,7 @@ export default function DiagnosticPage() {
 
           {/* Priority Gaps + Strengths + CTA */}
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 mb-6">
-            {/* Priority areas — 3 cols */}
+            {/* Priority areas: 3 cols */}
             <div className="lg:col-span-3 rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
               <div className="flex items-center gap-2 mb-5">
                 <AlertTriangle size={16} className="text-orange-400" />
@@ -921,7 +921,7 @@ export default function DiagnosticPage() {
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold"
                       style={{ backgroundColor: `${MATURITY_COLORS[Math.round(dim.score)]}15`, color: MATURITY_COLORS[Math.round(dim.score)] }}
                     >
-                      {dim.score} — {dim.level}
+                      {dim.score}: {dim.level}
                     </span>
                   </div>
                   <p className="text-xs text-teal-muted/60 leading-relaxed mb-3">{dim.description}</p>
@@ -936,7 +936,7 @@ export default function DiagnosticPage() {
               ))}
             </div>
 
-            {/* Right column — 2 cols */}
+            {/* Right column: 2 cols */}
             <div className="lg:col-span-2 space-y-5">
               {/* Strengths */}
               <div className="rounded-2xl border border-navy-mid bg-navy-deep/40 p-6">
@@ -951,7 +951,7 @@ export default function DiagnosticPage() {
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold"
                       style={{ backgroundColor: `${MATURITY_COLORS[Math.round(dim.score)]}15`, color: MATURITY_COLORS[Math.round(dim.score)] }}
                     >
-                      {dim.score} — {dim.level}
+                      {dim.score}: {dim.level}
                     </span>
                   </div>
                 ))}
@@ -964,7 +964,7 @@ export default function DiagnosticPage() {
                   Book a free 90-minute Problem Session with our team. We will dive deeper into your priority areas and map out a concrete improvement plan.
                 </p>
                 <div className="text-[11px] text-teal-muted/40 mb-4">
-                  {L('Typical ROI: CHF 25K engagement recovers CHF 500K–2M in margin (20–80x return)')}
+                  {L('Typical ROI: CHF 25K engagement recovers CHF 500K to 2M in margin (20 to 80x return)')}
                 </div>
                 <a
                   href={CALENDLY}
@@ -1024,7 +1024,7 @@ export default function DiagnosticPage() {
 
           {/* Footer */}
           <div className="text-center pt-5 border-t border-navy-mid/40">
-            <div className="text-xs text-teal-muted/40">OpsFlow Advisory — Smarter supply chains. Built by people. AI-assisted.</div>
+            <div className="text-xs text-teal-muted/40">OpsFlow Advisory · Smarter supply chains. Built by people. AI-assisted.</div>
             <div className="text-[10px] text-teal-muted/20 mt-1">opsflow-advisory.ch &middot; Nyon, Canton Vaud, Switzerland</div>
           </div>
         </div>

@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'S&OP Health Check — OpsFlow Advisory',
+  title: 'Free S&OP Self-Assessment | OpsFlow Advisory',
   description:
-    'Free S&OP maturity assessment. 32 questions across 8 dimensions — get a personalised maturity profile with actionable recommendations for your supply chain. Takes 12 minutes.',
+    'Free S&OP Self-Assessment: 32 questions across 8 dimensions, about 12 minutes. Get a personalized maturity profile with practical recommendations.',
+  alternates: { canonical: 'https://www.opsflow-advisory.ch/diagnostic' },
   openGraph: {
-    title: 'S&OP Health Check — OpsFlow Advisory',
+    title: 'Free S&OP Self-Assessment | OpsFlow Advisory',
     description:
-      'How mature is your S&OP process? Take our free 12-minute assessment and get a personalised maturity report.',
-    url: 'https://opsflow-advisory.ch/diagnostic',
+      'How mature is your S&OP process? Take the free S&OP Self-Assessment (about 12 minutes) and get a personalized maturity report.',
+    url: 'https://www.opsflow-advisory.ch/diagnostic',
     siteName: 'OpsFlow Advisory',
     type: 'website',
   },

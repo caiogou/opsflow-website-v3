@@ -9,7 +9,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     intro: 'Trois étapes. Des délais fixes. Aucune mission à durée indéterminée.',
     steps: [
       { num: '1', title: 'Session diagnostic gratuite', desc: 'Un échange structuré sur la réalité de votre supply chain. Vous repartez avec une vision claire de vos priorités, que nous travaillions ensemble ou non.', price: 'Gratuit — sans engagement' },
-      { num: '2', title: 'Rapid Assessment', desc: 'Diagnostic structuré en 2 semaines. Vos 3 priorités classées par impact sur le résultat. Un plan d’action de 90 jours prêt à exécuter. Une synthèse pour votre direction.', price: <>Dès <Money chf={8500} /> — prix fixe</> },
+      { num: '2', title: 'Supply Chain Health Check', desc: 'Diagnostic structuré en 2 semaines. Vos 3 priorités classées par impact sur le résultat. Un plan d’action de 90 jours prêt à exécuter. Une synthèse pour votre direction.', price: <>Dès <Money chf={8500} /> — prix fixe</> },
       { num: '3', title: 'Stratégie + suivi senior', desc: 'Nous construisons la stratégie et le plan avec vous. Un professionnel senior suit ensuite l’exécution : appels réguliers avec vos équipes, suivi des indicateurs et ajustement du plan pour rester sur la trajectoire. Sans équipe à demeure.', price: <><MoneyRange from={22000} to={80000} /> selon le périmètre</> },
     ],
   },
@@ -18,7 +18,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     intro: 'Drei Schritte. Feste Fristen. Keine Mandate mit offenem Ende.',
     steps: [
       { num: '1', title: 'Kostenlose Standortbestimmung', desc: 'Ein strukturiertes Gespräch über die Realität Ihrer Supply Chain. Sie gehen mit einem klaren Bild Ihrer Prioritäten heraus — ob wir zusammenarbeiten oder nicht.', price: 'Kostenlos — unverbindlich' },
-      { num: '2', title: 'Rapid Assessment', desc: 'Strukturierte Diagnose in 2 Wochen. Ihre 3 Prioritäten, nach Ergebniswirkung geordnet. Ein umsetzungsbereiter 90-Tage-Aktionsplan. Eine Zusammenfassung für Ihre Geschäftsleitung.', price: <>Ab <Money chf={8500} /> — Festpreis</> },
+      { num: '2', title: 'Supply Chain Health Check', desc: 'Strukturierte Diagnose in 2 Wochen. Ihre 3 Prioritäten, nach Ergebniswirkung geordnet. Ein umsetzungsbereiter 90-Tage-Aktionsplan. Eine Zusammenfassung für Ihre Geschäftsleitung.', price: <>Ab <Money chf={8500} /> — Festpreis</> },
       { num: '3', title: 'Strategie + Senior-Begleitung', desc: 'Wir entwickeln Strategie und Plan mit Ihnen. Danach begleitet eine erfahrene Fachperson die Umsetzung: regelmässige Calls mit Ihrem Team, Nachverfolgung der Kennzahlen und Anpassung des Plans, damit er auf Kurs bleibt. Ohne Team vor Ort.', price: <><MoneyRange from={22000} to={80000} /> je nach Umfang</> },
     ],
   },
@@ -27,7 +27,7 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
     intro: 'Three steps. Clear scope at each one. No open-ended engagements.',
     steps: [
       { num: '1', title: 'Free diagnostic session', desc: 'A structured 45-minute conversation about your supply chain reality. You walk away with clarity on your top priorities whether we work together or not.', price: 'Free, no commitment' },
-      { num: '2', title: 'Rapid Assessment', desc: 'Two-week structured diagnostic. Your top 3 priorities ranked by P&L impact. A 90-day action plan ready to execute. Executive summary for your leadership team.', price: <>Starting at <Money chf={8500} />, fixed price</> },
+      { num: '2', title: 'Supply Chain Health Check', desc: 'Two-week structured diagnostic. Your top 3 priorities ranked by P&L impact. A 90-day action plan ready to execute. Executive summary for your leadership team.', price: <>Starting at <Money chf={8500} />, fixed price</> },
       { num: '3', title: 'Strategy + senior follow-through', desc: 'We build the strategy and the plan with you. A senior practitioner then oversees execution: regular calls with your team, tracking the KPIs and adjusting the plan to keep it on track. No embedded team.', price: <><MoneyRange from={22000} to={80000} /> depending on scope</> },
     ],
   },

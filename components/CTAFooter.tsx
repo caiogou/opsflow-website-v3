@@ -22,7 +22,7 @@ const C: Record<Lang, {
   en: {
     ctaH2: 'Start with a free conversation.',
     ctaText: 'Structured thinking about your supply chain challenges. Honest perspectives on where the real value is.',
-    cta1: 'Book a free session', cta2: 'Take the S&OP Health Check',
+    cta1: 'Book a free session', cta2: 'Take the free S&OP Self-Assessment',
     fServices: 'Services', fHow: 'How it works', fRessources: 'Insights', fContact: 'Contact',
     fLine: '2026 OpsFlow Advisory · Nyon, Switzerland',
   },
@@ -44,6 +44,16 @@ export function CTA({ lang = 'fr' }: { lang?: Lang }) {
   )
 }
 
+const EN_FOOTER = [
+  { label: 'Solutions', href: '/en/services' },
+  { label: 'How we work', href: '/en/how-we-work' },
+  { label: 'Case studies', href: '/en/case-studies' },
+  { label: 'Who we help', href: '/en/who-we-help' },
+  { label: 'About', href: '/en/about' },
+  { label: 'Insights', href: '/en/insights' },
+  { label: 'Contact', href: '/en/contact' },
+]
+
 export function Footer({ lang = 'fr' }: { lang?: Lang }) {
   const t = C[lang]
   const base = lang === 'fr' ? '' : `/${lang}`
@@ -51,12 +61,20 @@ export function Footer({ lang = 'fr' }: { lang?: Lang }) {
     <footer className="bg-navy-deep border-t border-navy-mid py-8 px-6 md:py-10 md:px-8">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 md:gap-0">
         <span className="text-base font-bold text-white">OpsFlow Advisory</span>
+        {lang === 'en' ? (
+        <div className="flex flex-wrap justify-center gap-5 md:gap-7">
+          {EN_FOOTER.map((l) => (
+            <a key={l.href} href={l.href} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{l.label}</a>
+          ))}
+        </div>
+        ) : (
         <div className="flex flex-wrap justify-center gap-5 md:gap-7">
           <a href={`${base}/#services`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fServices}</a>
           <a href={`${base}/#how`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fHow}</a>
-          <a href={lang === 'en' ? '/en/insights' : `${base}/ressources`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fRessources}</a>
+          <a href={`${base}/ressources`} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fRessources}</a>
           <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{t.fContact}</a>
         </div>
+        )}
         <span className="text-xs text-slate-500 text-center">{t.fLine}</span>
       </div>
     </footer>

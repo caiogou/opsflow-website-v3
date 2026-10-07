@@ -36,7 +36,7 @@ const orgSchema = {
   knowsAbout: [
     'Supply Chain Management',
     'Sales and Operations Planning (S&OP)',
-    'Inventory Optimisation',
+    'Inventory Optimization',
     'Demand Planning',
     'Supply Risk Management',
     'Distribution Planning',

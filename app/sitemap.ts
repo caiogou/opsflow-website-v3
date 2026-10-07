@@ -21,6 +21,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/en`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/en/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/en/insights`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/en/how-we-work`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/en/case-studies`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/en/who-we-help`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/en/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/en/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
   ]
   const fr: MetadataRoute.Sitemap = [
     ...services.map((r) => ({ url: `${BASE}/services/${r.slug}`, lastModified: now, changeFrequency: 'monthly' as const, priority: 0.8 })),

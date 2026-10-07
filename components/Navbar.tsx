@@ -12,15 +12,31 @@ const LABELS: Record<Lang, { services: string; how: string; academy: string; pla
   en: { services: 'Services', how: 'How it works', academy: 'Academy', platform: 'Platform', ressources: 'Insights', diagnostic: 'Diagnostic', cta: 'Book a session', ctaShort: 'Book' },
 }
 
+// EN main menu (Behrad's structure, 07/10/2026). FR/DE menus unchanged.
+const EN_LINKS = [
+  { label: 'Solutions', href: '/en/services' },
+  { label: 'How we work', href: '/en/how-we-work' },
+  { label: 'Case studies', href: '/en/case-studies' },
+  { label: 'Who we help', href: '/en/who-we-help' },
+  { label: 'About', href: '/en/about' },
+  { label: 'Insights', href: '/en/insights' },
+]
+
 export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
   const t = LABELS[lang]
   const base = lang === 'fr' ? '' : `/${lang}`
-  const links = [
-    { label: t.services, href: `${base}/services` },
-    { label: t.how, href: `${base}/#how` },
-    { label: t.ressources, href: lang === 'en' ? '/en/insights' : `${base}/ressources` },
-    { label: t.diagnostic, href: `/diagnostic` },
-  ]
+  const links = lang === 'en'
+    ? EN_LINKS
+    : [
+        { label: t.services, href: `${base}/services` },
+        { label: t.how, href: `${base}/#how` },
+        { label: t.ressources, href: `${base}/ressources` },
+        { label: t.diagnostic, href: `/diagnostic` },
+      ]
+  const isEn = lang === 'en'
+  const cta = isEn
+    ? { href: '/en/contact', label: 'Talk to us', short: 'Talk to us', ext: {} }
+    : { href: CALENDLY, label: t.cta, short: t.ctaShort, ext: { target: '_blank', rel: 'noopener' } }
   return (
     <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
       <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
@@ -28,7 +44,7 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
           <LogoIcon size={34} />
           <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
         </a>
-        <div className="hidden md:flex items-center gap-5">
+        <div className={`hidden ${isEn ? 'lg:flex' : 'md:flex'} items-center gap-5`}>
           {links.map((l) => (
             <a key={l.label} href={l.href} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{l.label}</a>
           ))}
@@ -39,9 +55,9 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
             <span className="text-navy-mid">|</span>
             <a href="/en" className={`no-underline ${lang === 'en' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>EN</a>
           </div>
-          <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">{t.cta}</a>
+          <a href={cta.href} {...cta.ext} className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline whitespace-nowrap">{cta.label}</a>
         </div>
-        <a href={CALENDLY} target="_blank" rel="noopener" className="md:hidden bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline">{t.ctaShort}</a>
+        <a href={cta.href} {...cta.ext} className={`${isEn ? 'lg:hidden' : 'md:hidden'} bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline`}>{cta.short}</a>
       </div>
     </nav>
   )
