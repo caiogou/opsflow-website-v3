@@ -1,18 +1,18 @@
 'use client'
 
-import { LogoIcon } from './LogoIcon'
-
+import { useEffect, useRef, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { CALENDLY } from '@/lib/booking'
 
 type Lang = 'fr' | 'de' | 'en'
 
-const LABELS: Record<Lang, { services: string; how: string; academy: string; platform: string; ressources: string; diagnostic: string; cta: string; ctaShort: string }> = {
-  fr: { services: 'Services', how: 'Notre approche', academy: 'Academy', platform: 'Plateforme', ressources: 'Ressources', diagnostic: 'Diagnostic', cta: 'Réserver un échange', ctaShort: 'Échange' },
-  de: { services: 'Leistungen', how: 'Unser Ansatz', academy: 'Academy', platform: 'Plattform', ressources: 'Ressourcen', diagnostic: 'Diagnostik', cta: 'Termin buchen', ctaShort: 'Termin' },
-  en: { services: 'Services', how: 'How it works', academy: 'Academy', platform: 'Platform', ressources: 'Insights', diagnostic: 'Diagnostic', cta: 'Book a session', ctaShort: 'Book' },
+const LABELS: Record<Lang, { services: string; how: string; ressources: string; diagnostic: string; cta: string; menu: string; close: string }> = {
+  fr: { services: 'Services', how: 'Notre approche', ressources: 'Ressources', diagnostic: 'Diagnostic', cta: 'Réserver un échange', menu: 'Menu', close: 'Fermer' },
+  de: { services: 'Leistungen', how: 'Unser Ansatz', ressources: 'Ressourcen', diagnostic: 'Diagnostik', cta: 'Termin buchen', menu: 'Menü', close: 'Schliessen' },
+  en: { services: 'Solutions', how: 'How we work', ressources: 'Insights', diagnostic: 'Diagnostic', cta: 'Talk to us', menu: 'Menu', close: 'Close' },
 }
 
-// EN main menu (Behrad's structure, 07/10/2026). FR/DE menus unchanged.
+// EN main menu (Behrad's structure, 07/10/2026). FR/DE keep their own menus.
 const EN_LINKS = [
   { label: 'Solutions', href: '/en/services' },
   { label: 'How we work', href: '/en/how-we-work' },
@@ -22,9 +22,23 @@ const EN_LINKS = [
   { label: 'Insights', href: '/en/insights' },
 ]
 
+export function Logo() {
+  return (
+    <svg width="40" height="40" viewBox="0 0 46 46" fill="none" stroke="#2fd3bd" strokeWidth="2.4" aria-hidden="true">
+      <circle cx="23" cy="10" r="6" /><circle cx="10" cy="36" r="6" /><circle cx="36" cy="36" r="6" />
+      <path d="M19 15 12 30M27 15l7 15M16 36h14" />
+    </svg>
+  )
+}
+
+/** Dark site navigation. Desktop menu above 980px, a button-driven menu panel below. */
 export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
   const t = LABELS[lang]
   const base = lang === 'fr' ? '' : `/${lang}`
+  const path = usePathname() || ''
+  const [open, setOpen] = useState(false)
+  const box = useRef<HTMLDivElement>(null)
+
   const links = lang === 'en'
     ? EN_LINKS
     : [
@@ -33,32 +47,56 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
         { label: t.ressources, href: `${base}/ressources` },
         { label: t.diagnostic, href: `/diagnostic` },
       ]
-  const isEn = lang === 'en'
-  const cta = isEn
-    ? { href: '/en/contact', label: 'Talk to us', short: 'Talk to us', ext: {} }
-    : { href: CALENDLY, label: t.cta, short: t.ctaShort, ext: { target: '_blank', rel: 'noopener' } }
+  const cta = lang === 'en'
+    ? { href: '/en/contact', ext: {} }
+    : { href: CALENDLY, ext: { target: '_blank', rel: 'noopener' } }
+  const isOn = (href: string) => !href.includes('#') && href !== '/' && (path === href || path.startsWith(href + '/'))
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    const onClick = (e: MouseEvent) => { if (box.current && !box.current.contains(e.target as Node)) setOpen(false) }
+    document.addEventListener('keydown', onKey)
+    document.addEventListener('click', onClick)
+    return () => { document.removeEventListener('keydown', onKey); document.removeEventListener('click', onClick) }
+  }, [open])
+
+  const langs = (
+    <>
+      <a href="/" className={lang === 'fr' ? 'on' : ''} hrefLang="fr">FR</a>
+      <a href="/de" className={lang === 'de' ? 'on' : ''} hrefLang="de">DE</a>
+      <a href="/en" className={lang === 'en' ? 'on' : ''} hrefLang="en">EN</a>
+    </>
+  )
+
   return (
-    <nav className="bg-navy sticky top-0 z-50 border-b border-navy-mid">
-      <div className="max-w-6xl mx-auto px-6 md:px-8 h-16 flex items-center justify-between">
-        <a href={base || '/'} className="flex items-center gap-3 no-underline shrink-0 mr-6">
-          <LogoIcon size={34} />
-          <span className="text-base md:text-lg font-bold text-white tracking-tight">OpsFlow Advisory</span>
+    <div className="wrap site-nav">
+      <nav className="nav" aria-label="Main">
+        <a className="logo" href={base || '/'} aria-label="OpsFlow Advisory home">
+          <Logo />
+          <span>OpsFlow <b>Advisory</b></span>
         </a>
-        <div className={`hidden ${isEn ? 'lg:flex' : 'md:flex'} items-center gap-5`}>
+        <div className="menu">
           {links.map((l) => (
-            <a key={l.label} href={l.href} className="text-teal-muted text-sm hover:text-white transition-colors no-underline">{l.label}</a>
+            <a key={l.href} href={l.href} className={isOn(l.href) ? 'on' : undefined} aria-current={isOn(l.href) ? 'page' : undefined}>{l.label}</a>
           ))}
-          <div className="flex items-center gap-2 text-xs">
-            <a href="/" className={`no-underline ${lang === 'fr' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>FR</a>
-            <span className="text-navy-mid">|</span>
-            <a href="/de" className={`no-underline ${lang === 'de' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>DE</a>
-            <span className="text-navy-mid">|</span>
-            <a href="/en" className={`no-underline ${lang === 'en' ? 'text-white font-bold' : 'text-teal-muted hover:text-white'}`}>EN</a>
-          </div>
-          <a href={cta.href} {...cta.ext} className="bg-teal text-white px-5 py-2 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline whitespace-nowrap">{cta.label}</a>
+          {lang !== 'en' && <span className="langs" aria-label="Language">{langs}</span>}
         </div>
-        <a href={cta.href} {...cta.ext} className={`${isEn ? 'lg:hidden' : 'md:hidden'} bg-teal text-white px-4 py-2 rounded text-xs font-semibold hover:bg-teal-light transition-colors no-underline`}>{cta.short}</a>
-      </div>
-    </nav>
+        <div className="mnav" ref={box}>
+          <button type="button" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
+            {open ? t.close : t.menu}
+          </button>
+          {open && (
+            <div className="mpanel" id="mobile-menu">
+              {links.map((l) => (
+                <a key={l.href} href={l.href} className={isOn(l.href) ? 'on' : undefined} aria-current={isOn(l.href) ? 'page' : undefined} onClick={() => setOpen(false)}>{l.label}</a>
+              ))}
+              <div className="mlangs">{langs}</div>
+            </div>
+          )}
+        </div>
+        <a className="cta" href={cta.href} {...cta.ext}>{t.cta}</a>
+      </nav>
+    </div>
   )
 }

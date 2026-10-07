@@ -1,10 +1,13 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
+import { Article } from '@/components/dark/Article'
+import { CTA } from '@/components/CTAFooter'
 import { ressourcesEn, getRessourceEn } from '@/lib/ressources_en'
+import { INSIGHT_TOPIC, topicOf } from '@/lib/insights_meta'
+import { insightBg } from '@/lib/bg'
+
 
 const BASE = 'https://www.opsflow-advisory.ch'
-import { CALENDLY } from '@/lib/booking'
 
 export function generateStaticParams() {
   return ressourcesEn.map((r) => ({ slug: r.slug }))
@@ -17,44 +20,64 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   return { title: r.title, description: r.description, alternates: { canonical: url }, openGraph: { title: r.title, description: r.description, url, type: 'website' } }
 }
 
+// The solution most related to each topic.
+const SOLUTION_FOR: Record<string, { label: string; href: string }[]> = {
+  sop: [{ label: 'S&OP Consulting', href: '/en/services/s-op-consulting' }, { label: 'Supply Chain Audit', href: '/en/services/supply-chain-audit' }],
+  planning: [{ label: 'S&OP Consulting', href: '/en/services/s-op-consulting' }, { label: 'Inventory Optimization', href: '/en/services/inventory-optimization' }],
+  inventory: [{ label: 'Inventory Optimization', href: '/en/services/inventory-optimization' }, { label: 'Distribution Planning', href: '/en/services/distribution-planning' }],
+  suppliers: [{ label: 'Supply Chain Risk Management', href: '/en/services/supply-chain-risk-management' }, { label: 'Inventory Optimization', href: '/en/services/inventory-optimization' }],
+  operations: [{ label: 'Supply Chain Audit', href: '/en/services/supply-chain-audit' }, { label: 'Distribution Planning', href: '/en/services/distribution-planning' }],
+}
+
 export default function Page({ params }: { params: { slug: string } }) {
   const r = getRessourceEn(params.slug)
   if (!r) notFound()
   const url = `${BASE}/en/insights/${r.slug}`
-  const others = ressourcesEn.filter((x) => x.slug !== r.slug)
+  const topic = topicOf(r.slug)
+  const same = ressourcesEn.filter((x) => x.slug !== r.slug && INSIGHT_TOPIC[x.slug] === topic.id)
+  const more = [...same, ...ressourcesEn.filter((x) => x.slug !== r.slug && INSIGHT_TOPIC[x.slug] !== topic.id)].slice(0, 3)
   const main = { '@context': 'https://schema.org', '@type': 'Article', headline: r.h1, description: r.description, inLanguage: 'en', mainEntityOfPage: url, url }
-  const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: r.faq.map((f) => ({ '@type':'Question', name: f.q, acceptedAnswer: { '@type':'Answer', text: f.a } })) }
+  const faq = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: r.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }
+  const crumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE}/en` },
+      { '@type': 'ListItem', position: 2, name: 'Insights', item: `${BASE}/en/insights` },
+      { '@type': 'ListItem', position: 3, name: r.h1, item: url },
+    ],
+  }
   return (
     <>
-      <Navbar lang="en" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(main) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faq) }} />
-      <style>{`
-        .ressource-body h1{font-size:2rem;line-height:1.2;font-weight:600;color:#0f2a4a;margin:0 0 1.25rem}
-        .ressource-body h2{font-size:1.4rem;font-weight:700;color:#0f2a4a;margin:2rem 0 .75rem}
-        .ressource-body h3{font-size:1.05rem;font-weight:700;color:#1a9e8f;margin:1.25rem 0 .35rem}
-        .ressource-body p{color:#374151;line-height:1.75;margin:0 0 1rem}
-        .ressource-body ul{margin:0 0 1rem 1.25rem;list-style:disc}
-        .ressource-body li{color:#374151;line-height:1.7;margin:.25rem 0}
-        .ressource-body a{color:#1a9e8f;text-decoration:underline}
-`}</style>
-      <main className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-        <p className="text-xs font-bold tracking-widest uppercase mb-6"><a href="/en/insights" className="no-underline text-teal">Insights</a></p>
-        <article className="ressource-body" dangerouslySetInnerHTML={{ __html: r.bodyHtml }} />
-        <div className="mt-10 flex flex-wrap items-center gap-5">
-          <a href={CALENDLY} target="_blank" rel="noopener" className="bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">Book a session</a>
-          <a href="/diagnostic" className="text-sm font-semibold text-navy underline">Free S&OP Self-Assessment</a>
-        </div>
-        <section className="mt-14 border-t border-gray-200 pt-8">
-          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Also worth reading</p>
-          <ul className="space-y-2 list-none pl-0">
-            {others.map((o) => (
-              <li key={o.slug}><a href={`/en/insights/${o.slug}`} className="text-navy hover:text-teal no-underline">{o.h1}</a></li>
-            ))}
-            <li className="pt-2"><a href="/en/services" className="text-teal no-underline text-sm font-semibold">→ Our services</a></li>
-          </ul>
-        </section>
-      </main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbLd) }} />
+      <Article bg={insightBg(params.slug)}
+        lang="en"
+        crumbs={[{ label: 'Home', href: '/en' }, { label: 'Insights', href: '/en/insights' }, { label: topic.label }]}
+        kick={topic.label}
+        title={r.h1}
+        lead={r.description}
+        html={r.bodyHtml}
+        faq={r.faq}
+        aside={
+          <div className="pn others">
+            <h5>Related solutions</h5>
+            {SOLUTION_FOR[topic.id].map((s) => <a key={s.href} href={s.href}>{s.label} <span aria-hidden="true">›</span></a>)}
+            <a href="/en/insights">All insights <span aria-hidden="true">›</span></a>
+          </div>
+        }
+        after={<>
+          <section className="wrap sec">
+            <div className="kick">Insights</div>
+            <h2>Also worth reading.</h2>
+            <div className="rel">
+              {more.map((o) => <a key={o.slug} href={`/en/insights/${o.slug}`}><span>{topicOf(o.slug).label}</span><b>{o.title}</b></a>)}
+            </div>
+          </section>
+          <CTA lang="en" h2="Bring your figures. Leave with a plain answer." text="A free 45-minute session with a senior practitioner. Free, no commitment." />
+        </>}
+      />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
+import { Band } from '@/components/dark/Band'
+import { CTA, Footer } from '@/components/CTAFooter'
 import { ressources } from '@/lib/ressources'
 
 export const metadata: Metadata = {
@@ -12,23 +13,28 @@ export const metadata: Metadata = {
 export default function Hub() {
   return (
     <>
-      <Navbar />
-      <main className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-        <h1 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4">Ressources</h1>
-        <p className="text-lg text-gray-600 leading-relaxed mb-10">
-          Des fiches courtes et concrètes sur le S&amp;OP, les processus et la supply chain, pensées pour les PME.
-        </p>
-        <ul className="space-y-5 list-none pl-0">
-          {ressources.map((r) => (
-            <li key={r.slug} className="border-b border-gray-100 pb-5">
-              <a href={`/ressources/${r.slug}`} className="no-underline block">
-                <h2 className="text-xl font-bold text-navy hover:text-teal">{r.h1}</h2>
-                <p className="text-sm text-gray-500 mt-1">{r.description}</p>
+      <Band bg="insights"
+        lang="fr"
+        crumbs={[{ label: 'Accueil', href: '/' }, { label: 'Ressources' }]}
+        kick="Ressources"
+        title="Ressources"
+        lead="Des fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les PME."
+      />
+      <main id="main">
+        <section className="wrap sec" style={{ paddingTop: 32 }}>
+          <div className="cgrid g3">
+            {ressources.map((r) => (
+              <a key={r.slug} className="card" href={`/ressources/${r.slug}`}>
+                <h2 style={{ fontSize: 19, lineHeight: 1.3, fontWeight: 700, marginTop: 0, letterSpacing: '-.01em' }}>{r.h1}</h2>
+                <p>{r.description}</p>
+                <span className="more">Lire la fiche <span aria-hidden="true">→</span></span>
               </a>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        </section>
+        <CTA lang="fr" />
       </main>
+      <Footer lang="fr" />
     </>
   )
 }

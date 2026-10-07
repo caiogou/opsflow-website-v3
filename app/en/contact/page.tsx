@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/CTAFooter'
+import { CTA, Footer } from '@/components/CTAFooter'
+import { Band, Arrow } from '@/components/dark/Band'
 import { CALENDLY } from '@/lib/booking'
-import { CONTACT as T, CONTACT_EMAIL, LOCATION, PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
+import { CONTACT_EMAIL, LOCATION, PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
 
 const META = PAGE_META.contact
 export const metadata: Metadata = pageMetadata(META)
@@ -20,40 +20,57 @@ export default function Page() {
   }
   return (
     <>
-      <Navbar lang="en" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd(META)) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactLd) }} />
-      <main className="py-14 px-6 md:py-20 md:px-8">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div className="md:col-span-2">
-            <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{T.rubric}</p>
-            <h1 className="font-serif text-3xl md:text-5xl font-normal text-navy mb-5 leading-tight">{T.h1}</h1>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-xl mb-8">{T.intro}</p>
-            <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="inline-block bg-teal text-white px-7 py-3 rounded text-sm font-semibold hover:bg-teal-light transition-colors no-underline">{T.bookCta}</a>
-            <dl className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div>
-                <dt className="text-[11px] font-bold tracking-widest text-teal uppercase mb-1">{T.emailLabel}</dt>
-                <dd className="ml-0"><a href={`mailto:${CONTACT_EMAIL}`} className="text-navy font-semibold underline">{CONTACT_EMAIL}</a></dd>
+      <Band bg="contact"
+        crumbs={[{ label: 'Home', href: '/en' }, { label: 'Contact' }]}
+        kick="Contact"
+        title={<>Let&apos;s talk about your <em>supply chain challenges.</em></>}
+        lead="Book a free 45-minute session with a senior practitioner, or email us."
+        actions={<a className="btn" href={CALENDLY} target="_blank" rel="noopener">Book a free 45-minute session <Arrow /></a>}
+      />
+      <main id="main">
+        <section className="wrap sec">
+          <div className="ctc">
+            <div>
+              <div className="kick">Talk to us</div>
+              <h2>Tell us what is <em>slowing you down.</em></h2>
+              <p className="intro">The first conversation is a free 45-minute session about your supply chain, with a senior practitioner. Free, no commitment. Pick a time that suits you, or write to us and we reply by email, only about your request.</p>
+              <div className="btns">
+                <a className="btn" href={CALENDLY} target="_blank" rel="noopener">Pick a time for your free session <Arrow /></a>
+                <a className="btn2" href={`mailto:${CONTACT_EMAIL}`}>Email {CONTACT_EMAIL} ›</a>
               </div>
-              <div>
-                <dt className="text-[11px] font-bold tracking-widest text-teal uppercase mb-1">{T.locationLabel}</dt>
-                <dd className="ml-0 text-navy font-semibold">{LOCATION}</dd>
+              <div className="steps mini" style={{ marginTop: 36 }}>
+                <div className="pn"><div className="n">1</div><h3>Pick a time</h3><p>Choose a 45-minute slot in the calendar. No preparation needed.</p></div>
+                <div className="pn"><div className="n">2</div><h3>Bring your figures</h3><p>Recent figures help, if you have them. We look at your situation with you.</p></div>
+                <div className="pn"><div className="n">3</div><h3>A plain answer</h3><p>You leave with your top priorities clear, whether we work together or not.</p></div>
               </div>
-            </dl>
+            </div>
+            <aside className="side">
+              <div className="pn">
+                <h4>Contact details</h4>
+                <ul className="dets">
+                  <li><b>Email</b><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
+                  <li><b>Location</b>{LOCATION}</li>
+                  <li><b>Languages</b>English, French and German</li>
+                </ul>
+              </div>
+              <div className="pn">
+                <div className="kick">Supply Chain Health Check</div>
+                <h3>Prefer to start with a Supply Chain Health Check?</h3>
+                <p>In two weeks we assess your planning, inventory and operational setup and give you a prioritized roadmap. From CHF 8,500.</p>
+                <div className="btns" style={{ marginTop: 16 }}><a className="btn" href="/en/services/supply-chain-audit" style={{ fontSize: 15 }}>About the Health Check <Arrow /></a></div>
+                <p style={{ fontSize: 14 }}>Not ready to talk yet? Take the <a href="/diagnostic" style={{ color: 'var(--teal)', borderBottom: '1px solid var(--line2)' }}>Free S&amp;OP Self-Assessment</a>: 32 questions, about 12 minutes.</p>
+              </div>
+            </aside>
           </div>
-          <aside className="space-y-6">
-            <div className="rounded-lg border border-teal/30 bg-teal-pale/30 p-6">
-              <h2 className="text-lg font-bold text-navy mb-2">{T.healthCheck.h2}</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">{T.healthCheck.text}</p>
-              <a href={T.healthCheck.href} className="text-sm font-semibold text-teal no-underline hover:underline">{T.healthCheck.link} →</a>
-            </div>
-            <div className="rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-navy mb-2">{T.selfAssessment.h2}</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">{T.selfAssessment.text}</p>
-              <a href="/diagnostic" className="text-sm font-semibold text-teal no-underline hover:underline">{T.selfAssessment.cta} →</a>
-            </div>
-          </aside>
-        </div>
+        </section>
+        <CTA
+          lang="en"
+          h2="Rather talk first?"
+          text="Book a free 45-minute session with a senior practitioner. Free, no commitment."
+          secondary={null}
+        />
       </main>
       <Footer lang="en" />
     </>

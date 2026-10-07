@@ -1,45 +1,81 @@
 import type { Metadata } from 'next'
-import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/CTAFooter'
+import { Footer, CTA } from '@/components/CTAFooter'
+import { Band, Arrow } from '@/components/dark/Band'
 import { CALENDLY } from '@/lib/booking'
-import { servicesEn } from '@/lib/services_en'
-import { PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
+import { BASE, PAGE_META, breadcrumbLd, pageMetadata } from '@/lib/pages_en'
 
 const META = PAGE_META.solutions
 export const metadata: Metadata = pageMetadata(META)
 
+const SOLUTIONS = [
+  { slug: 's-op-consulting', tag: 'Solution 01', name: 'S&OP Consulting', out: 'Replace decisions made under pressure with prepared decisions that hold.', ticks: ['One shared plan for sales, operations and finance, signed off by leadership', 'Fewer stockouts alongside unsold goods, fewer last-minute decisions', 'A cycle your team runs without depending on us'] },
+  { slug: 'inventory-optimization', tag: 'Solution 02', name: 'Inventory Optimization', out: 'Less stock, better service: free up working capital without hurting service.', ticks: ['Cash freed from slow-moving stock', 'Safety stocks recalculated on real data, SKU by SKU', 'Service strengthened where it was lacking'] },
+  { slug: 'supply-chain-risk-management', tag: 'Solution 03', name: 'Supply Chain Risk Management', out: 'See supply disruptions coming instead of suffering them.', ticks: ['Critical dependencies on suppliers, materials and regions made visible', 'Risks ranked by impact and probability', 'Targeted countermeasures and early-warning indicators where they matter'] },
+  { slug: 'distribution-planning', tag: 'Solution 04', name: 'Distribution Planning', out: 'Serve every location at the right service level and the right cost.', ticks: ['No more out-of-stock stores alongside overflowing warehouses', 'Replenishment rules consistent with your target service level', 'An explicit trade-off between transport cost, stock and service'] },
+  { slug: 'supply-chain-audit', tag: 'Starting point', name: 'Supply Chain Audit', out: 'Know where to act first, in two weeks, before you invest.', ticks: ['Top 3 priorities ranked by P&L impact', 'A 90-day plan and an executive summary for leadership', 'Delivered as the Supply Chain Health Check: two weeks, from CHF 8,500'] },
+]
+
 export default function Hub() {
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'OpsFlow supply chain solutions',
+    itemListElement: SOLUTIONS.map((s, i) => ({ '@type': 'ListItem', position: i + 1, name: s.name, url: `${BASE}/en/services/${s.slug}` })),
+  }
   return (
     <>
-      <Navbar lang="en" />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd(META)) }} />
-      <main>
-        <section className="max-w-3xl mx-auto px-6 md:px-8 py-14 md:py-20">
-          <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">Solutions</p>
-          <h1 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4">Supply Chain Solutions for Growing SMEs</h1>
-          <p className="text-lg text-gray-600 leading-relaxed mb-4">Clearly scoped, senior-led engagements across S&OP/IBP, supply planning, order management and logistics.</p>
-          <p className="text-base text-gray-600 leading-relaxed mb-10">Each solution starts from your own data and ends with a plan your team can run. A senior practitioner follows the execution month by month. Embedded leadership, not an embedded team.</p>
-          <ul className="space-y-5 list-none pl-0">
-            {servicesEn.map((r) => (
-              <li key={r.slug} className="border-b border-gray-100 pb-5">
-                <a href={`/en/services/${r.slug}`} className="no-underline block">
-                  <h2 className="text-xl font-bold text-navy hover:text-teal">{r.h1}</h2>
-                  <p className="text-sm text-gray-500 mt-1">{r.description}</p>
-                </a>
-              </li>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }} />
+      <Band bg="solutions"
+        crumbs={[{ label: 'Home', href: '/en' }, { label: 'Solutions' }]}
+        kick="Solutions"
+        title={<>Practical solutions for <em>real supply chain challenges.</em></>}
+        lead="For growing manufacturing and distribution SMEs across Europe: we fix how planning, inventory and operations work together, with your team."
+        actions={<>
+          <a className="btn" href={CALENDLY} target="_blank" rel="noopener">Book a free 45-minute session <Arrow /></a>
+          <a className="btn2" href="#all">See the five solutions ›</a>
+        </>}
+        aside={
+          <div className="pn" aria-label="Our scope">
+            <h4>What we work on</h4>
+            <ul className="plist">
+              <li><b>1</b><div><strong>S&amp;OP/IBP</strong>One plan for sales, operations and finance</div></li>
+              <li><b>2</b><div><strong>Supply planning</strong>Forecasts, inventory and replenishment</div></li>
+              <li><b>3</b><div><strong>Order management</strong>Promises your operations can keep</div></li>
+              <li><b>4</b><div><strong>Logistics</strong>Distribution at the right cost and service</div></li>
+            </ul>
+          </div>
+        }
+      />
+      <main id="main">
+        <section className="wrap sec" id="all">
+          <div className="kick">Our solutions</div>
+          <h2>Five solutions, <em>one goal:</em> decisions that hold.</h2>
+          <p className="intro">Our scope is S&amp;OP/IBP, supply planning, order management and logistics. Each solution starts from your real situation and is sized to your scale.</p>
+          <div className="cgrid g3">
+            {SOLUTIONS.map((s) => (
+              <a key={s.slug} className="card svc" href={`/en/services/${s.slug}`}>
+                <span className="tag">{s.tag}</span>
+                <h3>{s.name}</h3>
+                <p className="out">{s.out}</p>
+                <ul className="ticks">{s.ticks.map((t) => <li key={t}>{t}</li>)}</ul>
+                <span className="more">Explore {s.name} <Arrow /></span>
+              </a>
             ))}
-          </ul>
-        </section>
-        <section className="py-14 px-6 md:py-16 md:px-8 bg-teal text-center">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="font-serif text-2xl md:text-3xl font-normal text-white mb-4">Not sure which solution is right for you?</h2>
-            <p className="text-base text-emerald-50 leading-relaxed mb-8">Start with a free 45-minute session. We look at your situation together and tell you where we would start. Free, no commitment.</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={CALENDLY} target="_blank" rel="noopener noreferrer" className="inline-block bg-white text-navy px-8 py-4 rounded text-sm font-bold hover:opacity-90 transition-opacity no-underline">Book a free session</a>
-              <a href="/en/how-we-work" className="inline-block bg-transparent text-white border-2 border-white px-8 py-4 rounded text-sm font-bold hover:bg-white/10 transition-colors no-underline">See how we work</a>
+            <div className="card" style={{ borderStyle: 'dashed' }}>
+              <span className="tag">How we engage</span>
+              <h3>From a free session to senior follow-through</h3>
+              <p>Every engagement follows the same three steps. You decide at each one whether to go further.</p>
+              <a className="more" href="/en/how-we-work">See how we work <Arrow /></a>
             </div>
           </div>
         </section>
+        <CTA
+          lang="en"
+          kick="Not sure?"
+          h2="Not sure which solution is right for you?"
+          text="Start with a free 45-minute session. We look at your situation with you and tell you plainly where to begin. Free, no commitment."
+        />
       </main>
       <Footer lang="en" />
     </>

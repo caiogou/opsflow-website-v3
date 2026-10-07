@@ -36,19 +36,19 @@ const C: Record<Lang, { rubric: string; h2a: string; h2b: string; intro: string;
 export function Approach({ lang = 'fr' }: { lang?: Lang }) {
   const t = C[lang]
   return (
-    <section id="approach" className="py-16 px-6 md:py-24 md:px-8 bg-white">
+    <section id="approach" className="py-16 px-6 md:py-24 md:px-8 bg-dk-bg">
       <div className="max-w-6xl mx-auto">
-        <p className="text-xs font-bold tracking-widest text-teal uppercase mb-4">{t.rubric}</p>
-        <h2 className="font-serif text-3xl md:text-4xl font-normal text-navy mb-4 leading-tight">{t.h2a}<br />{t.h2b}</h2>
-        <p className="text-base text-gray-500 leading-relaxed max-w-2xl mb-10 md:mb-14">{t.intro}</p>
+        <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-4">{t.rubric}</p>
+        <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-dk-ink mb-4 leading-tight">{t.h2a}<br />{t.h2b}</h2>
+        <p className="text-base text-dk-body leading-relaxed max-w-2xl mb-10 md:mb-14">{t.intro}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {t.cols.map((c) => (
-            <div key={c.tag} className="rounded-lg border border-gray-200 p-9 hover:border-teal transition-colors">
-              <p className="text-xs font-bold tracking-widest text-teal uppercase mb-3">{c.tag}</p>
-              <h3 className="text-xl font-bold text-navy mb-5">{c.title}</h3>
+            <div key={c.tag} className="rounded-lg border border-dk-line p-9 hover:border-dk-teal transition-colors">
+              <p className="text-xs font-bold tracking-widest text-dk-teal uppercase mb-3">{c.tag}</p>
+              <h3 className="text-xl font-bold text-dk-ink mb-5">{c.title}</h3>
               <ul className="space-y-2">
                 {c.points.map((p) => (
-                  <li key={p} className="text-sm text-gray-600 flex gap-2"><span className="text-teal">✓</span>{p}</li>
+                  <li key={p} className="text-sm text-dk-body flex gap-2"><span className="text-dk-teal">✓</span>{p}</li>
                 ))}
               </ul>
             </div>
@@ -56,7 +56,7 @@ export function Approach({ lang = 'fr' }: { lang?: Lang }) {
         </div>
         <div className="flex flex-wrap gap-3">
           {t.vs.map((v) => (
-            <span key={v} className="bg-teal-pale text-emerald-800 text-xs px-3 py-1.5 rounded-full font-medium">{v}</span>
+            <span key={v} className="bg-dk-teal/10 text-dk-teal2 border border-dk-line2 text-xs px-3 py-1.5 rounded-full font-medium">{v}</span>
           ))}
         </div>
       </div>
