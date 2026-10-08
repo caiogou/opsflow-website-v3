@@ -4,9 +4,9 @@ import { CTA, Footer } from '@/components/CTAFooter'
 import { ressources } from '@/lib/ressources'
 
 export const metadata: Metadata = {
-  title: 'Ressources — supply chain et processus pour PME',
+  title: 'Ressources — supply chain et processus',
   description:
-    'Fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les PME romandes : définitions, méthodes et repères.',
+    'Fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les entreprises : définitions, méthodes et repères.',
   alternates: { canonical: 'https://www.opsflow-advisory.ch/ressources' },
 }
 
@@ -18,7 +18,7 @@ export default function Hub() {
         crumbs={[{ label: 'Accueil', href: '/' }, { label: 'Ressources' }]}
         kick="Ressources"
         title="Ressources"
-        lead="Des fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les PME."
+        lead="Des fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les entreprises."
       />
       <main id="main">
         <section className="wrap sec" style={{ paddingTop: 32 }}>

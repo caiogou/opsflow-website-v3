@@ -692,7 +692,7 @@ export default function InventoryDiagnostic() {
           </p>
           {CTA.showInvestment ? (
             <p className="text-xs text-teal-muted/40 mb-6">
-              Investment: {COMPANY.currency} 22-32K &middot; Duration: 4-6 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 27000)}x
+              Duration: 4-6 weeks
             </p>
           ) : <div className="mb-6" />}
           <div className="flex flex-col sm:flex-row gap-3 justify-center no-print">

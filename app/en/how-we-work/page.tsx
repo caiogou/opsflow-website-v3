@@ -10,13 +10,13 @@ export const metadata: Metadata = pageMetadata(META)
 
 const STEPS = [
   { n: '1', title: 'Free 45-minute session', price: 'Free, no commitment', what: 'A structured conversation with a senior practitioner about your supply chain reality. Bring your recent figures.', get: 'Your top priorities clear, and a plain answer on whether going further is worth it now.', dur: '45 minutes' },
-  { n: '2', title: 'Supply Chain Health Check', price: 'From CHF 8,500, fixed price', what: 'We assess your planning, inventory and operational setup, from forecast to delivery, using your data and interviews with your teams.', get: 'Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary.', dur: 'Two weeks' },
-  { n: '3', title: 'Strategy and senior follow-through', price: 'CHF 22,000 to 80,000 depending on scope', what: 'We build the plan with you. A senior practitioner then oversees execution with your team, month by month.', get: 'A plan your team executes, with senior oversight until the results show.', dur: 'Month by month, sized to the scope agreed' },
+  { n: '2', title: 'Supply Chain Health Check', price: 'Two weeks, fixed price', what: 'We assess your planning, inventory and operational setup, from forecast to delivery, using your data and interviews with your teams.', get: 'Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary.', dur: 'Two weeks' },
+  { n: '3', title: 'Strategy and senior follow-through', price: 'Scoped to your needs', what: 'We build the plan with you. A senior practitioner then oversees execution with your team, month by month.', get: 'A plan your team executes, with senior oversight until the results show.', dur: 'Month by month, sized to the scope agreed' },
 ]
 
 const FAQ = [
   { q: 'What does the first session cost?', a: 'Nothing. The 45-minute session is free, with no commitment. You leave with your top priorities clear, whether we work together or not.' },
-  { q: 'What is the Supply Chain Health Check?', a: 'A two-week, fixed-price engagement, from CHF 8,500. You get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.' },
+  { q: 'What is the Supply Chain Health Check?', a: 'A two-week, fixed-price engagement. You get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.' },
   { q: 'Do you place a team inside our company?', a: 'No. Embedded leadership, not an embedded team: a senior practitioner oversees execution month by month, and your own team runs it.' },
   { q: 'How do you use AI?', a: 'AI speeds up data analysis, diagnostics and scenario modeling. Judgment and decisions stay with senior people: AI-assisted, senior-decided.' },
 ]
@@ -45,8 +45,8 @@ export default function Page() {
             <h4>The three steps at a glance</h4>
             <ul className="plist">
               <li><b>1</b><div><strong>Free 45-minute session</strong>Free, no commitment</div></li>
-              <li><b>2</b><div><strong>Supply Chain Health Check</strong>Two weeks, from CHF 8,500</div></li>
-              <li><b>3</b><div><strong>Strategy and senior follow-through</strong>CHF 22,000 to 80,000 depending on scope</div></li>
+              <li><b>2</b><div><strong>Supply Chain Health Check</strong>Two weeks, fixed price</div></li>
+              <li><b>3</b><div><strong>Strategy and senior follow-through</strong>Scoped to your needs</div></li>
             </ul>
           </div>
         }

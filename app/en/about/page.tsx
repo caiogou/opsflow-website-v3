@@ -34,7 +34,7 @@ export default function Page() {
               <li><b>1</b><div><strong>Based in</strong>Nyon, Switzerland</div></li>
               <li><b>2</b><div><strong>Languages</strong>English, French and German</div></li>
               <li><b>3</b><div><strong>Scope</strong>S&amp;OP/IBP, supply planning, order management, logistics</div></li>
-              <li><b>4</b><div><strong>Clients</strong>Growing manufacturing and distribution SMEs across Europe</div></li>
+              <li><b>4</b><div><strong>Clients</strong>Growing manufacturing and distribution companies across Europe</div></li>
             </ul>
           </div>
         }
@@ -42,10 +42,10 @@ export default function Page() {
       <main id="main">
         <section className="wrap sec">
           <div className="kick">Who we are</div>
-          <h2>A Swiss supply chain advisory <em>for growing SMEs.</em></h2>
+          <h2>A Swiss supply chain advisory <em>for growing companies.</em></h2>
           <div className="split" style={{ marginTop: 24 }}>
             <div>
-              <p>OpsFlow Advisory is a supply chain advisory based in Nyon, Switzerland. We help growing manufacturing and distribution SMEs across Europe with S&amp;OP/IBP, supply planning, order management and logistics.</p>
+              <p>OpsFlow Advisory is a supply chain advisory based in Nyon, Switzerland. We help growing manufacturing and distribution companies across Europe with S&amp;OP/IBP, supply planning, order management and logistics.</p>
               <p>We work in English, French and German. Our partners have worked as senior supply chain professionals; you can read what they delivered in our <a href="/en/case-studies" style={{ color: 'var(--teal)' }}>case studies</a>.</p>
             </div>
             <div style={{ display: 'grid', gap: 18 }}>

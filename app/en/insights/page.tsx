@@ -7,8 +7,8 @@ import { BASE } from '@/lib/pages_en'
 import { TOPICS, TOPIC_ORDER, topicOf } from '@/lib/insights_meta'
 
 export const metadata: Metadata = {
-  title: 'Insights: Supply Chain and Operations for SMEs',
-  description: 'Practical fact sheets on S&OP, processes and supply chain for SMEs: definitions, methods and guidance.',
+  title: 'Insights: Supply Chain and Operations',
+  description: 'Practical fact sheets on S&OP, processes and supply chain: definitions, methods and guidance.',
   alternates: { canonical: 'https://www.opsflow-advisory.ch/en/insights' },
 }
 
@@ -34,7 +34,7 @@ export default function Hub() {
         crumbs={[{ label: 'Home', href: '/en' }, { label: 'Insights' }]}
         kick="Insights"
         title={<>Practical insights for <em>better supply chains.</em></>}
-        lead="Short, practical articles on planning, inventory, S&OP/IBP, suppliers and operations, written for SME leaders and their teams."
+        lead="Short, practical articles on planning, inventory, S&OP/IBP, suppliers and operations, written for business leaders and their teams."
       />
       <main id="main">
         <section className="wrap sec" style={{ paddingTop: 32 }}>

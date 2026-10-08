@@ -4,7 +4,7 @@ import { CTA, Footer } from '@/components/CTAFooter'
 import { servicesDe } from '@/lib/services_de'
 
 export const metadata: Metadata = {
-  title: 'Leistungen — Supply-Chain-Beratung & S&OP für KMU',
+  title: 'Leistungen — Supply-Chain-Beratung & S&OP',
   description: 'Unsere Beratungsmandate: S&OP, Bestandsoptimierung, Risikomanagement, Distribution und Supply Chain Health Check.',
   alternates: { canonical: 'https://www.opsflow-advisory.ch/de/services' },
 }

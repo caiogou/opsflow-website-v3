@@ -12,7 +12,7 @@ const SOLUTIONS = [
   { slug: 'inventory-optimization', tag: 'Solution 02', name: 'Inventory Optimization', out: 'Less stock, better service: free up working capital without hurting service.', ticks: ['Cash freed from slow-moving stock', 'Safety stocks recalculated on real data, SKU by SKU', 'Service strengthened where it was lacking'] },
   { slug: 'supply-chain-risk-management', tag: 'Solution 03', name: 'Supply Chain Risk Management', out: 'See supply disruptions coming instead of suffering them.', ticks: ['Critical dependencies on suppliers, materials and regions made visible', 'Risks ranked by impact and probability', 'Targeted countermeasures and early-warning indicators where they matter'] },
   { slug: 'distribution-planning', tag: 'Solution 04', name: 'Distribution Planning', out: 'Serve every location at the right service level and the right cost.', ticks: ['No more out-of-stock stores alongside overflowing warehouses', 'Replenishment rules consistent with your target service level', 'An explicit trade-off between transport cost, stock and service'] },
-  { slug: 'supply-chain-audit', tag: 'Starting point', name: 'Supply Chain Audit', out: 'Know where to act first, in two weeks, before you invest.', ticks: ['Top 3 priorities ranked by P&L impact', 'A 90-day plan and an executive summary for leadership', 'Delivered as the Supply Chain Health Check: two weeks, from CHF 8,500'] },
+  { slug: 'supply-chain-audit', tag: 'Starting point', name: 'Supply Chain Audit', out: 'Know where to act first, in two weeks, before you invest.', ticks: ['Top 3 priorities ranked by P&L impact', 'A 90-day plan and an executive summary for leadership', 'Delivered as the Supply Chain Health Check: two weeks, fixed price'] },
 ]
 
 export default function Hub() {
@@ -30,7 +30,7 @@ export default function Hub() {
         crumbs={[{ label: 'Home', href: '/en' }, { label: 'Solutions' }]}
         kick="Solutions"
         title={<>Practical solutions for <em>real supply chain challenges.</em></>}
-        lead="For growing manufacturing and distribution SMEs across Europe: we fix how planning, inventory and operations work together, with your team."
+        lead="For growing manufacturing and distribution companies across Europe: we fix how planning, inventory and operations work together, with your team."
         actions={<>
           <a className="btn" href={CALENDLY} target="_blank" rel="noopener">Book a free 45-minute session <Arrow /></a>
           <a className="btn2" href="#all">See the five solutions ›</a>

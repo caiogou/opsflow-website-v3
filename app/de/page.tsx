@@ -12,7 +12,7 @@ import { CTA, Footer } from '@/components/CTAFooter'
 export const metadata: Metadata = {
   title: 'OpsFlow Advisory — Supply-Chain-Beratung & S&OP · Schweiz',
   description:
-    'Supply-Chain-Beratung für KMU in der Schweiz und EMEA: S&OP, Bestandsoptimierung, Risikomanagement und Distributionsplanung. Kostenlose Session.',
+    'Supply-Chain-Beratung für Unternehmen in der Schweiz und EMEA: S&OP, Bestandsoptimierung, Risikomanagement und Distributionsplanung. Kostenlose Session.',
   alternates: {
     canonical: 'https://www.opsflow-advisory.ch/de',
     languages: { fr: 'https://www.opsflow-advisory.ch/', de: 'https://www.opsflow-advisory.ch/de', en: 'https://www.opsflow-advisory.ch/en', 'x-default': 'https://www.opsflow-advisory.ch/en' },

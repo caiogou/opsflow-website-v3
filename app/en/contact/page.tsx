@@ -58,7 +58,7 @@ export default function Page() {
               <div className="pn">
                 <div className="kick">Supply Chain Health Check</div>
                 <h3>Prefer to start with a Supply Chain Health Check?</h3>
-                <p>In two weeks we assess your planning, inventory and operational setup and give you a prioritized roadmap. From CHF 8,500.</p>
+                <p>In two weeks we assess your planning, inventory and operational setup and give you a prioritized roadmap. Fixed price.</p>
                 <div className="btns" style={{ marginTop: 16 }}><a className="btn" href="/en/services/supply-chain-audit" style={{ fontSize: 15 }}>About the Health Check <Arrow /></a></div>
                 <p style={{ fontSize: 14 }}>Not ready to talk yet? Take the <a href="/diagnostic" style={{ color: 'var(--teal)', borderBottom: '1px solid var(--line2)' }}>Free S&amp;OP Self-Assessment</a>: 32 questions, about 12 minutes.</p>
               </div>
