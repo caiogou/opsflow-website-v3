@@ -27,8 +27,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 
 const STEPS = [
   { n: '1', h: 'Free 45-minute session', p: 'A structured conversation about your supply chain reality. You leave with your top priorities clear, whether we work together or not.', em: 'Free, no commitment' },
-  { n: '2', h: 'Supply Chain Health Check', p: 'Two-week structured diagnostic. Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary.', em: 'From CHF 8,500, fixed price' },
-  { n: '3', h: 'Strategy and senior follow-through', p: 'We build the plan with you. A senior practitioner oversees execution with your team, month by month.', em: 'CHF 22,000 to 80,000 depending on scope' },
+  { n: '2', h: 'Supply Chain Health Check', p: 'Two-week structured diagnostic. Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary.', em: 'Two weeks, fixed price' },
+  { n: '3', h: 'Strategy and senior follow-through', p: 'We build the plan with you. A senior practitioner oversees execution with your team, month by month.', em: 'Scoped to your needs' },
 ]
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -91,7 +91,7 @@ export default function Page({ params }: { params: { slug: string } }) {
                 <div className="kick">The paid offer</div>
                 <h3>Supply Chain Health Check</h3>
                 <p>Two weeks, fixed price. Top 3 priorities ranked by P&amp;L impact, a 90-day plan, an executive summary.</p>
-                <div className="price">From CHF 8,500 <small>fixed price</small></div>
+                <div className="price">Two weeks <small>fixed price</small></div>
               </div>
             )}
             <div className="pn others">

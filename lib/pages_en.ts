@@ -1,5 +1,5 @@
 // Content for the new EN site structure (Behrad's 9-page map, 07/10/2026).
-// Rules: no em/en dashes, US spelling, only the 3 approved prices, no invented numbers, people or clients.
+// Rules: no em/en dashes, US spelling, no prices (Cassio 08/10: do not show amounts), no invented numbers, people or clients.
 // Case copy is taken verbatim from qa/CASOS_BEHRAD_SECAO_HOME_07OUT.md (checked against the sources on 07/10/2026).
 
 export const BASE = 'https://www.opsflow-advisory.ch'
@@ -11,13 +11,13 @@ export type PageMeta = { path: string; title: string; description: string; name:
 export const PAGE_META: Record<'howWeWork' | 'caseStudies' | 'whoWeHelp' | 'about' | 'contact' | 'solutions', PageMeta> = {
   solutions: {
     path: '/en/services', name: 'Solutions',
-    title: 'Supply Chain Solutions for Growing SMEs | OpsFlow',
-    description: 'S&OP consulting, inventory optimization, supply chain risk, distribution planning and a two-week Supply Chain Health Check for growing SMEs.',
+    title: 'Supply Chain Solutions for Growing Companies | OpsFlow',
+    description: 'S&OP consulting, inventory optimization, supply chain risk, distribution planning and a two-week Supply Chain Health Check for growing companies.',
   },
   howWeWork: {
     path: '/en/how-we-work', name: 'How we work',
     title: 'How We Work: From First Session to Follow-Through',
-    description: 'Three steps: a free 45-minute session, a two-week Supply Chain Health Check from CHF 8,500, then strategy with senior follow-through.',
+    description: 'Three steps: a free 45-minute session, a two-week Supply Chain Health Check, then strategy with senior follow-through.',
   },
   caseStudies: {
     path: '/en/case-studies', name: 'Case studies',
@@ -26,8 +26,8 @@ export const PAGE_META: Record<'howWeWork' | 'caseStudies' | 'whoWeHelp' | 'abou
   },
   whoWeHelp: {
     path: '/en/who-we-help', name: 'Who we help',
-    title: 'Who We Help: Growing Manufacturing and Distribution SMEs',
-    description: 'Supply chain advisory for growing manufacturing and distribution SMEs across Europe: S&OP/IBP, supply planning, order management and logistics.',
+    title: 'Who We Help: Growing Manufacturing and Distribution Companies',
+    description: 'Supply chain advisory for growing manufacturing and distribution companies across Europe: S&OP/IBP, supply planning, order management and logistics.',
   },
   about: {
     path: '/en/about', name: 'About',
@@ -63,7 +63,7 @@ export function pageMetadata(meta: PageMeta) {
   }
 }
 
-/* ───────────── Offer ladder (the only prices allowed) ───────────── */
+/* ───────────── Offer ladder (no amounts: Cassio 08/10) ───────────── */
 
 export type OfferStep = { num: string; title: string; price: string; desc: string; href?: string; linkLabel?: string }
 
@@ -73,12 +73,12 @@ export const OFFER_STEPS: OfferStep[] = [
     desc: 'A structured conversation about your supply chain. You leave with a clear view of your top priorities, whether we work together or not.',
   },
   {
-    num: '2', title: 'Supply Chain Health Check', price: 'Two weeks, fixed price. From CHF 8,500.',
+    num: '2', title: 'Supply Chain Health Check', price: 'Two weeks, fixed price.',
     desc: 'A structured two-week review of your supply chain, based on your own data and interviews with your team. You get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary for your leadership team.',
     href: '/en/services/supply-chain-audit', linkLabel: 'About the Supply Chain Health Check',
   },
   {
-    num: '3', title: 'Strategy and senior follow-through', price: 'CHF 22,000 to 80,000 depending on scope.',
+    num: '3', title: 'Strategy and senior follow-through', price: 'Scoped to your needs.',
     desc: 'We build the strategy and the plan with you. A senior practitioner then oversees execution with your team, month by month: regular calls, KPI tracking and plan adjustments to keep it on track.',
   },
 ]
@@ -121,11 +121,11 @@ export const HOW_WE_WORK = {
     },
     {
       q: 'What do we get from the Supply Chain Health Check?',
-      a: 'In two weeks, at a fixed price from CHF 8,500, you get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.',
+      a: 'In two weeks, at a fixed price, you get your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.',
     },
     {
       q: 'What does strategy and senior follow-through cost?',
-      a: 'CHF 22,000 to 80,000 depending on scope. A senior practitioner oversees execution with your team, month by month.',
+      a: 'It depends on the scope, agreed with you after the Health Check. A senior practitioner oversees execution with your team, month by month.',
     },
     {
       q: 'Do you place a team inside our company?',
@@ -225,10 +225,10 @@ export const CASES = {
 
 export const WHO_WE_HELP = {
   rubric: 'Who we help',
-  h1: 'Supply chain advisory for growing SMEs',
+  h1: 'Supply chain advisory for growing companies',
   // TODO Caio/Behrad: replace with the confirmed profile.
   // Placeholder from the brief: "[confirm with partners: revenue range and key industries]"
-  profile: 'Growing manufacturing and distribution SMEs across Europe.',
+  profile: 'Growing manufacturing and distribution companies across Europe.',
   intro: 'Companies whose growth has outpaced the way they plan, buy, store and deliver. We help leadership teams put structure into S&OP/IBP, supply planning, order management and logistics, and then follow it through.',
   signalsH2: 'Signs it is time to talk',
   signals: [
@@ -262,7 +262,7 @@ export const ABOUT = {
   h1: 'About OpsFlow Advisory',
   positioning: 'Embedded leadership, not an embedded team.',
   paragraphs: [
-    'OpsFlow Advisory is a Swiss supply chain advisory based in Nyon, Switzerland. We work with growing manufacturing and distribution SMEs across Europe on S&OP/IBP, supply planning, order management and logistics.',
+    'OpsFlow Advisory is a Swiss supply chain advisory based in Nyon, Switzerland. We work with growing manufacturing and distribution companies across Europe on S&OP/IBP, supply planning, order management and logistics.',
     'We build the strategy and the plan with your leadership team, then a senior practitioner follows the execution month by month. Your people run the work and keep the capability.',
   ],
   tagline: 'Built by people, AI-assisted.',
@@ -289,7 +289,7 @@ export const CONTACT = {
   locationLabel: 'Location',
   healthCheck: {
     h2: 'Supply Chain Health Check',
-    text: 'Two weeks, fixed price, from CHF 8,500. Your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.',
+    text: 'Two weeks, fixed price. Your top 3 priorities ranked by P&L impact, a 90-day plan and an executive summary.',
     link: 'How the Health Check works',
     href: '/en/services/supply-chain-audit',
   },

@@ -6,12 +6,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
   title: 'OpsFlow Academy — Processus & équipes performantes | Suisse romande',
   description:
-    'OpsFlow Academy améliore un processus précis de votre entreprise — intégration, vente, coordination — et forme votre équipe à le faire tourner. Sur mesure, pour PME. Diagnostic gratuit de 45 minutes.',
+    'OpsFlow Academy améliore un processus précis de votre entreprise — intégration, vente, coordination — et forme votre équipe à le faire tourner. Sur mesure. Diagnostic gratuit de 45 minutes.',
   alternates: { canonical: '/academy' },
   openGraph: {
     title: 'OpsFlow Academy',
     description:
-      'Nous simplifions un processus précis et formons votre équipe à le faire tourner. PME, Suisse romande.',
+      'Nous simplifions un processus précis et formons votre équipe à le faire tourner. Suisse romande.',
     url: 'https://opsflow-advisory.ch/academy',
     siteName: 'OpsFlow',
     type: 'website',

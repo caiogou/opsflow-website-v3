@@ -315,7 +315,7 @@ function AuditTimeline() {
           </g>
         </svg>
       </div>
-      <div className="note">ILLUSTRATIVE · FROM CHF 8,500, FIXED PRICE</div>
+      <div className="note">ILLUSTRATIVE · TWO WEEKS, FIXED PRICE</div>
     </div>
   )
 }

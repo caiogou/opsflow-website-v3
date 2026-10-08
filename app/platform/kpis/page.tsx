@@ -712,7 +712,7 @@ export default function KPIsDiagnostic() {
           </p>
           {META.showInvestment && totalRecoverableValue > 0 && (
             <p className="text-xs text-teal-muted/40 mb-6">
-              Investment: {COMPANY.currency} 14-18K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 16000)}x
+              Duration: 12 weeks
             </p>
           )}
           <div className={`flex flex-col sm:flex-row gap-3 justify-center ${META.showInvestment ? '' : 'mt-6'}`}>

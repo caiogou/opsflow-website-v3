@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '
 export const metadata: Metadata = {
   title: 'OpsFlow Advisory: Supply Chain Strategy and S&OP Advisory',
   description:
-    'Senior supply chain advisory for SMEs: S&OP/IBP, supply planning, order management and logistics. Embedded leadership, not an embedded team. Free 45-minute session.',
+    'Senior supply chain advisory: S&OP/IBP, supply planning, order management and logistics. Embedded leadership, not an embedded team. Free 45-minute session.',
   metadataBase: new URL('https://www.opsflow-advisory.ch'),
   openGraph: {
     title: 'OpsFlow Advisory',

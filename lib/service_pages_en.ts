@@ -21,7 +21,7 @@ export const SERVICE_PAGES: Record<string, ServicePage> = {
     model: { decision: 'The plan validated by leadership, once a month.', execution: 'Day-to-day operations, driven by that plan.' },
     related: [
       { slug: 'what-is-sop', kind: 'Guide', title: 'What is S&OP? Definition and 5-step cycle' },
-      { slug: 'demand-forecasting', kind: 'Method', title: 'Demand forecasting: methods for SMEs' },
+      { slug: 'demand-forecasting', kind: 'Method', title: 'Demand forecasting: methods and how to choose' },
       { slug: 'otif', kind: 'KPI', title: 'OTIF: definition and how to manage it' },
     ],
   },
@@ -32,7 +32,7 @@ export const SERVICE_PAGES: Record<string, ServicePage> = {
     bookQ: 'Where is unnecessary stock hiding?',
     model: { decision: 'Which service level to target, and for which products.', execution: 'Tuning the stock that carries it out.' },
     related: [
-      { slug: 'safety-stock', kind: 'Guide', title: 'Safety Stock: How to Calculate It in an SME' },
+      { slug: 'safety-stock', kind: 'Guide', title: 'Safety Stock: How to Calculate It' },
       { slug: 'reorder-point-economic-order-quantity', kind: 'Method', title: 'Reorder point and economic order quantity (EOQ)' },
       { slug: 'inventory-turnover', kind: 'KPI', title: 'Inventory turnover: how to calculate and read it' },
     ],
@@ -45,7 +45,7 @@ export const SERVICE_PAGES: Record<string, ServicePage> = {
     model: { decision: 'Which risks to accept, which to cover and at what cost.', execution: 'Implementing those choices in purchasing and planning.' },
     related: [
       { slug: 'dual-sourcing', kind: 'Strategy', title: 'Dual Sourcing: A Strategy to Secure Supply' },
-      { slug: 'safety-stock', kind: 'Guide', title: 'Safety Stock: How to Calculate It in an SME' },
+      { slug: 'safety-stock', kind: 'Guide', title: 'Safety Stock: How to Calculate It' },
       { slug: 'supply-chain-kpis-dashboard', kind: 'KPI', title: 'Supply chain KPIs: building your dashboard' },
     ],
   },
@@ -56,7 +56,7 @@ export const SERVICE_PAGES: Record<string, ServicePage> = {
     bookQ: 'Where is your distribution losing service or money?',
     model: { decision: 'The cost and service compromise, decided by leadership.', execution: 'The replenishment rules that apply it.' },
     related: [
-      { slug: 'cost-to-serve', kind: 'Analysis', title: 'Cost-to-Serve: Definition and Analysis for SMEs' },
+      { slug: 'cost-to-serve', kind: 'Analysis', title: 'Cost-to-Serve: Definition and Analysis' },
       { slug: 'otif', kind: 'KPI', title: 'OTIF (On Time In Full): Definition and How to Manage It' },
       { slug: 'inventory-turnover', kind: 'KPI', title: 'Inventory turnover: how to calculate and read it' },
     ],
@@ -64,7 +64,7 @@ export const SERVICE_PAGES: Record<string, ServicePage> = {
   'supply-chain-audit': {
     short: 'Supply chain audit',
     h1a: 'Supply Chain Audit: ', h1b: 'The Two-Week Health Check',
-    facts: [{ b: '2 weeks', s: 'fixed scope, from forecast to delivery' }, { b: 'From CHF 8,500', s: 'fixed price' }, { b: 'Top 3 priorities', s: 'ranked by P&L impact' }],
+    facts: [{ b: '2 weeks', s: 'fixed scope, from forecast to delivery' }, { b: 'Fixed price', s: 'agreed before we start' }, { b: 'Top 3 priorities', s: 'ranked by P&L impact' }],
     bookQ: 'Is the Health Check the right next step?',
     model: { decision: 'Each recommendation states who must decide.', execution: 'And who must execute it.' },
     related: [

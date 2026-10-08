@@ -24,7 +24,7 @@ export default function Page() {
         crumbs={[{ label: 'Home', href: '/en' }, { label: 'Who we help' }]}
         kick="Who we help"
         title={<>Built for companies where supply chain complexity is <em>catching up with growth.</em></>}
-        lead="Growing manufacturing and distribution SMEs across Europe, at the point where informal planning stops working."
+        lead="Growing manufacturing and distribution companies across Europe, at the point where informal planning stops working."
         actions={<>
           <a className="btn" href="/en/services/supply-chain-audit">Start with a Health Check <Arrow /></a>
           <a className="btn2" href={CALENDLY} target="_blank" rel="noopener">Or book a free session ›</a>
@@ -57,7 +57,7 @@ export default function Page() {
           <h2>Who we usually <em>work with.</em></h2>
           <div className="split" style={{ marginTop: 24 }}>
             <div>
-              <p>We work with growing manufacturing and distribution SMEs across Europe, where sales and production decisions are made by different people and coordination has become too complex to stay informal.</p>
+              <p>We work with growing manufacturing and distribution companies across Europe, where sales and production decisions are made by different people and coordination has become too complex to stay informal.</p>
               <p>You do not need to be a large company. What matters is that supply chain complexity is catching up with growth, and that leadership wants to decide on a shared plan rather than react.</p>
             </div>
             {/* Revenue range and key industries: hidden until confirmed by the partners (no placeholders on the live site). */}
@@ -65,7 +65,7 @@ export default function Page() {
               <h4>Profile details</h4>
               <ul className="ticks" style={{ marginTop: 14 }}>
                 <li>Manufacturing and distribution companies</li>
-                <li>Growing SMEs across Europe</li>
+                <li>Growing companies across Europe</li>
                 <li>Work in English, French and German</li>
               </ul>
             </div>
@@ -74,7 +74,7 @@ export default function Page() {
         <CTA
           lang="en"
           h2="Start with a Supply Chain Health Check."
-          text="Two weeks, fixed price, from CHF 8,500. Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary. Not ready yet? Start with a free 45-minute session."
+          text="Two weeks, fixed price. Top 3 priorities ranked by P&L impact, a 90-day plan, an executive summary. Not ready yet? Start with a free 45-minute session."
           primary={{ label: 'About the Health Check', href: '/en/services/supply-chain-audit' }}
           secondary={{ label: 'Book a free 45-minute session', href: CALENDLY }}
         />

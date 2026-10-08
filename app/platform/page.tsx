@@ -109,7 +109,7 @@ export default function PlatformIndex() {
                   <mod.icon size={22} className="text-teal" />
                 </div>
                 <span className="px-2.5 py-1 rounded-full bg-navy-mid/40 text-teal-muted/50 text-[10px] border border-navy-mid/60">
-                  <MoneyRange from={mod.price[0]} to={mod.price[1]} /> engagement
+                  Structured engagement
                 </span>
               </div>
 

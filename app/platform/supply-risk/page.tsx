@@ -690,7 +690,7 @@ export default function SupplyRiskDiagnostic() {
           </p>
           {isDemo && (
             <p className="text-xs text-teal-muted/40 mb-6">
-              Investment: {cur}22-30K &middot; Duration: 12 weeks &middot; Expected ROI: {Math.round(totalRecoverableValue / 26000)}x
+              Duration: 12 weeks
             </p>
           )}
           <div className="flex flex-col sm:flex-row gap-3 justify-center no-print mt-6">

@@ -18,7 +18,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     heroSub:
       'OpsFlow Academy prend un processus précis de votre entreprise : l’intégration des nouveaux collaborateurs, la vente, la coordination entre services. Nous le simplifions, puis nous construisons le programme qui rend votre équipe autonome. En quelques semaines.',
     heroCta: 'Réserver le diagnostic',
-    heroNote: 'PME · Suisse romande · sur site ou à distance',
+    heroNote: 'Suisse romande · sur site ou à distance',
     chKick: 'Vous cherchez quoi ?',
     chTitle: 'Le niveau de l’entreprise, ou celui de l’équipe ?',
     ch1who: 'Pour la direction',
@@ -68,9 +68,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     l3t: 'Suivi',
     l3d: 'Un accompagnement léger, optionnel, pour ancrer le fonctionnement dans la durée.',
     proofKick: 'Référence',
-    proofTitle: 'Une PME de l’ameublement',
+    proofTitle: 'Une entreprise de l’ameublement',
     caseIntro:
-      'Pour une PME du secteur de l’ameublement, nous avons construit le programme d’intégration et de vente de l’équipe commerciale. Il a été mis en place par les responsables de l’entreprise eux-mêmes et fonctionne depuis sans intervention externe.',
+      'Pour une entreprise du secteur de l’ameublement, nous avons construit le programme d’intégration et de vente de l’équipe commerciale. Il a été mis en place par les responsables de l’entreprise eux-mêmes et fonctionne depuis sans intervention externe.',
     ctaTitle: 'Parlons de votre processus.',
     ctaBody:
       'Le diagnostic dure 45 minutes et n’engage à rien. Vous repartez avec une lecture claire de la situation, que nous travaillions ensemble par la suite ou non.',
@@ -85,7 +85,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     heroSub:
       'OpsFlow Academy takes one specific process in your company: new-hire onboarding, sales, coordination between departments. We simplify it, then build the program that makes your team autonomous. Within weeks.',
     heroCta: 'Book the diagnostic',
-    heroNote: 'SMEs · French-speaking Switzerland · on site or remote',
+    heroNote: 'French-speaking Switzerland · on site or remote',
     chKick: 'What are you looking for?',
     chTitle: 'The company level, or the team level?',
     ch1who: 'For leadership',
@@ -135,9 +135,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     l3t: 'Follow-up',
     l3d: 'Light, optional support to consolidate the way of working over time.',
     proofKick: 'Reference',
-    proofTitle: 'A home-furnishing SME',
+    proofTitle: 'A home-furnishing company',
     caseIntro:
-      'For an SME in the home-furnishing sector, we built the sales team’s onboarding and sales program. It was put in place by the company’s own managers and has run without external involvement since.',
+      'For a company in the home-furnishing sector, we built the sales team’s onboarding and sales program. It was put in place by the company’s own managers and has run without external involvement since.',
     ctaTitle: 'Let’s talk about your process.',
     ctaBody:
       'The diagnostic takes 45 minutes and comes with no obligation. You leave with a clear reading of the situation, whether we work together afterwards or not.',
@@ -152,7 +152,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     heroSub:
       'Die OpsFlow Academy nimmt einen konkreten Prozess in Ihrem Unternehmen: das Onboarding neuer Mitarbeitender, den Vertrieb, die Abstimmung zwischen Abteilungen. Wir vereinfachen ihn und bauen das Programm, das Ihr Team eigenständig macht. In wenigen Wochen.',
     heroCta: 'Diagnose buchen',
-    heroNote: 'KMU · Schweiz · vor Ort oder aus der Ferne',
+    heroNote: 'Unternehmen · Schweiz · vor Ort oder aus der Ferne',
     chKick: 'Wonach suchen Sie?',
     chTitle: 'Die Unternehmensebene oder die Teamebene?',
     ch1who: 'Für die Geschäftsleitung',
@@ -202,9 +202,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     l3t: 'Begleitung',
     l3d: 'Eine leichte, optionale Begleitung, um das Funktionieren dauerhaft zu verankern.',
     proofKick: 'Referenz',
-    proofTitle: 'Ein KMU aus der Möbelbranche',
+    proofTitle: 'Ein Unternehmen aus der Möbelbranche',
     caseIntro:
-      'Für ein KMU aus der Möbelbranche haben wir das Onboarding- und Vertriebsprogramm des Verkaufsteams aufgebaut. Es wurde von den Führungskräften des Unternehmens selbst eingeführt und läuft seither ohne externes Zutun.',
+      'Für ein Unternehmen aus der Möbelbranche haben wir das Onboarding- und Vertriebsprogramm des Verkaufsteams aufgebaut. Es wurde von den Führungskräften des Unternehmens selbst eingeführt und läuft seither ohne externes Zutun.',
     ctaTitle: 'Sprechen wir über Ihren Prozess.',
     ctaBody:
       'Die Diagnose dauert 45 Minuten und ist unverbindlich. Sie gehen mit einer klaren Einschätzung der Lage – ob wir danach zusammenarbeiten oder nicht.',

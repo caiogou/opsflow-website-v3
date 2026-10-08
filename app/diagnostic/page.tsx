@@ -930,7 +930,6 @@ export default function DiagnosticPage() {
                       <div className="text-[10px] text-teal-muted/40 uppercase tracking-wider">Recommended</div>
                       <div className="text-xs text-teal font-semibold">{dim.service}</div>
                     </div>
-                    <span className="text-xs text-teal-muted/40">{convertChfText(dim.price, ccy)}</span>
                   </div>
                 </div>
               ))}
@@ -963,9 +962,6 @@ export default function DiagnosticPage() {
                 <p className="text-xs text-teal-muted leading-relaxed mb-4">
                   Book a free 90-minute Problem Session with our team. We will dive deeper into your priority areas and map out a concrete improvement plan.
                 </p>
-                <div className="text-[11px] text-teal-muted/40 mb-4">
-                  {L('Typical ROI: CHF 25K engagement recovers CHF 500K to 2M in margin (20 to 80x return)')}
-                </div>
                 <a
                   href={CALENDLY}
                   target="_blank"

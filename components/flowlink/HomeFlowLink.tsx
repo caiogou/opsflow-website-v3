@@ -34,9 +34,9 @@ const CHIPS = [
 ]
 const INSIGHTS = [
   { href: '/en/insights/what-is-sop', t: 'What is S&OP? definition and the monthly cycle' },
-  { href: '/en/insights/safety-stock', t: 'Safety stock: how to calculate it in an SME' },
+  { href: '/en/insights/safety-stock', t: 'Safety stock: how to calculate it' },
   { href: '/en/insights/otif', t: 'OTIF: definition and how to manage it' },
-  { href: '/en/insights/demand-forecasting', t: 'Demand forecasting: methods for SMEs' },
+  { href: '/en/insights/demand-forecasting', t: 'Demand forecasting: methods and how to choose' },
   { href: '/en/insights/dual-sourcing', t: 'Dual sourcing: a strategy to secure supply' },
   { href: '/en/insights/cost-to-serve', t: 'Cost-to-serve: understanding it' },
 ]
@@ -55,7 +55,7 @@ function Headline({ mobile }: { mobile?: boolean }) {
   const title = <>Smarter supply chains.<br /><em>Built by people, AI&#8209;assisted.</em></>
   return (
     <div className="h">
-      <div className="kk">Supply chain advisory for growing SMEs · Nyon, Switzerland</div>
+      <div className="kk">Supply chain advisory for growing companies · Nyon, Switzerland</div>
       {mobile ? <div className="h1" role="heading" aria-level={1}>{title}</div> : <h1>{title}</h1>}
       <p>Senior supply chain expertise for growing businesses: S&amp;OP/IBP, supply planning, order management and logistics. Practical solutions, better data and measurable results.</p>
       <a className="btn" href={CALENDLY} target="_blank" rel="noopener noreferrer">Book a free session <span aria-hidden="true">→</span></a>{' '}
@@ -178,8 +178,8 @@ function Slides() {
       <div className="sl" data-id="sl2"><div className="k">How we work</div><h2>From first conversation <em>to measurable results.</em></h2><p>Three steps. Clear scope at each one. No open-ended engagements.</p></div>
       <div className="sp" data-id="sp2"><div className="pn steps3">
         <div><b>1</b><div><strong>Free 45-minute session</strong><span>A structured conversation about your supply chain reality. You leave with your top priorities clear, whether we work together or not.</span><em>Free, no commitment</em></div></div>
-        <div><b>2</b><div><strong>Supply Chain Health Check</strong><span>Two-week structured assessment. Top 3 priorities ranked by P&amp;L impact, a 90-day plan, an executive summary.</span><em>From CHF 8,500, fixed price</em></div></div>
-        <div><b>3</b><div><strong>Strategy and senior follow-through</strong><span>We build the plan with you. A senior practitioner then oversees execution with your team, month by month.</span><em>CHF 22,000 to 80,000 depending on scope</em></div></div>
+        <div><b>2</b><div><strong>Supply Chain Health Check</strong><span>Two-week structured assessment. Top 3 priorities ranked by P&amp;L impact, a 90-day plan, an executive summary.</span><em>Two weeks, fixed price</em></div></div>
+        <div><b>3</b><div><strong>Strategy and senior follow-through</strong><span>We build the plan with you. A senior practitioner then oversees execution with your team, month by month.</span><em>Scoped to your needs</em></div></div>
       </div></div>
 
       <div className="sl" data-id="sl3" style={{ top: '470px', width: '640px' }}><div className="k">Real results</div><h2>What better supply chain systems <em>can deliver.</em></h2>
@@ -188,7 +188,7 @@ function Slides() {
       </div>
       <div className="sp" data-id="sp3"><div className="pn"><h4>Supplier lead time, before and after</h4><svg viewBox="0 0 380 110" fontSize="11" fill="#c6d5de"><text x="0" y="28">Before</text><rect x="90" y="18" width="280" height="14" rx="7" fill="#163a46" /><text x="0" y="68">After</text><rect data-id="wkBar" x="90" y="58" width="0" height="14" rx="7" fill="#2fd3bd" /><text x="370" y="30" textAnchor="end" fontSize="10" fill="#c6d5de">about 6 months</text><text x="146" y="70" fontSize="10" fill="#7ff5df" fontWeight="700">about 1 month</text><text x="0" y="100" fontSize="10" fill="#6b8597">From a partner project before OpsFlow, not to scale</text></svg></div></div>
 
-      <div className="sl" data-id="sl4"><div className="k">Who we work with</div><h2>Growing companies. <em>Nyon, Switzerland.</em></h2><p>Manufacturing and distribution SMEs across Europe where supply chain complexity is catching up with growth. We work in English, French and German. <a href="/en/who-we-help" style={{ color: 'var(--teal)' }}>Who we help ›</a></p></div>
+      <div className="sl" data-id="sl4"><div className="k">Who we work with</div><h2>Growing companies. <em>Nyon, Switzerland.</em></h2><p>Manufacturing and distribution companies across Europe where supply chain complexity is catching up with growth. We work in English, French and German. <a href="/en/who-we-help" style={{ color: 'var(--teal)' }}>Who we help ›</a></p></div>
       <div className="sp" data-id="sp4"><div className="pn"><h4>Right now, across the network</h4><div className="clocks" data-id="clocks"><div data-tz="Europe/Zurich"><b>--:--</b><span>Nyon · HQ</span></div><div data-tz="Europe/Amsterdam"><b>--:--</b><span>Rotterdam</span></div><div data-tz="Asia/Shanghai"><b>--:--</b><span>Shanghai</span></div><div data-tz="America/Sao_Paulo"><b>--:--</b><span>São Paulo</span></div></div></div></div>
     </>
   )
