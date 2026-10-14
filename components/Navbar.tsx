@@ -43,7 +43,7 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
     ? EN_LINKS
     : [
         { label: t.services, href: `${base}/services` },
-        { label: t.how, href: `${base}/#how` },
+        { label: t.how, href: `${base || '/fr'}#how` },
         { label: t.ressources, href: `${base}/ressources` },
         { label: t.diagnostic, href: `/diagnostic` },
       ]
@@ -63,7 +63,7 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
 
   const langs = (
     <>
-      <a href="/" className={lang === 'fr' ? 'on' : ''} hrefLang="fr">FR</a>
+      <a href="/fr" className={lang === 'fr' ? 'on' : ''} hrefLang="fr">FR</a>
       <a href="/de" className={lang === 'de' ? 'on' : ''} hrefLang="de">DE</a>
       <a href="/en" className={lang === 'en' ? 'on' : ''} hrefLang="en">EN</a>
     </>
@@ -72,7 +72,7 @@ export function Navbar({ lang = 'fr' }: { lang?: Lang }) {
   return (
     <div className="wrap site-nav">
       <nav className="nav" aria-label="Main">
-        <a className="logo" href={base || '/'} aria-label="OpsFlow Advisory home">
+        <a className="logo" href={base || '/fr'} aria-label="OpsFlow Advisory home">
           <Logo />
           <span>OpsFlow <b>Advisory</b></span>
         </a>

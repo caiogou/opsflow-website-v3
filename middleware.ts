@@ -29,25 +29,25 @@ function nextWithLang(req: NextRequest) {
 }
 
 export function middleware(req: NextRequest) {
-  if (req.nextUrl.pathname !== '/') return withCcy(req, nextWithLang(req))
-
-  const cookie = req.cookies.get(COOKIE)?.value
-  let target = cookie
-  if (!target) {
-    // 05/oct/2026 (Cassio + Caio): English is the main language for everyone. FR/DE stay as secondary versions (language switch).
-    target = 'en'
-  }
-
-  if (target === 'de' || target === 'en') {
+  const p = req.nextUrl.pathname
+  // 14/oct/2026 (Cassio): the root ALWAYS opens the English site, whatever language the visitor used before.
+  // The old cookie (opsflow_locale=fr) used to keep returning visitors on the French home at "/".
+  if (p === '/') {
     const url = req.nextUrl.clone()
-    url.pathname = `/${target}`
-    const res = NextResponse.redirect(url)
-    res.cookies.set(COOKIE, target, { path: '/', maxAge: 60 * 60 * 24 * 365 })
+    url.pathname = '/en'
+    const res = NextResponse.redirect(url, 308)
+    res.cookies.set(COOKIE, 'en', { path: '/', maxAge: 60 * 60 * 24 * 365 })
     return withCcy(req, res)
   }
-  const res = nextWithLang(req)
-  if (!cookie) res.cookies.set(COOKIE, 'fr', { path: '/', maxAge: 60 * 60 * 24 * 365 })
-  return withCcy(req, res)
+  // The French home now lives at /fr (same page as before, served internally from "/").
+  if (p === '/fr' || p === '/fr/') {
+    const h = new Headers(req.headers)
+    h.set('x-lang', 'fr')
+    const url = req.nextUrl.clone()
+    url.pathname = '/'
+    return withCcy(req, NextResponse.rewrite(url, { request: { headers: h } }))
+  }
+  return withCcy(req, nextWithLang(req))
 }
 
 export const config = { matcher: ['/((?!_next/|api/|icon|favicon|robots|sitemap|.*\\.(?:svg|png|jpg|jpeg|webp|txt|xml|ico)$).*)'] }

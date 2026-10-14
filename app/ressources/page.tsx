@@ -15,7 +15,7 @@ export default function Hub() {
     <>
       <Band bg="insights"
         lang="fr"
-        crumbs={[{ label: 'Accueil', href: '/' }, { label: 'Ressources' }]}
+        crumbs={[{ label: 'Accueil', href: '/fr' }, { label: 'Ressources' }]}
         kick="Ressources"
         title="Ressources"
         lead="Des fiches courtes et concrètes sur le S&OP, les processus et la supply chain, pensées pour les entreprises."
