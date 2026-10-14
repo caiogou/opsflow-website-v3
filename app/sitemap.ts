@@ -11,7 +11,7 @@ const BASE = 'https://www.opsflow-advisory.ch'
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   const core: MetadataRoute.Sitemap = [
-    { url: `${BASE}/`, lastModified: now, changeFrequency: 'weekly', priority: 1 },
+    { url: `${BASE}/fr`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${BASE}/diagnostic`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/services`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${BASE}/ressources`, lastModified: now, changeFrequency: 'monthly', priority: 0.6 },

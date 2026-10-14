@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <Article bg={"insights"}
         lang="fr"
-        crumbs={[{ label: 'Accueil', href: '/' }, { label: 'Ressources', href: '/ressources' }, { label: r.h1 }]}
+        crumbs={[{ label: 'Accueil', href: '/fr' }, { label: 'Ressources', href: '/ressources' }, { label: r.h1 }]}
         kick="Ressources"
         title={r.h1}
         lead={r.description}

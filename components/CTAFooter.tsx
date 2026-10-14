@@ -77,7 +77,7 @@ export function Footer({ lang = 'fr' }: { lang?: Lang }) {
     ? EN_FOOTER
     : [
         { label: t.fServices, href: `${base}/services` },
-        { label: t.fHow, href: `${base}/#how` },
+        { label: t.fHow, href: `${base || '/fr'}#how` },
         { label: t.fRessources, href: `${base}/ressources` },
         { label: t.fContact, href: 'mailto:caio@opsflow-advisory.ch' },
       ]
@@ -89,7 +89,7 @@ export function Footer({ lang = 'fr' }: { lang?: Lang }) {
           <nav aria-label="Footer">
             {links.map((l) => <a key={l.href} href={l.href}>{l.label}</a>)}
             <span aria-label="Language" style={{ display: 'flex', gap: 10 }}>
-              {lang !== 'fr' && <a href="/" hrefLang="fr">FR</a>}
+              {lang !== 'fr' && <a href="/fr" hrefLang="fr">FR</a>}
               {lang !== 'de' && <a href="/de" hrefLang="de">DE</a>}
               {lang !== 'en' && <a href="/en" hrefLang="en">EN</a>}
             </span>

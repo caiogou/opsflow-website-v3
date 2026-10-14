@@ -15,7 +15,7 @@ export default function Hub() {
     <>
       <Band bg="solutions"
         lang="fr"
-        crumbs={[{ label: 'Accueil', href: '/' }, { label: 'Services' }]}
+        crumbs={[{ label: 'Accueil', href: '/fr' }, { label: 'Services' }]}
         kick="Services"
         title="Services"
         lead="Des missions à périmètre clair, pilotées par un senior, qui laissent vos équipes autonomes."
