@@ -4,7 +4,7 @@ import LANE_PTS from './lanePts.json'
 
 type Pt = number[]
 type Lane = {
-  p: SVGPathElement; len: number; kind: string; key: string; both: boolean
+  p: SVGPathElement; len: number; pts: Float32Array; kind: string; key: string; both: boolean
   w: number; wc: number; hiOn: number; next: number; hi: SVGPathElement | null
   a?: string; b?: string
 }
@@ -82,7 +82,10 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
         hi.style.transition = 'opacity .7s'
         hg.appendChild(hi)
       }
-      const lane: Lane = { p, len: p.getTotalLength(), kind, key: key || '', both: !!both, w: 1, wc: 1, hiOn: -1, next: performance.now() + Math.random() * 1800, hi }
+      // sample the track once (every 4px) so moving dots only read from this table
+      const len = p.getTotalLength(), n = Math.max(2, Math.ceil(len / 4)), pts = new Float32Array((n + 1) * 2)
+      for (let i = 0; i <= n; i++) { const q = p.getPointAtLength((len * i) / n); pts[i * 2] = q.x; pts[i * 2 + 1] = q.y }
+      const lane: Lane = { p, len, pts, kind, key: key || '', both: !!both, w: 1, wc: 1, hiOn: -1, next: performance.now() + Math.random() * 1800, hi }
       sys.lanes.push(lane)
       return lane
     }
@@ -110,10 +113,12 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
         d.s += d.v * dt
         if (d.s > d.ln.len) { d.c.remove(); d.h.remove(); sys.dots.splice(i, 1); continue }
         if (d.s < 0 || !sys.active) continue
-        const pt = d.ln.p.getPointAtLength(d.dir > 0 ? d.s : d.ln.len - d.s)
+        const at = d.dir > 0 ? d.s : d.ln.len - d.s, np = d.ln.pts.length / 2 - 1
+        const k = Math.min(np, Math.round((at / d.ln.len) * np)) * 2
+        const px = d.ln.pts[k].toFixed(1), py = d.ln.pts[k + 1].toFixed(1)
         const o = Math.min(1, d.ln.wc * 1.1)
-        d.c.setAttribute('cx', String(pt.x)); d.c.setAttribute('cy', String(pt.y))
-        d.h.setAttribute('cx', String(pt.x)); d.h.setAttribute('cy', String(pt.y))
+        d.c.setAttribute('cx', px); d.c.setAttribute('cy', py)
+        d.h.setAttribute('cx', px); d.h.setAttribute('cy', py)
         d.c.setAttribute('opacity', (0.98 * o).toFixed(2)); d.h.setAttribute('opacity', (0.22 * o).toFixed(2))
       }
     }
@@ -125,13 +130,20 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
   let frameFns: ((now: number, dt: number) => void)[] = []
 
   if (!MOB) {
-    /* ---- fit the 1680x1080 stage to the viewport ---- */
+    /* ---- fit the stage under the site header (04/11/2026) ----
+       The stage content sits between y=70 and y=1070 of the 1680x1080 design; that band is fitted
+       into the space left under the 76px header and centred, so nothing is cut and nothing floats. */
     const stage = $('stage')
-    let COVER = 1
+    const head = root.querySelector('.flnav') as HTMLElement | null
+    let COVER = 1, NAV = 76
     const fit = () => {
-      const s = Math.min(innerWidth / 1680, innerHeight / 1080)
+      NAV = head ? head.offsetHeight : 76
+      const W = innerWidth, H = Math.max(300, innerHeight - NAV)
+      const s = Math.min(W / 1680, H / 1018)
       stage.style.setProperty('--s', String(s))
-      COVER = Math.min(1.22, Math.max(1, innerHeight / s / 944, innerWidth / s / 1680))
+      stage.style.setProperty('--tx', ((W - 1680 * s) / 2).toFixed(1) + 'px')
+      stage.style.setProperty('--ty', ((H - 1018 * s) / 2 - 66 * s).toFixed(1) + 'px')
+      COVER = Math.min(1.22, Math.max(1, H / s / 944, W / s / 1680))
     }
     fit()
 
@@ -228,10 +240,11 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
     const pc = $('plateClean'), pgb = $('plateGlobe'), flows = $<SVGSVGElement>('flows'), gflows = $<SVGSVGElement>('gflows'), hint = $('hint')
     const MAPS = 0.88, mapC = $('mapC'), mapG = $('mapG')
     const slots = [[0.3, 0.42], [0.42, 0.54], [0.54, 0.66], [0.66, 0.78], [0.78, 0.9]]
+    const shade = $('shade')
     const update = () => {
       const r = scene.getBoundingClientRect()
-      const total = r.height - innerHeight
-      prog = clamp(-r.top / total, 0, 1)
+      const total = r.height - (innerHeight - NAV)
+      prog = clamp((NAV - r.top) / total, 0, 1)
       const p = prog
       const a = ease(seg(p, 0, 0.14))
       topL.style.transform = `translateY(${-520 * a}px)`; topL.style.opacity = String(1 - a)
@@ -249,33 +262,40 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
       gtx.style.opacity = String(c * (1 - ease(seg(p, 0.4, 0.46))))
       gtx.style.transform = `translateX(${(-70 * (COVER - 1)) / 0.22}px) scale(${COVER}) translateY(${30 * (1 - c)}px)`
       GSTATE = p < 0.42 ? 'all' : p < 0.54 ? 'svc' : p < 0.66 ? 'how' : p < 0.78 ? 'why' : 'where'
+      let showTxt = c * (1 - ease(seg(p, 0.4, 0.46)))
       slots.forEach(([s0, s1], i) => {
         const sl = $('sl' + i), sp = T.querySelector(`[data-id="sp${i}"]`) as HTMLElement | null
         const u = seg(p, s0, s1)
         const inn = ease(seg(u, 0, 0.25)), out = ease(seg(u, 0.75, 1))
         const o = inn * (1 - out), y = 80 * (1 - inn) - 80 * out
+        showTxt = Math.max(showTxt, o)
         sl.style.opacity = String(o); sl.style.transform = `translateY(${y}px)`
         if (sp) { sp.style.opacity = String(o); sp.style.transform = `translateY(${y * 1.2}px)` }
       })
+      shade.style.opacity = String(Math.min(1, showTxt * 1.15))
       const f = ease(seg(p, 0.92, 1))
       pgb.style.filter = `brightness(${1 - 0.7 * f})`
       gflows.style.opacity = String(b * (1 - f))
       hint.style.opacity = p < 0.03 ? '1' : '0'
     }
+    // one layout read per frame, not one per scroll event
+    let upRaf = 0
+    const queue = () => { if (!upRaf) upRaf = requestAnimationFrame(() => { upRaf = 0; update() }) }
+    cleanups.push(() => cancelAnimationFrame(upRaf))
     on(window, 'resize', () => { fit(); update() })
-    on(window, 'scroll', update, { passive: true })
+    on(window, 'scroll', queue, { passive: true })
     update()
 
-    /* ---- step scrolling: one gesture = one stop, then it waits ---- */
+    /* ---- stops: the dots on the right jump to each part; the wheel, trackpad and keys scroll normally (04/11/2026) ---- */
     const STOPS = [0, 0.36, 0.48, 0.6, 0.72, 0.84]
     const summary = root.querySelector('[data-id="diagnostic"]') as HTMLElement
     const nav = $('stops')
     const buttons = Array.from(nav.querySelectorAll('button'))
-    const yOf = (p: number) => scene.offsetTop + p * (scene.offsetHeight - innerHeight)
+    const yOf = (p: number) => scene.getBoundingClientRect().top + scrollY - NAV + p * (scene.offsetHeight - (innerHeight - NAV))
     const maxY = () => document.documentElement.scrollHeight - innerHeight
     const sumY = () => Math.min(summary.offsetTop, maxY())
     const targets = () => [...STOPS.map(yOf), sumY()]
-    let anim = false, needGap = false, lastWheel = 0, endAt = 0, animRaf = 0
+    let animRaf = 0
     const current = () => { const y = scrollY, t = targets(); let best = 0; t.forEach((v, i) => { if (Math.abs(v - y) < Math.abs(t[best] - y)) best = i }); return best }
     const mark = () => {
       const c = current()
@@ -283,6 +303,9 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
       nav.style.opacity = scrollY > summary.offsetTop - innerHeight * 0.5 ? '0' : '1'
     }
     on(window, 'scroll', mark, { passive: true })
+    cleanups.push(() => window.removeEventListener('wheel', stopAnim))
+    function stopAnim() { cancelAnimationFrame(animRaf) }
+    window.addEventListener('wheel', stopAnim, { passive: true })
     mark()
     const jump = (y: number) => window.scrollTo({ top: y, behavior: 'instant' as ScrollBehavior })
     const go = (i: number) => {
@@ -291,7 +314,7 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
       const from = scrollY, to = t[i], d = to - from
       if (Math.abs(d) < 2) return
       if (RM) { jump(to); return }
-      anim = true
+      cancelAnimationFrame(animRaf)
       const dur = Math.min(1400, 650 + Math.abs(d) * 0.25), t0 = performance.now()
       const e = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
       const step = (now: number) => {
@@ -299,37 +322,11 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
         const k = Math.min(1, (now - t0) / dur)
         jump(from + d * e(k))
         if (k < 1) animRaf = requestAnimationFrame(step)
-        else { anim = false; needGap = true; endAt = performance.now() }
       }
       animRaf = requestAnimationFrame(step)
     }
     cleanups.push(() => cancelAnimationFrame(animRaf))
     buttons.forEach((b, i) => on(b, 'click', () => go(i)))
-    if (!RM) {
-      const inScene = () => scrollY < sumY() + 2
-      on(window, 'wheel', ((ev: WheelEvent) => {
-        const now = performance.now(), gap = now - lastWheel
-        lastWheel = now
-        if (!inScene()) return // summary scrolls normally
-        if (scrollY >= sumY() - 2 && ev.deltaY > 0) return // already on the summary: free scroll down
-        ev.preventDefault()
-        if (anim) return
-        if (now - endAt < 380) return // short pause after each stop
-        if (needGap && gap < 220) return // swallow trackpad inertia from the last move
-        needGap = false
-        if (Math.abs(ev.deltaY) < 4) return
-        go(current() + (ev.deltaY > 0 ? 1 : -1))
-      }) as EventListener, { passive: false })
-      on(window, 'keydown', ((ev: KeyboardEvent) => {
-        const ae = document.activeElement
-        if (!inScene() || (ae && /INPUT|TEXTAREA|SELECT/.test(ae.tagName))) return
-        const dn = ['ArrowDown', 'PageDown', ' '].includes(ev.key), up = ['ArrowUp', 'PageUp'].includes(ev.key)
-        if (!dn && !up) return
-        if (scrollY >= sumY() - 2 && dn) return
-        ev.preventDefault()
-        if (!anim) go(current() + (dn ? 1 : -1))
-      }) as EventListener)
-    }
   } else {
     /* ---- phone: the same pieces stacked, particles on both plates ---- */
     const mh = makeSystem($('mpaths'), $('mdots'), null, {})
@@ -409,11 +406,17 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
   cleanups.push(() => clearInterval(clockT))
 
   /* ---- one rAF loop for particles, viz and counter ---- */
-  let lastT = performance.now(), raf = 0
+  let lastT = performance.now(), raf = 0, onScreen = true
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => { onScreen = es.some((e) => e.isIntersecting) })
+    T.querySelectorAll(MOB ? '.mmap, .mglobe' : '.stick').forEach((e) => io.observe(e))
+    cleanups.push(() => io.disconnect())
+  }
   const loop = (now: number) => {
     if (!alive) return
     const dt = Math.min(0.05, (now - lastT) / 1000)
     lastT = now
+    if (document.hidden || !onScreen) { raf = requestAnimationFrame(loop); return }
     SYS.forEach((s) => s.step(now, dt))
     frameFns.forEach((f) => f(now, dt))
     raf = requestAnimationFrame(loop)
