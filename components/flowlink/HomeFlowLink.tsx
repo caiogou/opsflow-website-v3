@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Inter } from 'next/font/google'
 import { CALENDLY } from '@/lib/booking'
+import { Navbar } from '@/components/Navbar'
 import { startFlowLink } from './engine'
 import './flowlink.css'
 
@@ -12,17 +13,12 @@ const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '
 const EMAIL = 'caio@opsflow-advisory.ch'
 const PLATE_EUROPE = '/img/home_plate_europe.webp'
 const PLATE_GLOBE = '/img/home_plate_globe.webp'
+// 2x versions for retina screens (04/11/2026): the 1x plates looked soft once scaled up.
+const SET_EUROPE = `${PLATE_EUROPE} 1x, /img/home_plate_europe_2x.webp 2x`
+const SET_GLOBE = `${PLATE_GLOBE} 1x, /img/home_plate_globe_2x.webp 2x`
 const ALT_EUROPE = 'Supply network over Europe at night'
 const ALT_GLOBE = 'Global supply network on the globe'
 
-const MENU = [
-  { label: 'Solutions', href: '/en/services' },
-  { label: 'How we work', href: '/en/how-we-work' },
-  { label: 'Case studies', href: '/en/case-studies' },
-  { label: 'Who we help', href: '/en/who-we-help' },
-  { label: 'About', href: '/en/about' },
-  { label: 'Insights', href: '/en/insights' },
-]
 const STOPS = ['Overview', 'One network', 'Services', 'How it works', 'Why OpsFlow', 'Where we are', 'Book a session']
 
 const CHIPS = [
@@ -40,15 +36,6 @@ const INSIGHTS = [
   { href: '/en/insights/dual-sourcing', t: 'Dual sourcing: a strategy to secure supply' },
   { href: '/en/insights/cost-to-serve', t: 'Cost-to-serve: understanding it' },
 ]
-
-function Logo() {
-  return (
-    <a className="logo" href="/en" aria-label="OpsFlow Advisory, home">
-      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" stroke="#2fd3bd" strokeWidth="2.4" aria-hidden="true"><circle cx="23" cy="10" r="6" /><circle cx="10" cy="36" r="6" /><circle cx="36" cy="36" r="6" /><path d="M19 15 12 30M27 15l7 15M16 36h14" /></svg>
-      <span>OpsFlow <b>Advisory</b></span>
-    </a>
-  )
-}
 
 /* The H1 lives in the desktop tree only; the phone copy is a level-1 heading role (only one tree is displayed at a time). */
 function Headline({ mobile }: { mobile?: boolean }) {
@@ -194,22 +181,6 @@ function Slides() {
   )
 }
 
-function MobileMenu() {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className="mright">
-      <a className="cta" href="/en/contact">Talk to us</a>
-      <button type="button" className="mburger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="fl-mmenu" onClick={() => setOpen(!open)}>
-        <i /><i /><i />
-      </button>
-      <nav id="fl-mmenu" className={open ? 'mmenu open' : 'mmenu'} aria-label="Main">
-        {MENU.map((m) => <a key={m.href} href={m.href} onClick={() => setOpen(false)}>{m.label}</a>)}
-        <a href="/en/contact" onClick={() => setOpen(false)}>Contact</a>
-      </nav>
-    </div>
-  )
-}
-
 function Chips() {
   const [i, setI] = useState(0)
   const c = CHIPS[i]
@@ -231,7 +202,7 @@ export default function HomeFlowLink() {
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
-    const mq = matchMedia('(max-width: 899px)')
+    const mq = matchMedia('(max-width: 899px), (max-aspect-ratio: 5/4)')
     const rmq = matchMedia('(prefers-reduced-motion: reduce)')
     let stop = startFlowLink(root, mq.matches, rmq.matches)
     const restart = () => { stop(); stop = startFlowLink(root, mq.matches, rmq.matches) }
@@ -246,13 +217,14 @@ export default function HomeFlowLink() {
 
   return (
     <div className={`fl ${inter.variable}`} ref={rootRef}>
+      {/* Same header as every other page (04/11/2026): one size, one position, always visible on the home. */}
+      <div className="flnav"><Navbar lang="en" /></div>
       {/* ================= PHONE (< 900px): the same pieces stacked ================= */}
       <div className="mob">
-        <header className="mhead"><Logo /><MobileMenu /></header>
         <Headline mobile />
         <div className="mmap">
           <div className="mmap-in">
-            <img alt={ALT_EUROPE} src={PLATE_EUROPE} width={1680} height={944} fetchPriority="high" decoding="async" />
+            <img alt={ALT_EUROPE} src={PLATE_EUROPE} srcSet={SET_EUROPE} width={1680} height={944} fetchPriority="high" decoding="async" />
             <svg viewBox="0 0 1680 944" preserveAspectRatio="none" aria-hidden="true"><g data-id="mpaths" fill="none"></g><g data-id="mdots"></g></svg>
           </div>
         </div>
@@ -262,7 +234,7 @@ export default function HomeFlowLink() {
         <Feed />
         <div className="mglobe">
           <div className="mglobe-in">
-            <img alt={ALT_GLOBE} src={PLATE_GLOBE} width={1680} height={944} loading="lazy" decoding="async" />
+            <img alt={ALT_GLOBE} src={PLATE_GLOBE} srcSet={SET_GLOBE} width={1680} height={944} loading="lazy" decoding="async" />
             <svg viewBox="0 0 1680 944" preserveAspectRatio="none" aria-hidden="true"><g data-id="mgpaths" fill="none"></g><g data-id="mgdots"></g></svg>
           </div>
         </div>
@@ -274,14 +246,14 @@ export default function HomeFlowLink() {
         <div className="stick">
           <div className="stage" data-id="stage">
             <div className="mapG" data-id="mapG">
-              <img className="plate plateGlobe" data-id="plateGlobe" src={PLATE_GLOBE} width={1680} height={944} alt={ALT_GLOBE} loading="lazy" decoding="async" />
+              <img className="plate plateGlobe" data-id="plateGlobe" src={PLATE_GLOBE} srcSet={SET_GLOBE} width={1680} height={944} alt={ALT_GLOBE} loading="lazy" decoding="async" />
               <svg className="ov" data-id="gflows" viewBox="0 0 1680 944" preserveAspectRatio="none" style={{ opacity: 0 }} aria-hidden="true">
                 <g data-id="ghi"></g><g data-id="gpaths" fill="none" stroke="none"></g><g data-id="gdots"></g>
                 <g data-id="hqMark" style={{ opacity: 0, transition: 'opacity .7s' }}><circle data-id="hqRing" cx="860" cy="322" r="18" fill="none" stroke="#FFB547" strokeWidth="2" /><circle cx="860" cy="322" r="5" fill="#FFB547" /><text x="878" y="300" fontSize="15" fontWeight="700" letterSpacing="1.5" fill="#FFD28A">NYON · HQ</text></g>
               </svg>
             </div>
             <div className="mapC" data-id="mapC">
-              <img className="plate plateClean" data-id="plateClean" src={PLATE_EUROPE} width={1680} height={944} alt={ALT_EUROPE} fetchPriority="high" decoding="async" />
+              <img className="plate plateClean" data-id="plateClean" src={PLATE_EUROPE} srcSet={SET_EUROPE} width={1680} height={944} alt={ALT_EUROPE} fetchPriority="high" decoding="async" />
               <svg className="ov" data-id="flows" viewBox="0 0 1680 944" preserveAspectRatio="none" style={{ zIndex: 1 }} aria-hidden="true">
                 <defs>
                   <filter id="fl-g2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9" /></filter>
@@ -312,12 +284,6 @@ export default function HomeFlowLink() {
             </div>
 
             <div className="top">
-              <nav className="nav" aria-label="Main">
-                <Logo />
-                <div className="menu">{MENU.map((m) => <a key={m.href} href={m.href}>{m.label}</a>)}</div>
-                <a className="cta" href="/en/contact">Talk to us</a>
-                <div className="burger" aria-hidden="true"><i></i><i></i><i></i></div>
-              </nav>
               <Headline />
               <PanelSop /><PanelDvs /><PanelSsc /><PanelOtif />
             </div>
@@ -330,6 +296,7 @@ export default function HomeFlowLink() {
               <div className="illu">DASHBOARD DATA IS ILLUSTRATIVE</div>
             </div>
 
+            <div className="shade" data-id="shade" aria-hidden="true"></div>
             <div className="ov944">
               <div className="globeTxt" aria-hidden="true">
                 <div className="gl" style={{ left: '300px', top: '330px' }}>AMERICAS<small>4 nodes · 2 lanes</small></div>
@@ -342,7 +309,7 @@ export default function HomeFlowLink() {
               <Slides />
             </div>
           </div>
-          <div className="hint" data-id="hint">SCROLL ONCE · OR PRESS ↓</div>
+          <div className="hint" data-id="hint">SCROLL TO EXPLORE ↓</div>
           <nav className="stops" data-id="stops" aria-label="Sections">
             {STOPS.map((s) => <button type="button" key={s} aria-label={s}>{s}<i /></button>)}
           </nav>
