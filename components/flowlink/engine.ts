@@ -1,5 +1,6 @@
 // Flow Link home: client-side choreography ported from the approved prototype (paginas_v1/home.html, v19).
 // Everything here only animates markup that HomeFlowLink already renders on the server.
+import Lenis from 'lenis'
 import LANE_PTS from './lanePts.json'
 
 type Pt = number[]
@@ -241,6 +242,21 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
     const MAPS = 0.88, mapC = $('mapC'), mapG = $('mapG')
     const slots = [[0.3, 0.42], [0.42, 0.54], [0.54, 0.66], [0.66, 0.78], [0.78, 0.9]]
     const shade = $('shade')
+    // smoother curve than ease(): no visible start/stop corners
+    const soft = (t: number) => t * t * t * (t * (t * 6 - 15) + 10)
+    // write a style only when it changed: fewer repaints while scrolling
+    const last = new WeakMap<HTMLElement, Record<string, string>>()
+    const put = (e: HTMLElement, k: string, v: number | string) => {
+      const sv = typeof v === 'number' ? v.toFixed(3) : v
+      let m = last.get(e); if (!m) { m = {}; last.set(e, m) }
+      if (m[k] === sv) return
+      m[k] = sv; e.style.setProperty(k, sv)
+    }
+    const slotEls = slots.map((_, i) => {
+      const sl = $('sl' + i), sp = T.querySelector(`[data-id="sp${i}"]`) as HTMLElement | null
+      sl.style.opacity = '0'
+      return { sl, sp, kids: Array.from(sl.children) as HTMLElement[], pans: sp ? (Array.from(sp.children) as HTMLElement[]) : [] }
+    })
     const update = () => {
       const r = scene.getBoundingClientRect()
       const total = r.height - (innerHeight - NAV)
@@ -263,18 +279,30 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
       gtx.style.transform = `translateX(${(-70 * (COVER - 1)) / 0.22}px) scale(${COVER}) translateY(${30 * (1 - c)}px)`
       GSTATE = p < 0.42 ? 'all' : p < 0.54 ? 'svc' : p < 0.66 ? 'how' : p < 0.78 ? 'why' : 'where'
       let showTxt = c * (1 - ease(seg(p, 0.4, 0.46)))
-      slots.forEach(([s0, s1], i) => {
-        const sl = $('sl' + i), sp = T.querySelector(`[data-id="sp${i}"]`) as HTMLElement | null
+      slotEls.forEach(({ sl, sp, kids, pans }, i) => {
+        const [s0, s1] = slots[i]
         const u = seg(p, s0, s1)
-        const inn = ease(seg(u, 0, 0.25)), out = ease(seg(u, 0.75, 1))
-        const o = inn * (1 - out), y = 80 * (1 - inn) - 80 * out
+        const inn = soft(seg(u, 0, 0.3)), out = soft(seg(u, 0.74, 1))
+        const o = inn * (1 - out)
         showTxt = Math.max(showTxt, o)
-        sl.style.opacity = String(o); sl.style.transform = `translateY(${y}px)`
-        if (sp) { sp.style.opacity = String(o); sp.style.transform = `translateY(${y * 1.2}px)` }
+        sl.classList.toggle('live', o > 0.5); if (sp) sp.classList.toggle('live', o > 0.5)
+        // the block fades out as one; on the way in each line rises on its own, one after the other
+        put(sl, 'opacity', (1 - out) * (inn > 0 ? 1 : 0)); put(sl, 'transform', `translate3d(0,${(-56 * out).toFixed(1)}px,0)`)
+        kids.forEach((k, j) => {
+          const q = soft(seg(u, 0.02 + 0.045 * j, 0.22 + 0.045 * j))
+          put(k, 'opacity', q); put(k, 'transform', `translate3d(0,${(34 * (1 - q)).toFixed(1)}px,0)`)
+        })
+        if (sp) {
+          put(sp, 'opacity', (1 - out) * (inn > 0 ? 1 : 0)); put(sp, 'transform', `translate3d(0,${(-70 * out).toFixed(1)}px,0)`)
+          pans.forEach((k, j) => {
+            const q = soft(seg(u, 0.08 + 0.06 * j, 0.3 + 0.06 * j))
+            put(k, 'opacity', q); put(k, 'transform', `translate3d(0,${(48 * (1 - q)).toFixed(1)}px,0) scale(${(0.97 + 0.03 * q).toFixed(4)})`)
+          })
+        }
       })
       shade.style.opacity = String(Math.min(1, showTxt * 1.15))
       const f = ease(seg(p, 0.92, 1))
-      pgb.style.filter = `brightness(${1 - 0.7 * f})`
+      put(pgb, 'filter', f > 0 ? `brightness(${(1 - 0.7 * f).toFixed(3)})` : 'none')
       gflows.style.opacity = String(b * (1 - f))
       hint.style.opacity = p < 0.03 ? '1' : '0'
     }
@@ -285,6 +313,14 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
     on(window, 'resize', () => { fit(); update() })
     on(window, 'scroll', queue, { passive: true })
     update()
+
+    /* ---- smooth scroll (mouse wheel / trackpad), like an inertial glide; phones and reduced-motion keep the native scroll ---- */
+    let lenis: Lenis | null = null
+    if (!RM && !matchMedia('(pointer: coarse)').matches) {
+      lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.9, smoothWheel: true, autoRaf: true, anchors: true })
+      lenis.on('scroll', update)
+      cleanups.push(() => { lenis?.destroy(); lenis = null })
+    }
 
     /* ---- stops: the dots on the right jump to each part; the wheel, trackpad and keys scroll normally (04/11/2026) ---- */
     const STOPS = [0, 0.36, 0.48, 0.6, 0.72, 0.84]
@@ -314,6 +350,7 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
       const from = scrollY, to = t[i], d = to - from
       if (Math.abs(d) < 2) return
       if (RM) { jump(to); return }
+      if (lenis) { lenis.scrollTo(to, { duration: Math.min(1.6, 0.8 + Math.abs(d) / 2500), easing: (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2) }); return }
       cancelAnimationFrame(animRaf)
       const dur = Math.min(1400, 650 + Math.abs(d) * 0.25), t0 = performance.now()
       const e = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
@@ -356,7 +393,6 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
     ctsBars = Array.from(T.querySelectorAll<SVGRectElement>('[data-id="ctsBars"] rect')), auditBar = $('auditBar'), wkBar = $('wkBar')
   const invLen = invPath.getTotalLength()
   invPath.style.strokeDasharray = String(invLen)
-  const slsp = MOB ? [] : Array.from(T.querySelectorAll<HTMLElement>('.sl,.sp'))
   frameFns.push(() => {
     vT++; autoT++
     if ((MOB || (prog > 0.42 && prog < 0.54)) && !RM && autoT > 240) showViz((vIdx + 1) % 5)
@@ -368,7 +404,6 @@ export function startFlowLink(root: HTMLElement, MOB: boolean, RM: boolean): () 
     if (vIdx === 4) auditBar.setAttribute('x2', String(30 + 320 * k))
     const w = MOB ? 1 : Math.min(1, Math.max(0, (prog - 0.66) / 0.05))
     wkBar.setAttribute('width', String(47 * w))
-    slsp.forEach((e) => e.classList.toggle('live', parseFloat(e.style.opacity || '0') > 0.5))
   })
 
   /* ---- sample network: counter and event feed (simulated) ---- */
