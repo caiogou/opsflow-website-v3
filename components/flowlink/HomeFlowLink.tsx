@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 import { CALENDLY } from '@/lib/booking'
 import { Navbar } from '@/components/Navbar'
 import { startFlowLink } from './engine'
+import 'lenis/dist/lenis.css'
 import './flowlink.css'
 
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700', '800'], variable: '--fl-font', display: 'swap' })

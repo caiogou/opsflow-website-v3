@@ -283,3 +283,6 @@
 @media (min-width:900px) and (min-aspect-ratio:5/4){.fl .flnav{position:sticky;top:0;border-bottom:1px solid rgba(127,245,223,.08)}}
 /* soft dark band behind the text stops, so they read over the globe */
 .fl .shade{position:absolute;left:0;top:0;width:1100px;height:1080px;pointer-events:none;opacity:0;background:linear-gradient(to right,rgba(2,7,16,.86) 0,rgba(2,7,16,.62) 42%,rgba(2,7,16,0) 100%)}
+
+/* smooth scroll (Lenis, home only): the browser's own smooth-scroll must be off while Lenis drives the page */
+html.lenis,html.lenis body{scroll-behavior:auto !important}
